@@ -1,30 +1,21 @@
 ﻿import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import CrystalCanvas from "./components/CrystalCanvas";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const servicePillars = [
   {
-    index: "I",
     title: "Extensions Service",
-    subtext: "Seamless blending, volume, and length with a refined finish.",
   },
   {
-    index: "II",
     title: "Cuts",
-    subtext: "Precision shape, movement, and tailored structure.",
   },
   {
-    index: "III",
     title: "Color",
-    subtext: "Dimensional color work with polished tone and depth.",
   },
   {
-    index: "IV",
     title: "Brazilian Blowout",
-    subtext: "Silken smoothing for radiant, controlled texture.",
   },
 ];
 
@@ -129,7 +120,6 @@ export default function App() {
 
   return (
     <div ref={rootRef} className="site-shell">
-      <CrystalCanvas />
       <div className="overlay-noise" aria-hidden="true" />
 
       <header className="shell section nav-row">
@@ -137,26 +127,21 @@ export default function App() {
         <a className="ghost-link" href="#services">
           Services
         </a>
-        <a className="cta-button cta-small" href="#booking">
-          Reserve an Experience
+        <a className="cta-button cta-small" href="tel:915-920-7823">
+          915-920-7823
         </a>
       </header>
 
       <main>
         <section className="shell hero section">
-          <p className="kicker hero-kicker">27 YEARS EXPERIENCE</p>
-          <h1 className="hero-title">
-            WILLIAM stylist
-          </h1>
+          <p className="kicker hero-kicker">27 years EXPERIENCE</p>
+          <h1 className="hero-title">WILLIAM stylist</h1>
           <p className="lead hero-copy">
-            Private-feeling luxury service, expert technique, and quietly confident hair artistry on Mesa Street.
+            High-touch hair artistry, local trust, and twenty-seven years of refined experience in El Paso.
           </p>
           <div className="hero-actions">
             <a className="cta-button" href="tel:915-920-7823">
-              Reserve by Phone
-            </a>
-            <a className="secondary-button" href="#services">
-              Explore Services
+              915-920-7823
             </a>
           </div>
         </section>
@@ -164,11 +149,7 @@ export default function App() {
         <section id="services" className="shell section reveal">
           <div className="section-heading-wrap">
             <p className="kicker">Services</p>
-            <h2 className="section-heading">Refined essentials, shaped by experience.</h2>
-            <p className="lead section-copy">
-              Extensions Service, Cuts, Color, and Brazilian Blowout delivered with a polished, appointment-led
-              approach.
-            </p>
+            <h2 className="section-heading">Luxury work. Precise execution.</h2>
           </div>
           <div className="semantic-service-headings">
             <h2 className="sr-only">Extensions Service</h2>
@@ -177,28 +158,21 @@ export default function App() {
           <div className="services-grid">
             {servicePillars.map((service) => (
               <article key={service.title} className="service-card">
-                <div className="service-meta">
-                  <p>{service.index}</p>
-                </div>
                 <h3>{service.title}</h3>
-                <p className="service-subtext">{service.subtext}</p>
-                <a className="service-link" href="#booking">
-                  Reserve an Experience
-                </a>
               </article>
             ))}
           </div>
         </section>
 
         <section id="booking" className="shell section reveal booking-panel">
-          <p className="kicker">El Paso Booking</p>
-          <h2 className="section-heading">El Paso Hair, Refined by William</h2>
+          <p className="kicker">Location</p>
+          <h2 className="section-heading">5411 N. Mesa, Suite 13C, El Paso, TX 79912</h2>
           <p className="lead">
-            Private-feeling luxury service, expert technique, and 27 years of experience on Mesa Street.
+            A polished local destination for extensions, cuts, color, and Brazilian Blowout appointments.
           </p>
           <div className="booking-actions">
             <a className="cta-button" href="tel:915-920-7823">
-              Reserve by Phone
+              915-920-7823
             </a>
             <a
               className="secondary-button"
@@ -213,13 +187,13 @@ export default function App() {
       </main>
       <footer className="shell section site-footer">
         <p className="kicker">Hair by William</p>
-        <p className="site-footer-copy">
-          Extensions Service, Cuts, Color, Brazilian Blowout.
-        </p>
+        <p className="site-footer-copy">5411 N. Mesa, Suite 13C, El Paso, TX 79912</p>
         <div className="footer-details" aria-label="Salon contact details">
-          <p>915-920-7823</p>
-          <p>5411 N. Mesa, Suite 13C</p>
-          <p>El Paso, TX 79912</p>
+          <p><a href="tel:915-920-7823">915-920-7823</a></p>
+          <p>Extensions Service</p>
+          <p>Cuts</p>
+          <p>Color</p>
+          <p>Brazilian Blowout</p>
         </div>
       </footer>
     </div>
