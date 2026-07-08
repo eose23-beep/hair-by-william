@@ -1,11 +1,14 @@
 import { Suspense, useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
+import { ThreePerf } from "three-perf";
 import ObsidianFluidMesh from "./ObsidianFluidMesh";
 
 function useFluidPointer() {
-  const mouseRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
+  const mouseRef = useRef({ x: 0, y: 0, tx: 0, ty: 0, px: 0, py: 0 });
   const scrollRef = useRef(0);
+  const velocityRef = useRef(0);
   const rafRef = useRef(0);
+  const lastTimeRef = useRef(performance.now());
 
   useEffect(() => {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -20,8 +23,22 @@ function useFluidPointer() {
       scrollRef.current = window.scrollY;
     };
 
-    const tick = () => {
+    const tick = (now) => {
       const m = mouseRef.current;
+      const dt = Math.max((now - lastTimeRef.current) / 1000, 0.001);
+      lastTimeRef.current = now;
+
+      const dx = m.tx - m.px;
+      const dy = m.ty - m.py;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const instantVelocity = distance / dt;
+      m.px = m.tx;
+      m.py = m.ty;
+
+      const normalized = Math.min(instantVelocity / 9.5, 1.0);
+      velocityRef.current += (normalized - velocityRef.current) * 0.2;
+      velocityRef.current *= 0.94;
+
       const ease = 0.055;
       m.x += (m.tx - m.x) * ease;
       m.y += (m.ty - m.y) * ease;
@@ -40,24 +57,23 @@ function useFluidPointer() {
     };
   }, []);
 
-  return { mouseRef, scrollRef };
+  return { mouseRef, scrollRef, velocityRef };
 }
 
-function FluidScene({ mouseRef, scrollRef }) {
+function FluidScene({ mouseRef, scrollRef, velocityRef }) {
   return (
     <>
-      <color attach="background" args={["#0c0906"]} />
-      <fog attach="fog" args={["#0c0906", 5.5, 14]} />
-      <ambientLight intensity={0.22} color="#a8844a" />
-      <directionalLight position={[2.4, 1.8, 3.2]} intensity={0.62} color="#e8c878" />
-      <pointLight position={[-1.8, 0.6, 2.2]} intensity={0.28} color="#c9a45c" />
-      <ObsidianFluidMesh mouseRef={mouseRef} scrollRef={scrollRef} />
+      <color attach="background" args={["#000000"]} />
+      <fog attach="fog" args={["#000000", 10, 22]} />
+      <ambientLight intensity={0} color="#000000" />
+      <ObsidianFluidMesh mouseRef={mouseRef} scrollRef={scrollRef} velocityRef={velocityRef} />
+      {import.meta.env.DEV ? <ThreePerf position="top-right" minimal={true} /> : null}
     </>
   );
 }
 
 export default function LiquidSilkCanvas() {
-  const { mouseRef, scrollRef } = useFluidPointer();
+  const { mouseRef, scrollRef, velocityRef } = useFluidPointer();
   const reduceMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -84,7 +100,7 @@ export default function LiquidSilkCanvas() {
         frameloop="always"
       >
         <Suspense fallback={null}>
-          <FluidScene mouseRef={mouseRef} scrollRef={scrollRef} />
+          <FluidScene mouseRef={mouseRef} scrollRef={scrollRef} velocityRef={velocityRef} />
         </Suspense>
       </Canvas>
     </div>
