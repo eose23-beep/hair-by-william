@@ -83,37 +83,45 @@ const fragmentShader = /* glsl */ `
   varying vec3 vNormal;
 
   void main() {
-    vec3 obsidian = vec3(0.028, 0.03, 0.038);
-    vec3 deep = vec3(0.012, 0.014, 0.02);
+    vec3 moltenDeep = vec3(0.04, 0.026, 0.014);
+    vec3 moltenBase = vec3(0.09, 0.058, 0.028);
 
     vec3 N = normalize(vNormal);
     vec3 V = normalize(cameraPosition - vWorldPos);
 
     vec2 mouseUv = uMouse * 0.5 + 0.5;
-    vec3 lightA = normalize(vec3(uMouse.x * 1.8, uMouse.y * 1.4 + 0.6, 2.4));
-    vec3 lightB = normalize(vec3(-0.6, 0.35, 1.6));
+    float cursorDist = distance(vUv, mouseUv);
+    float cursorProximity = smoothstep(0.9, 0.0, cursorDist);
 
-    float specA = pow(max(dot(reflect(-lightA, N), V), 0.0), 48.0);
-    float specB = pow(max(dot(reflect(-lightB, N), V), 0.0), 24.0);
-    float fresnel = pow(1.0 - max(dot(N, V), 0.0), 4.0);
+    vec3 lightA = normalize(vec3(uMouse.x * 3.2, uMouse.y * 2.4 + 0.8, 3.2));
+    vec3 lightB = normalize(vec3(-0.45, 0.42, 1.9));
+    vec3 lightC = normalize(vec3(0.35, -0.25, 1.4));
 
-    float chromePhase = vElevation * 18.0 + uTime * 0.6 + distance(vUv, mouseUv) * 4.0;
-    vec3 chrome = vec3(
-      0.62 + 0.18 * sin(chromePhase),
-      0.66 + 0.16 * sin(chromePhase + 1.9),
-      0.74 + 0.14 * sin(chromePhase + 3.7)
+    float specA = pow(max(dot(reflect(-lightA, N), V), 0.0), 42.0);
+    float specB = pow(max(dot(reflect(-lightB, N), V), 0.0), 22.0);
+    float specC = pow(max(dot(reflect(-lightC, N), V), 0.0), 18.0);
+    float fresnel = pow(1.0 - max(dot(N, V), 0.0), 2.8);
+
+    float ribbonPhase = vElevation * 24.0 + uTime * 0.95 + cursorDist * 7.2;
+    vec3 champagne = vec3(
+      0.92 + 0.08 * sin(ribbonPhase),
+      0.76 + 0.12 * sin(ribbonPhase + 1.35),
+      0.44 + 0.1 * sin(ribbonPhase + 2.6)
     );
+    vec3 warmGold = vec3(0.84, 0.66, 0.36);
+    vec3 burnishedBronze = vec3(0.58, 0.4, 0.22);
 
-    vec3 color = mix(deep, obsidian, 0.5 + vElevation * 1.6);
-    color += specA * chrome * 0.72;
-    color += specB * vec3(0.42, 0.44, 0.5) * 0.22;
-    color += fresnel * chrome * 0.11;
+    vec3 color = mix(moltenDeep, moltenBase, 0.48 + vElevation * 2.1);
+    color += specA * champagne * (1.05 + cursorProximity * 0.55);
+    color += specB * warmGold * 0.48;
+    color += specC * burnishedBronze * 0.22;
+    color += fresnel * champagne * 0.34;
 
-  float grid = abs(sin(vUv.x * 42.0 + uTime * 0.15)) * abs(sin(vUv.y * 38.0 - uTime * 0.12));
-  color += grid * 0.018 * (0.35 + specA);
+    float ribbonWave = sin((vUv.x + vElevation) * 18.0 + uTime * 0.7 + cursorDist * 8.0);
+    color += ribbonWave * champagne * 0.04 * (0.4 + cursorProximity);
 
-    float vignette = smoothstep(1.35, 0.25, length(vUv - 0.5));
-    color *= mix(0.55, 1.0, vignette);
+    float vignette = smoothstep(1.2, 0.35, length(vUv - 0.5));
+    color *= mix(0.72, 1.0, vignette);
 
     gl_FragColor = vec4(color, 1.0);
   }

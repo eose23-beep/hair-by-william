@@ -46,10 +46,11 @@ function useFluidPointer() {
 function FluidScene({ mouseRef, scrollRef }) {
   return (
     <>
-      <color attach="background" args={["#050508"]} />
-      <fog attach="fog" args={["#050508", 3.5, 9]} />
-      <ambientLight intensity={0.08} />
-      <directionalLight position={[2.4, 1.8, 3.2]} intensity={0.35} color="#8a92a8" />
+      <color attach="background" args={["#0c0906"]} />
+      <fog attach="fog" args={["#0c0906", 5.5, 14]} />
+      <ambientLight intensity={0.22} color="#a8844a" />
+      <directionalLight position={[2.4, 1.8, 3.2]} intensity={0.62} color="#e8c878" />
+      <pointLight position={[-1.8, 0.6, 2.2]} intensity={0.28} color="#c9a45c" />
       <ObsidianFluidMesh mouseRef={mouseRef} scrollRef={scrollRef} />
     </>
   );

@@ -5,45 +5,48 @@ import LiquidSilkCanvas from "./components/LiquidSilkCanvas";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const lookbookSpreads = [
+const portfolioModules = [
   {
-    caption: "[ 01 / HAIR EXTENSIONS SYSTEM - INITIAL LAYER TO VOLUME INTEGRATION ]",
-    className: "lookbook-spread",
-    items: [
+    id: "extensions",
+    type: "pair",
+    caption: "[ 01 / HAIR EXTENSIONS SYSTEM — INITIAL LAYER TO VOLUME INTEGRATION ]",
+    frames: [
       {
-        title: "Before",
+        label: "Before",
         src: "/portfolio/extensions_before.jpg",
         alt: "Hair extensions transformation before volume integration and length enhancement",
       },
       {
-        title: "After",
+        label: "After",
         src: "/portfolio/extensions_after.jpg",
         alt: "Hair extensions transformation after volume integration with seamless structural blend",
       },
     ],
   },
   {
-    caption: "[ 02 / THERMO-ACTIVE KERATIN - NATURAL TEXTURE TO REFRACTIVE REFINE ]",
-    className: "lookbook-spread",
-    items: [
+    id: "blowout",
+    type: "pair",
+    caption: "[ 02 / THERMO-ACTIVE KERATIN — NATURAL TEXTURE TO REFRACTIVE REFINE ]",
+    frames: [
       {
-        title: "Before",
+        label: "Before",
         src: "/portfolio/blowout_before.jpg",
         alt: "Brazilian Blowout transformation before keratin smoothing treatment",
       },
       {
-        title: "After",
+        label: "After",
         src: "/portfolio/blowout_after.jpg",
         alt: "Brazilian Blowout transformation after keratin smoothing with refined shine",
       },
     ],
   },
   {
-    caption: "[ 03 / ARTISAN SPECIFICATION - DIMENSIONAL COLORING & PRECISION GEOMETRY ]",
-    className: "lookbook-spread lookbook-spread--wide",
-    items: [
+    id: "color-cut",
+    type: "centerpiece",
+    caption: "[ 03 / ARTISAN SPECIFICATION — DIMENSIONAL COLORING & PRECISION GEOMETRY ]",
+    frames: [
       {
-        title: "Dimensional Reconstruction",
+        label: "Dimensional Reconstruction",
         src: "/portfolio/color_cut.jpg",
         alt: "Dimensional coloring and precision cut reconstruction with artisan tonal geometry",
       },
@@ -88,7 +91,7 @@ export default function App() {
         );
 
       gsap.fromTo(
-        gsap.utils.toArray(".lookbook-module"),
+        gsap.utils.toArray(".portfolio-module"),
         { opacity: 0, y: 32 },
         {
           opacity: 1,
@@ -97,7 +100,7 @@ export default function App() {
           stagger: 0.12,
           ease: "power4.out",
           scrollTrigger: {
-            trigger: ".lookbook-grid",
+            trigger: ".portfolio-grid",
             start: "top 84%",
             once: true,
           },
@@ -141,7 +144,7 @@ export default function App() {
           </a>
         </header>
 
-        <main>
+        <main className="site-main">
           <section className="shell hero section">
             <p className="kicker hero-kicker">27 years EXPERIENCE</p>
             <h1 className="hero-title">
@@ -151,9 +154,16 @@ export default function App() {
             <p className="lead hero-copy">
               High-touch hair artistry, local trust, and twenty-seven years of refined experience in El Paso.
             </p>
+            <p className="hero-meta" aria-label="Salon credentials">
+              <span>5411 N. Mesa, Suite 13-C</span>
+              <span>Friday &amp; Saturday</span>
+            </p>
             <div className="hero-actions">
               <a className="cta-button" href="tel:915-920-7823">
                 915-920-7823
+              </a>
+              <a className="secondary-button" href="#services">
+                View Transformations
               </a>
             </div>
           </section>
@@ -172,34 +182,43 @@ export default function App() {
               <h2 className="section-heading lookbook-heading">Transformation Lookbook</h2>
               <p className="lead lookbook-copy">
                 A transparent editorial spread for extensions, smoothing, and dimensional reconstruction,
-                composed to move over the live ambient silk field.
+                composed to float over the live molten-gold ambient field.
               </p>
             </div>
 
-            <div className="lookbook-grid" aria-label="Service lookbook portfolio">
-              {lookbookSpreads.map((spread) => (
-                <figure key={spread.caption} className={`lookbook-module ${spread.className}`}>
-                  <div className="lookbook-images">
-                    {spread.items.map((item, index) => (
-                      <div key={item.src} className="lookbook-panel">
-                        <div className="lookbook-frame">
-                          <img
-                            className="lookbook-image"
-                            src={item.src}
-                            alt={item.alt}
-                            loading="lazy"
-                            decoding="async"
-                            width={index === 0 && spread.items.length === 1 ? 1600 : 800}
-                            height={index === 0 && spread.items.length === 1 ? 960 : 1000}
-                          />
+            <div className="portfolio-grid" aria-label="Service lookbook portfolio">
+              {portfolioModules.map((module) => (
+                <figure
+                  key={module.id}
+                  className={`portfolio-module portfolio-module--${module.type}`}
+                >
+                  <div
+                    className={
+                      module.type === "pair" ? "portfolio-pair" : "portfolio-centerpiece"
+                    }
+                  >
+                    {module.frames.map((frame) => (
+                      <div key={frame.src} className="portfolio-cell">
+                        <div className="portfolio-frame-shell">
+                          <div className="portfolio-frame">
+                            <img
+                              className="portfolio-image"
+                              src={frame.src}
+                              alt={frame.alt}
+                              loading="lazy"
+                              decoding="async"
+                              width={module.type === "centerpiece" ? 1600 : 800}
+                              height={module.type === "centerpiece" ? 900 : 1067}
+                            />
+                            {module.type === "pair" ? (
+                              <span className="portfolio-badge">{frame.label}</span>
+                            ) : null}
+                          </div>
                         </div>
-                        <p className="lookbook-micro-label" aria-hidden="true">
-                          {item.title}
-                        </p>
                       </div>
                     ))}
                   </div>
-                  <figcaption className="lookbook-caption">{spread.caption}</figcaption>
+                  <figcaption className="portfolio-caption">{module.caption}</figcaption>
                 </figure>
               ))}
             </div>
@@ -211,6 +230,11 @@ export default function App() {
             <p className="lead">
               A polished local destination for extensions, cuts, color, and Brazilian Blowout appointments.
             </p>
+            <dl className="booking-hours" aria-label="Salon hours">
+              <dt>Hours</dt>
+              <dd>Friday — 9:00 AM to 6:00 PM</dd>
+              <dd>Saturday — 9:00 AM to 4:00 PM</dd>
+            </dl>
             <div className="booking-actions">
               <a className="cta-button" href="tel:915-920-7823">
                 915-920-7823
@@ -234,6 +258,7 @@ export default function App() {
             <p>
               <a href="tel:915-920-7823">915-920-7823</a>
             </p>
+            <p className="footer-hours">Open Friday &amp; Saturday — Suite 13-C, LV Hair Salon</p>
             <p>Extensions Service</p>
             <p>Cuts</p>
             <p>Color</p>

@@ -7,10 +7,13 @@
   --stroke: rgba(255, 255, 255, 0.05);
   --stroke-mid: rgba(255, 255, 255, 0.12);
   --stroke-strong: rgba(255, 255, 255, 0.72);
+  --gold: #c9a86c;
+  --gold-soft: rgba(201, 168, 108, 0.55);
+  --gold-glow: rgba(201, 168, 108, 0.22);
   --radius: 0;
   --radius-lg: 0;
   --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-luxury: all 0.4s var(--ease-luxury);
+  --transition-luxury: all 0.55s var(--ease-luxury);
   --type-display: clamp(60px, 10vw, 132px);
   --type-headline: clamp(36px, 5vw, 72px);
   --type-title: clamp(32px, 4.5vw, 56px);
@@ -38,13 +41,21 @@ html {
 
 body {
   margin: 0;
-  font-family: "Avenir Next", "Segoe UI", sans-serif;
-  background-color: #050508 !important;
+  font-family: "Sora", "Avenir Next", "Segoe UI", sans-serif;
+  background: transparent !important;
+  background-color: transparent !important;
   color: var(--text-main);
   line-height: 1.65;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#root,
+.site-main,
+main {
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 .sr-only {
@@ -66,10 +77,7 @@ a {
 
 .fluid-canvas {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
@@ -84,7 +92,7 @@ a {
 .fluid-canvas--static .fluid-canvas__fallback {
   width: 100%;
   height: 100%;
-  background: radial-gradient(ellipse 80% 60% at 50% 40%, #0c0e14 0%, #050508 72%);
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, #1a1208 0%, #080604 72%);
 }
 
 .typography-layer {
@@ -126,9 +134,12 @@ a {
   grid-template-columns: 1fr auto auto;
   align-items: center;
   gap: 24px;
-  padding-top: 24px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--stroke);
+  margin-top: 16px;
+  padding: 12px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(8, 6, 4, 0.32);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .brand-mark {
@@ -153,13 +164,13 @@ a {
 }
 
 .hero {
-  min-height: calc(100dvh - 96px);
+  min-height: min(88dvh, 820px);
   display: grid;
   align-content: center;
-  gap: 32px;
-  padding: 8vw 0;
+  gap: 24px;
+  padding: clamp(48px, 10vh, 96px) 0 clamp(32px, 6vh, 64px);
   justify-items: start;
-  max-width: 920px;
+  max-width: 880px;
   margin-left: clamp(0px, 4vw, 64px);
   text-align: left;
 }
@@ -172,12 +183,47 @@ a {
   color: var(--text-dim);
 }
 
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.28em;
+  font-size: 10px;
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  margin: 0;
+  padding-top: 8px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.hero-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-meta span::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  background: var(--gold-soft);
+}
+
 .hero-title {
   margin: 0;
   display: grid;
-  gap: 16px;
+  gap: 12px;
   max-width: none;
-  padding: 4vw 0;
+  padding: 8px 0 4px;
 }
 
 .hero-title-primary {
@@ -233,26 +279,30 @@ a {
 }
 
 .cta-button {
-  border: 1px solid var(--text-main);
-  background: var(--text-main);
-  color: #050508;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  color: var(--text-main);
   position: relative;
   z-index: 3;
+  box-shadow: inset 0 0 0 0 var(--gold-glow);
 }
 
 .cta-button:hover {
-  background: transparent;
-  color: var(--text-main);
+  border-color: var(--gold-soft);
+  color: #f5e8d0;
+  box-shadow:
+    inset 0 0 24px var(--gold-glow),
+    0 0 32px rgba(201, 168, 108, 0.12);
 }
 
 .secondary-button {
-  border: 1px solid var(--stroke-mid);
-  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.82);
   background: transparent;
 }
 
 .secondary-button:hover {
-  border-color: var(--text-main);
+  border-color: rgba(255, 255, 255, 0.32);
   color: var(--text-main);
 }
 
@@ -270,7 +320,11 @@ a {
 
 .cta-small {
   min-height: 40px;
-  padding: 8px 18px;
+  padding: 8px 16px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  border-color: rgba(201, 168, 108, 0.35);
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .section-heading {
@@ -280,7 +334,7 @@ a {
   font-size: var(--type-headline);
   line-height: 1.02;
   letter-spacing: -0.04em;
-  padding: 8vw 0 2vw;
+  padding: 0 0 8px;
   color: var(--text-main);
 }
 
@@ -320,87 +374,129 @@ a {
   max-width: 38ch;
 }
 
-.lookbook-grid {
+.lookbook-grid,
+.portfolio-grid {
   display: grid;
-  gap: clamp(40px, 7vw, 80px);
+  gap: 0;
 }
 
-.lookbook-module {
-  margin: 0;
+.portfolio-module {
+  margin: 0 0 96px;
   display: grid;
-  gap: 20px;
+  gap: 24px;
   background: transparent !important;
 }
 
-.lookbook-images {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 24px);
+.portfolio-module:last-child {
+  margin-bottom: 0;
 }
 
-.lookbook-spread--wide .lookbook-images {
+/* Module 01 & 02 — editorial side-by-side pair */
+.portfolio-pair {
+  display: grid;
   grid-template-columns: 1fr;
-}
-
-.lookbook-panel {
-  display: grid;
-  gap: 12px;
-  margin: 0;
-}
-
-.lookbook-frame {
+  gap: 32px;
+  align-items: start;
   width: 100%;
-  aspect-ratio: 4 / 5;
-  overflow: hidden;
+  max-width: 72rem;
+  margin-inline: auto;
+  background: transparent !important;
+}
+
+.portfolio-cell {
+  margin: 0;
+  min-width: 0;
+}
+
+.portfolio-frame-shell {
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.portfolio-frame {
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: transparent;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   transition:
-    transform 0.55s var(--ease-luxury),
-    border-color 0.4s var(--ease-luxury);
+    border-color 0.55s var(--ease-luxury),
+    box-shadow 0.55s var(--ease-luxury);
 }
 
-.lookbook-spread--wide .lookbook-frame {
-  aspect-ratio: 16 / 9;
+.portfolio-frame-shell:hover .portfolio-frame {
+  border-color: rgba(201, 168, 108, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 24px rgba(201, 168, 108, 0.08);
 }
 
-.lookbook-image {
+.portfolio-image {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center top;
   transform: scale(1);
-  transition: transform 0.7s var(--ease-luxury);
+  transition: transform 0.7s cubic-bezier(0, 0, 0.2, 1);
 }
 
-.lookbook-module:hover .lookbook-frame {
-  transform: scale(1.006);
-  border-color: rgba(255, 255, 255, 0.18);
+.portfolio-frame-shell:hover .portfolio-image {
+  transform: scale(1.05);
 }
 
-.lookbook-module:hover .lookbook-image {
-  transform: scale(1.024);
+.portfolio-badge {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.88);
+  pointer-events: none;
 }
 
-.lookbook-micro-label,
-.lookbook-caption {
+.portfolio-caption {
   margin: 0;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
   text-transform: uppercase;
-}
-
-.lookbook-micro-label {
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  color: rgba(255, 255, 255, 0.42);
-}
-
-.lookbook-caption {
   font-size: var(--type-caption);
-  letter-spacing: 0.18em;
-  line-height: 1.6;
-  color: var(--text-soft);
+  letter-spacing: 0.2em;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 72rem;
+  margin-inline: auto;
+  width: 100%;
+  padding-top: 4px;
+}
+
+/* Module 03 — wide centerpiece statement window */
+.portfolio-centerpiece {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  background: transparent !important;
+}
+
+.portfolio-module--centerpiece .portfolio-frame {
+  aspect-ratio: 16 / 9;
+}
+
+.portfolio-module--centerpiece .portfolio-image {
+  object-position: center;
 }
 
 .booking-panel {
@@ -412,6 +508,33 @@ a {
   background: transparent !important;
   margin-left: clamp(32px, 10vw, 140px);
   max-width: 720px;
+}
+
+.booking-hours {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 20px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.booking-hours dt {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+.booking-hours dd {
+  margin: 0 0 12px;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--text-soft);
+}
+
+.booking-hours dd:last-child {
+  margin-bottom: 0;
 }
 
 .site-footer {
@@ -435,13 +558,26 @@ a {
   color: var(--text-soft);
 }
 
+.footer-hours {
+  margin-top: 8px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.52);
+}
+
 *,
 *::before,
 *::after {
-  box-shadow: none !important;
-  text-shadow: none !important;
+  box-shadow: none;
+  text-shadow: none;
 }
 
+@media (min-width: 768px) {
+  .portfolio-pair {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 @media (max-width: 768px) {
   .shell {
     width: min(1200px, 100% - 32px);
@@ -490,20 +626,20 @@ a {
     margin-right: 0;
   }
 
-  .lookbook-grid {
-    gap: 48px;
+  .portfolio-module {
+    margin-bottom: 64px;
   }
 
-  .lookbook-images {
-    grid-template-columns: 1fr;
+  .portfolio-badge {
+    left: 12px;
+    bottom: 12px;
+    padding: 6px 10px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
   }
 
-  .lookbook-panel {
-    gap: 10px;
-  }
-
-  .lookbook-caption {
-    letter-spacing: 0.14em;
+  .portfolio-caption {
+    letter-spacing: 0.16em;
     font-size: 10px;
   }
 }
