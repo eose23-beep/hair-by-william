@@ -5,33 +5,50 @@ import LiquidSilkCanvas from "./components/LiquidSilkCanvas";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const signatureServices = [
+const lookbookSpreads = [
   {
-    name: "Hair Extensions",
-    descriptor:
-      "Signature structural integration across premium I-Tip, Genius Weft, Tape-In, and Micro-link frameworks.",
+    caption: "[ 01 / HAIR EXTENSIONS SYSTEM - INITIAL LAYER TO VOLUME INTEGRATION ]",
+    className: "lookbook-spread",
+    items: [
+      {
+        title: "Before",
+        src: "/portfolio/extensions_before.jpg",
+        alt: "Hair extensions transformation before volume integration and length enhancement",
+      },
+      {
+        title: "After",
+        src: "/portfolio/extensions_after.jpg",
+        alt: "Hair extensions transformation after volume integration with seamless structural blend",
+      },
+    ],
   },
   {
-    name: "Brazilian Blowout",
-    descriptor:
-      "Advanced thermo-active keratin therapy for definitive texture refinement and mirror-like glass shine.",
+    caption: "[ 02 / THERMO-ACTIVE KERATIN - NATURAL TEXTURE TO REFRACTIVE REFINE ]",
+    className: "lookbook-spread",
+    items: [
+      {
+        title: "Before",
+        src: "/portfolio/blowout_before.jpg",
+        alt: "Brazilian Blowout transformation before keratin smoothing treatment",
+      },
+      {
+        title: "After",
+        src: "/portfolio/blowout_after.jpg",
+        alt: "Brazilian Blowout transformation after keratin smoothing with refined shine",
+      },
+    ],
   },
   {
-    name: "Dimensional Color",
-    descriptor:
-      "Bespoke architectural formulation, color correction, and hand-painted high-contrast tones.",
+    caption: "[ 03 / ARTISAN SPECIFICATION - DIMENSIONAL COLORING & PRECISION GEOMETRY ]",
+    className: "lookbook-spread lookbook-spread--wide",
+    items: [
+      {
+        title: "Dimensional Reconstruction",
+        src: "/portfolio/color_cut.jpg",
+        alt: "Dimensional coloring and precision cut reconstruction with artisan tonal geometry",
+      },
+    ],
   },
-  {
-    name: "Precision Cutting",
-    descriptor:
-      "Structural silhouette design and tailored texturing engineered for seamless movement.",
-  },
-];
-
-const portfolioPlaceholders = [
-  { label: "[ 01 — Extensions Integration ]", service: "Hair Extensions" },
-  { label: "[ 02 — Keratin Smoothing ]", service: "Brazilian Blowout" },
-  { label: "[ 03 — Dimensional Color ]", service: "Dimensional Color" },
 ];
 
 export default function App() {
@@ -70,29 +87,8 @@ export default function App() {
           "-=0.5",
         );
 
-      const essenceEntries = gsap.utils.toArray(".essence-entry");
-
       gsap.fromTo(
-        essenceEntries,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.1,
-          ease: "power4.out",
-          scrollTrigger: {
-            trigger: ".essence-grid",
-            start: "top 80%",
-            once: true,
-          },
-        },
-      );
-
-      const portfolioItems = gsap.utils.toArray(".portfolio-item");
-
-      gsap.fromTo(
-        portfolioItems,
+        gsap.utils.toArray(".lookbook-module"),
         { opacity: 0, y: 32 },
         {
           opacity: 1,
@@ -101,7 +97,7 @@ export default function App() {
           stagger: 0.12,
           ease: "power4.out",
           scrollTrigger: {
-            trigger: ".portfolio-row",
+            trigger: ".lookbook-grid",
             start: "top 84%",
             once: true,
           },
@@ -172,24 +168,38 @@ export default function App() {
               <h2 className="sr-only">Precision Cutting</h2>
             </div>
 
-            <ul className="essence-grid">
-              {signatureServices.map((service, index) => (
-                <li key={service.name} className="essence-entry">
-                  <p className="essence-index">{String(index + 1).padStart(2, "0")}</p>
-                  <h3 className="essence-name">{service.name}</h3>
-                  <p className="essence-desc">{service.descriptor}</p>
-                </li>
-              ))}
-            </ul>
+            <div className="lookbook-intro">
+              <h2 className="section-heading lookbook-heading">Transformation Lookbook</h2>
+              <p className="lead lookbook-copy">
+                A transparent editorial spread for extensions, smoothing, and dimensional reconstruction,
+                composed to move over the live ambient silk field.
+              </p>
+            </div>
 
-            <div className="portfolio-row" aria-label="Service lookbook portfolio">
-              {portfolioPlaceholders.map((item) => (
-                <figure key={item.label} className="portfolio-item">
-                  <div className="portfolio-placeholder" aria-hidden="true" />
-                  <figcaption className="portfolio-caption">
-                    <span className="sr-only">{item.service}</span>
-                    {item.label}
-                  </figcaption>
+            <div className="lookbook-grid" aria-label="Service lookbook portfolio">
+              {lookbookSpreads.map((spread) => (
+                <figure key={spread.caption} className={`lookbook-module ${spread.className}`}>
+                  <div className="lookbook-images">
+                    {spread.items.map((item, index) => (
+                      <div key={item.src} className="lookbook-panel">
+                        <div className="lookbook-frame">
+                          <img
+                            className="lookbook-image"
+                            src={item.src}
+                            alt={item.alt}
+                            loading="lazy"
+                            decoding="async"
+                            width={index === 0 && spread.items.length === 1 ? 1600 : 800}
+                            height={index === 0 && spread.items.length === 1 ? 960 : 1000}
+                          />
+                        </div>
+                        <p className="lookbook-micro-label" aria-hidden="true">
+                          {item.title}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  <figcaption className="lookbook-caption">{spread.caption}</figcaption>
                 </figure>
               ))}
             </div>
