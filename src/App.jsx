@@ -4,20 +4,33 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const servicePillars = [
+const signatureServices = [
   {
-    title: "Extensions Service",
-    detail: "Specializing in I-Tip, Genius Weft, Tape-In, and Micro-link integration.",
+    name: "Hair Extensions",
+    descriptor:
+      "Signature structural integration across premium I-Tip, Genius Weft, Tape-In, and Micro-link frameworks.",
   },
   {
-    title: "Cuts",
+    name: "Brazilian Blowout",
+    descriptor:
+      "Advanced thermo-active keratin therapy for definitive texture refinement and mirror-like glass shine.",
   },
   {
-    title: "Color",
+    name: "Dimensional Color",
+    descriptor:
+      "Bespoke architectural formulation, color correction, and hand-painted high-contrast tones.",
   },
   {
-    title: "Brazilian Blowout",
+    name: "Precision Cutting",
+    descriptor:
+      "Structural silhouette design and tailored texturing engineered for seamless movement.",
   },
+];
+
+const portfolioPlaceholders = [
+  { label: "[ 01 — Extensions Integration ]", service: "Hair Extensions" },
+  { label: "[ 02 — Keratin Smoothing ]", service: "Brazilian Blowout" },
+  { label: "[ 03 — Dimensional Color ]", service: "Dimensional Color" },
 ];
 
 export default function App() {
@@ -56,10 +69,10 @@ export default function App() {
           "-=0.5",
         );
 
-      const serviceCards = gsap.utils.toArray(".service-card");
+      const essenceEntries = gsap.utils.toArray(".essence-entry");
 
       gsap.fromTo(
-        serviceCards,
+        essenceEntries,
         { opacity: 0, y: 40 },
         {
           opacity: 1,
@@ -68,8 +81,27 @@ export default function App() {
           stagger: 0.1,
           ease: "power4.out",
           scrollTrigger: {
-            trigger: ".services-grid",
+            trigger: ".essence-grid",
             start: "top 80%",
+            once: true,
+          },
+        },
+      );
+
+      const portfolioItems = gsap.utils.toArray(".portfolio-item");
+
+      gsap.fromTo(
+        portfolioItems,
+        { opacity: 0, y: 32 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.85,
+          stagger: 0.12,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: ".portfolio-row",
+            start: "top 84%",
             once: true,
           },
         },
@@ -128,23 +160,35 @@ export default function App() {
           </div>
         </section>
 
-        <section id="services" className="shell section reveal">
-          <div className="section-heading-wrap">
-            <p className="kicker">Services</p>
-            <h2 className="section-heading">Luxury work. Precise execution.</h2>
-          </div>
+        <section id="services" className="shell shell--offset section lookbook-section reveal">
+          <p className="lookbook-tag">01 / Services</p>
+
           <div className="semantic-service-headings">
-            <h2 className="sr-only">Extensions Service</h2>
+            <h2 className="sr-only">Hair Extensions</h2>
             <h2 className="sr-only">Brazilian Blowout</h2>
+            <h2 className="sr-only">Dimensional Color</h2>
+            <h2 className="sr-only">Precision Cutting</h2>
           </div>
-          <div className="services-grid">
-            {servicePillars.map((service) => (
-              <article key={service.title} className="service-card">
-                <div className="service-card-content">
-                  <h3>{service.title}</h3>
-                  {service.detail ? <p className="service-detail">{service.detail}</p> : null}
-                </div>
-              </article>
+
+          <ul className="essence-grid">
+            {signatureServices.map((service, index) => (
+              <li key={service.name} className="essence-entry">
+                <p className="essence-index">{String(index + 1).padStart(2, "0")}</p>
+                <h3 className="essence-name">{service.name}</h3>
+                <p className="essence-desc">{service.descriptor}</p>
+              </li>
+            ))}
+          </ul>
+
+          <div className="portfolio-row" aria-label="Service lookbook portfolio">
+            {portfolioPlaceholders.map((item) => (
+              <figure key={item.label} className="portfolio-item">
+                <div className="portfolio-placeholder" aria-hidden="true" />
+                <figcaption className="portfolio-caption">
+                  <span className="sr-only">{item.service}</span>
+                  {item.label}
+                </figcaption>
+              </figure>
             ))}
           </div>
         </section>

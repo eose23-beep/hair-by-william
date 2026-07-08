@@ -1,13 +1,23 @@
 :root {
-  --bg-main: #000000;
-  --bg-panel: #000000;
+  --bg-main: #0a0a0a;
+  --bg-panel: #0a0a0a;
   --text-main: #ffffff;
-  --text-soft: rgba(255, 255, 255, 0.82);
-  --text-dim: rgba(255, 255, 255, 0.56);
-  --stroke: rgba(255, 255, 255, 0.24);
+  --text-soft: rgba(255, 255, 255, 0.9);
+  --text-dim: rgba(255, 255, 255, 0.58);
+  --stroke: rgba(255, 255, 255, 0.05);
+  --stroke-mid: rgba(255, 255, 255, 0.12);
   --stroke-strong: rgba(255, 255, 255, 0.72);
   --radius: 0;
   --radius-lg: 0;
+  --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-luxury: all 0.4s var(--ease-luxury);
+  --type-display: clamp(60px, 10vw, 132px);
+  --type-headline: clamp(36px, 5vw, 72px);
+  --type-title: clamp(32px, 4.5vw, 56px);
+  --type-lead: clamp(17px, 2.1vw, 22px);
+  --type-body: 15px;
+  --type-caption: 11px;
+  --type-kicker: 12px;
 }
 
 *,
@@ -29,10 +39,12 @@ html {
 body {
   margin: 0;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
-  background-color: #000000 !important;
-  color: #ffffff;
+  background-color: var(--bg-main) !important;
+  color: var(--text-main);
   line-height: 1.65;
   letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .sr-only {
@@ -56,8 +68,8 @@ a {
   position: relative;
   isolation: isolate;
   overflow: clip;
-  background-color: #000000 !important;
-  color: #ffffff;
+  background-color: var(--bg-main) !important;
+  color: var(--text-main);
 }
 
 .overlay-noise {
@@ -69,11 +81,18 @@ a {
   margin-inline: auto;
 }
 
+.shell--offset {
+  margin-left: clamp(24px, 8vw, 120px);
+  margin-right: clamp(16px, 4vw, 48px);
+  width: auto;
+  max-width: min(1080px, 100% - clamp(32px, 10vw, 160px));
+}
+
 .section {
   position: relative;
   z-index: 2;
-  padding-top: 96px;
-  padding-bottom: 96px;
+  padding-top: clamp(64px, 8vw, 120px);
+  padding-bottom: clamp(64px, 8vw, 120px);
 }
 
 .nav-row {
@@ -83,7 +102,7 @@ a {
   gap: 24px;
   padding-top: 24px;
   padding-bottom: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--stroke);
 }
 
 .brand-mark {
@@ -98,9 +117,9 @@ a {
 .ghost-link {
   font-size: 14px;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.16em;
   color: var(--text-dim);
-  transition: color 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: var(--transition-luxury);
 }
 
 .ghost-link:hover {
@@ -112,49 +131,53 @@ a {
   display: grid;
   align-content: center;
   gap: 32px;
-  padding-top: 64px;
+  padding: 8vw 0;
   justify-items: start;
   max-width: 920px;
+  margin-left: clamp(0px, 4vw, 64px);
   text-align: left;
 }
 
 .kicker {
   margin: 0;
   text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 0.18em;
+  font-size: var(--type-kicker);
+  letter-spacing: 0.2em;
   color: var(--text-dim);
 }
 
 .hero-title {
   margin: 0;
   display: grid;
-  gap: 12px;
+  gap: 16px;
   max-width: none;
+  padding: 4vw 0;
 }
 
 .hero-title-primary {
   font-family: "Times New Roman", "Iowan Old Style", "Baskerville Old Face", serif;
-  font-size: clamp(60px, 10vw, 132px);
+  font-size: var(--type-display);
   line-height: 0.88;
   letter-spacing: -0.06em;
   font-weight: 500;
   text-transform: uppercase;
+  color: var(--text-main);
 }
 
 .hero-title-secondary {
   font-family: "Avenir Next", "Segoe UI", sans-serif;
   font-size: 0.8rem;
   line-height: 1;
-  letter-spacing: 0.48em;
+  letter-spacing: 0.52em;
   font-weight: 600;
   text-transform: uppercase;
+  color: var(--text-soft);
 }
 
 .lead {
   margin: 0;
   max-width: 34ch;
-  font-size: clamp(17px, 2.1vw, 22px);
+  font-size: var(--type-lead);
   color: var(--text-soft);
   line-height: 1.6;
 }
@@ -178,30 +201,39 @@ a {
   padding: 12px 24px;
   font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease,
-    transform 220ms ease;
+  transition: var(--transition-luxury);
 }
 
 .cta-button {
-  border: 1px solid #ffffff;
-  background: #ffffff;
-  color: #000000;
+  border: 1px solid var(--text-main);
+  background: var(--text-main);
+  color: var(--bg-main);
   position: relative;
   z-index: 3;
 }
 
-.secondary-button {
-  border: 1px solid #ffffff;
-  color: #ffffff;
+.cta-button:hover {
   background: transparent;
+  color: var(--text-main);
+}
+
+.secondary-button {
+  border: 1px solid var(--stroke-mid);
+  color: var(--text-main);
+  background: transparent;
+}
+
+.secondary-button:hover {
+  border-color: var(--text-main);
+  color: var(--text-main);
 }
 
 .cta-button:hover,
 .secondary-button:hover,
 .service-link:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .cta-button:active,
@@ -215,18 +247,14 @@ a {
   padding: 8px 18px;
 }
 
-.section-heading-wrap {
-  display: grid;
-  gap: 12px;
-  margin-bottom: 40px;
-}
-
 .section-heading {
   margin: 0;
   max-width: 15ch;
-  font-size: clamp(36px, 5vw, 72px);
+  font-size: var(--type-headline);
   line-height: 1.02;
   letter-spacing: -0.04em;
+  padding: 8vw 0 2vw;
+  color: var(--text-main);
 }
 
 .section-copy,
@@ -234,72 +262,153 @@ a {
   max-width: 64ch;
 }
 
-.services-grid {
+.lookbook-section {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  gap: clamp(48px, 8vw, 96px);
+  margin-right: clamp(0px, 6vw, 80px);
 }
 
-.service-card {
-  min-height: 220px;
-  display: flex;
-  align-items: end;
-  padding: 32px;
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  background: #000000;
-  will-change: transform;
-  transition: border-color 220ms ease, background-color 220ms ease, transform 220ms ease;
-}
-
-.service-card-content {
-  display: grid;
-  gap: 12px;
-  max-width: 32ch;
-}
-
-.service-card:hover {
-  border-color: var(--stroke-strong);
-  background: #000000;
-  transform: translateY(-2px);
-}
-
-.service-card h3 {
+.lookbook-tag {
   margin: 0;
-  font-size: clamp(28px, 3.8vw, 48px);
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: var(--text-main);
-}
-
-.service-detail {
-  margin: 0;
-  max-width: 28ch;
-  font-size: 12px;
-  line-height: 1.6;
-  letter-spacing: 0.1em;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: var(--type-caption);
+  font-weight: 400;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--text-dim);
+}
+
+.essence-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--stroke-mid);
+}
+
+.essence-entry {
+  display: grid;
+  gap: 20px;
+  padding: clamp(32px, 6vw, 64px) 0;
+  border-bottom: 1px solid var(--stroke-mid);
+  background: var(--bg-main);
+  transition: var(--transition-luxury);
+}
+
+.essence-entry:nth-child(even) {
+  margin-left: clamp(24px, 8vw, 120px);
+  padding-right: clamp(0px, 4vw, 48px);
+}
+
+.essence-entry:nth-child(odd) {
+  margin-right: clamp(48px, 12vw, 160px);
+}
+
+.essence-index {
+  margin: 0;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: var(--type-caption);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.essence-name {
+  margin: 0;
+  font-family: "Times New Roman", "Iowan Old Style", "Baskerville Old Face", serif;
+  font-size: var(--type-title);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: var(--text-main);
+  padding: 2vw 0;
+}
+
+.essence-desc {
+  margin: 0;
+  max-width: 52ch;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: var(--type-body);
+  line-height: 1.7;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.portfolio-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 3vw, 32px);
+  margin-left: clamp(0px, 5vw, 64px);
+  padding-top: 4vw;
+}
+
+.portfolio-item {
+  margin: 0;
+  display: grid;
+  gap: 20px;
+  transition: var(--transition-luxury);
+}
+
+.portfolio-item:nth-child(2) {
+  margin-top: clamp(24px, 5vw, 64px);
+}
+
+.portfolio-item:nth-child(3) {
+  margin-top: clamp(48px, 8vw, 96px);
+}
+
+.portfolio-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: var(--bg-main);
+  border: 1px solid var(--stroke);
+  position: relative;
+  transition: var(--transition-luxury);
+}
+
+.portfolio-placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border: 1px solid var(--stroke);
+  pointer-events: none;
+}
+
+.portfolio-item:hover .portfolio-placeholder {
+  border-color: var(--stroke-mid);
+}
+
+.portfolio-caption {
+  margin: 0;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: var(--type-caption);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding-left: 4px;
 }
 
 .booking-panel {
   display: grid;
   gap: 24px;
-  padding: 48px 0 0;
+  padding: 8vw 0 0;
   border-radius: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  background: #000000;
+  border-top: 1px solid var(--stroke-mid);
+  background: var(--bg-main);
+  margin-left: clamp(32px, 10vw, 140px);
+  max-width: 720px;
 }
 
 .site-footer {
   z-index: 2;
-  padding-top: 0;
+  padding-top: 4vw;
   display: grid;
   gap: 16px;
   padding-bottom: 80px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid var(--stroke-mid);
+  margin-right: clamp(24px, 8vw, 96px);
 }
 
 .footer-details {
@@ -317,12 +426,6 @@ a {
 *::after {
   box-shadow: none !important;
   text-shadow: none !important;
-}
-
-@media (max-width: 1024px) {
-  .service-card {
-    min-height: 180px;
-  }
 }
 
 @media (max-width: 768px) {
@@ -359,8 +462,40 @@ a {
     letter-spacing: 0.32em;
   }
 
-  .services-grid {
+  .lookbook-section {
+    gap: 48px;
+  }
+
+  .essence-entry,
+  .essence-entry:nth-child(even),
+  .essence-entry:nth-child(odd) {
+    margin-left: 0;
+    margin-right: 0;
+    padding-right: 0;
+    padding: 32px 0;
+  }
+
+  .lookbook-section {
+    margin-right: 0;
+  }
+
+  .booking-panel {
+    margin-left: 0;
+  }
+
+  .site-footer {
+    margin-right: 0;
+  }
+
+  .portfolio-row {
     grid-template-columns: 1fr;
+    gap: 48px;
+    margin-left: 0;
+  }
+
+  .portfolio-item:nth-child(2),
+  .portfolio-item:nth-child(3) {
+    margin-top: 0;
   }
 
   .booking-panel {
