@@ -6,14 +6,14 @@
     <title>Hair by William | Luxury Hair Salon — Extensions, Color &amp; Blowouts</title>
     <meta
       name="description"
-      content="Hair by William is a luxury hair salon specializing in custom extensions, Brazilian blowouts, dimensional balayage, and precision cutting in an exclusive, high-touch atelier."
+      content="Hair by William specializes in high-end dimensional color, premium hair extensions, and Brazilian blowouts. Book an exclusive luxury salon experience."
     />
     <meta
       name="keywords"
       content="Hair by William, luxury hair salon, custom hair extensions, Brazilian blowout, balayage, dimensional color, precision cutting"
     />
     <meta name="author" content="Hair by William" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://william-site-snowy.vercel.app/" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://william-site-snowy.vercel.app/" />
@@ -37,19 +37,63 @@
       rel="stylesheet"
     />
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "HairSalon",
-      "name": "Hair by William",
-      "url": "https://william-site-snowy.vercel.app/",
-      "description": "Hair by William delivers bespoke dimensional color, premium custom hair extensions, Brazilian blowouts, and precision cutting in an exclusive, high-touch environment.",
-      "priceRange": "$$$",
-      "image": "https://william-site-snowy.vercel.app/og-cover.jpg"
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "HairSalon",
+        "@id": "https://william-site-snowy.vercel.app/#salon",
+        "name": "Hair by William",
+        "url": "https://william-site-snowy.vercel.app/",
+        "telephone": "[INSERT_PHONE_NUMBER]",
+        "priceRange": "$$$$",
+        "hasMap": "[INSERT_GMB_SHARE_LINK_IF_AVAILABLE]",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "[INSERT_SUITE_OR_STREET_ADDRESS]",
+          "addressLocality": "[INSERT_CITY]",
+          "addressRegion": "[INSERT_STATE_CODE]",
+          "postalCode": "[INSERT_ZIP]",
+          "addressCountry": "US"
+        },
+        "serviceArea": {
+          "@type": "GeoCircle",
+          "description": "Premium luxury hair styling and extension services"
+        },
+        "knowsAbout": [
+          "Hair Extensions",
+          "Brazilian Blowouts",
+          "Dimensional Color",
+          "Balayage",
+          "Precision Hair Cutting"
+        ]
+      }
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <header>
+        <p>Hair by William</p>
+      </header>
+      <main>
+        <section aria-labelledby="prehydrate-home-heading">
+          <h1 id="prehydrate-home-heading">Hair by William</h1>
+          <p>
+            Hair by William specializes in luxury salon services with a focus on premium extension installs,
+            smoothing treatments, and dimensional color.
+          </p>
+        </section>
+        <section id="services" aria-labelledby="prehydrate-services-heading">
+          <h2 id="prehydrate-services-heading">Luxury Hair Extensions</h2>
+          <p>Premium extension artistry designed for seamless length, volume, and a custom luxury finish.</p>
+          <h2>Brazilian Blowouts</h2>
+          <p>Professional smoothing services that deliver radiant shine, softness, and long-wearing frizz control.</p>
+          <h2>Dimensional Color</h2>
+          <p>High-end balayage and dimensional color services tailored for depth, movement, and refined contrast.</p>
+        </section>
+      </main>
+      <footer>
+        <p>Book an exclusive Hair by William luxury salon experience.</p>
+      </footer>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -146,10 +146,9 @@ export default function App() {
         <section className="shell hero section">
           <p className="kicker hero-kicker">Rosé Luxe Hair Atelier</p>
           <h1 className="hero-title">
-            The new standard in <br />
-            dimensional color <br />
-            &amp; extension artistry.
+            Hair by William
           </h1>
+          <h2 className="hero-subtitle">Dimensional Color</h2>
           <p className="lead hero-copy">
             Bespoke styling, Brazilian blowouts, and transformative treatments in an exclusive, high-touch
             environment.
@@ -167,7 +166,15 @@ export default function App() {
         <section id="services" className="shell section reveal">
           <div className="section-heading-wrap">
             <p className="kicker">Services</p>
-            <h2 className="section-heading">Tailored rituals for color, finish, and restorative shine.</h2>
+            <h2 className="section-heading">Luxury Hair Extensions</h2>
+            <p className="lead section-copy">
+              Brazilian Blowouts, dimensional color, and extension artistry tailored for an exclusive salon
+              experience.
+            </p>
+          </div>
+          <div className="semantic-service-headings">
+            <h2 className="sr-only">Brazilian Blowouts</h2>
+            <h2 className="sr-only">Dimensional Color</h2>
           </div>
           <div className="services-grid">
             {servicePillars.map((service) => (
@@ -205,6 +212,13 @@ export default function App() {
           </div>
         </section>
       </main>
+      <footer className="shell section site-footer">
+        <p className="kicker">Hair by William</p>
+        <p className="site-footer-copy">
+          Luxury hair extensions, Brazilian blowouts, and dimensional color delivered in a premium appointment-only
+          salon setting.
+        </p>
+      </footer>
     </div>
   );
 }
