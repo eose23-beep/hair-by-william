@@ -1,16 +1,12 @@
 :root {
-  --bg-main: #0c0c0b;
-  --bg-deep: #141311;
-  --bg-panel: rgba(255, 250, 244, 0.035);
-  --bg-panel-strong: rgba(255, 250, 244, 0.06);
-  --text-main: #f7f4ef;
-  --text-soft: #d8d0c7;
-  --text-dim: #a59c90;
-  --stroke: rgba(230, 201, 158, 0.24);
-  --champagne: #e6c99e;
-  --champagne-strong: #f0dcc0;
-  --shadow-soft: rgba(0, 0, 0, 0.28);
-  --radius: 999px;
+  --bg-main: #000000;
+  --bg-panel: #000000;
+  --text-main: #ffffff;
+  --text-soft: rgba(255, 255, 255, 0.82);
+  --text-dim: rgba(255, 255, 255, 0.56);
+  --stroke: rgba(255, 255, 255, 0.24);
+  --stroke-strong: rgba(255, 255, 255, 0.72);
+  --radius: 0;
   --radius-lg: 0;
 }
 
@@ -33,10 +29,8 @@ html {
 body {
   margin: 0;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
-  background:
-    radial-gradient(circle at top, rgba(230, 201, 158, 0.08) 0%, transparent 32%),
-    linear-gradient(180deg, #141311 0%, var(--bg-main) 34%, #090908 100%);
-  color: var(--text-main);
+  background-color: #000000 !important;
+  color: #ffffff;
   line-height: 1.65;
   letter-spacing: 0.01em;
 }
@@ -62,15 +56,12 @@ a {
   position: relative;
   isolation: isolate;
   overflow: clip;
+  background-color: #000000 !important;
+  color: #ffffff;
 }
 
 .overlay-noise {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  background-image: radial-gradient(rgba(255, 251, 245, 0.018) 1px, transparent 1px);
-  background-size: 5px 5px;
+  display: none;
 }
 
 .shell {
@@ -99,7 +90,8 @@ a {
   margin: 0;
   font-size: 28px;
   line-height: 1;
-  font-weight: 500;
+  font-weight: 400;
+  text-transform: uppercase;
   letter-spacing: -0.06em;
 }
 
@@ -119,11 +111,11 @@ a {
   min-height: calc(100dvh - 96px);
   display: grid;
   align-content: center;
-  gap: 24px;
+  gap: 32px;
   padding-top: 64px;
-  justify-items: center;
+  justify-items: start;
   max-width: 920px;
-  text-align: center;
+  text-align: left;
 }
 
 .kicker {
@@ -136,12 +128,27 @@ a {
 
 .hero-title {
   margin: 0;
-  max-width: 10ch;
+  display: grid;
+  gap: 12px;
+  max-width: none;
+}
+
+.hero-title-primary {
   font-family: "Times New Roman", "Iowan Old Style", "Baskerville Old Face", serif;
   font-size: clamp(60px, 10vw, 132px);
-  line-height: 0.94;
-  letter-spacing: -0.045em;
+  line-height: 0.88;
+  letter-spacing: -0.06em;
   font-weight: 500;
+  text-transform: uppercase;
+}
+
+.hero-title-secondary {
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  line-height: 1;
+  letter-spacing: 0.48em;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
 .lead {
@@ -171,32 +178,30 @@ a {
   padding: 12px 24px;
   font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1.04),
-    box-shadow 320ms cubic-bezier(0.2, 0.8, 0.2, 1.04),
-    background-color 320ms cubic-bezier(0.2, 0.8, 0.2, 1.04),
-    color 320ms cubic-bezier(0.2, 0.8, 0.2, 1.04),
-    border-color 320ms cubic-bezier(0.2, 0.8, 0.2, 1.04);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease,
+    transform 220ms ease;
 }
 
 .cta-button {
-  background: linear-gradient(135deg, var(--champagne-strong), var(--champagne));
-  color: #171411;
-  box-shadow: 0 18px 40px rgba(230, 201, 158, 0.18);
+  border: 1px solid #ffffff;
+  background: #ffffff;
+  color: #000000;
   position: relative;
   z-index: 3;
 }
 
 .secondary-button {
-  border: 1px solid var(--stroke);
-  color: var(--text-main);
-  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  background: transparent;
 }
 
 .cta-button:hover,
 .secondary-button:hover,
 .service-link:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
 }
 
 .cta-button:active,
@@ -233,8 +238,8 @@ a {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .service-card {
@@ -242,21 +247,22 @@ a {
   display: flex;
   align-items: end;
   padding: 32px;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
-    var(--bg-panel);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: #000000;
   will-change: transform;
-  transition: border-color 320ms cubic-bezier(0.22, 1, 0.36, 1), background 320ms cubic-bezier(0.22, 1, 0.36, 1), transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: border-color 220ms ease, background-color 220ms ease, transform 220ms ease;
+}
+
+.service-card-content {
+  display: grid;
+  gap: 12px;
+  max-width: 32ch;
 }
 
 .service-card:hover {
-  border-color: rgba(230, 201, 158, 0.28);
-  background:
-    linear-gradient(180deg, rgba(230, 201, 158, 0.08), rgba(255, 255, 255, 0)),
-    var(--bg-panel-strong);
+  border-color: var(--stroke-strong);
+  background: #000000;
   transform: translateY(-2px);
 }
 
@@ -268,15 +274,23 @@ a {
   color: var(--text-main);
 }
 
+.service-detail {
+  margin: 0;
+  max-width: 28ch;
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
 .booking-panel {
   display: grid;
   gap: 24px;
   padding: 48px 0 0;
   border-radius: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background:
-    radial-gradient(circle at top left, rgba(230, 201, 158, 0.08), transparent 36%),
-    linear-gradient(140deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  background: #000000;
 }
 
 .site-footer {
@@ -285,7 +299,7 @@ a {
   display: grid;
   gap: 16px;
   padding-bottom: 80px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .footer-details {
@@ -296,6 +310,13 @@ a {
 .footer-details p {
   margin: 0;
   color: var(--text-soft);
+}
+
+*,
+*::before,
+*::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
 
 @media (max-width: 1024px) {
@@ -327,7 +348,15 @@ a {
   }
 
   .hero-title {
+    gap: 8px;
+  }
+
+  .hero-title-primary {
     font-size: clamp(52px, 16vw, 84px);
+  }
+
+  .hero-title-secondary {
+    letter-spacing: 0.32em;
   }
 
   .services-grid {

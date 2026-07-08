@@ -7,6 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 const servicePillars = [
   {
     title: "Extensions Service",
+    detail: "Specializing in I-Tip, Genius Weft, Tape-In, and Micro-link integration.",
   },
   {
     title: "Cuts",
@@ -59,12 +60,11 @@ export default function App() {
 
       gsap.fromTo(
         serviceCards,
-        { opacity: 0, y: 56, rotateX: 6, transformOrigin: "center top" },
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
-          rotateX: 0,
-          duration: 1.1,
+          duration: 0.9,
           stagger: 0.1,
           ease: "power4.out",
           scrollTrigger: {
@@ -74,27 +74,6 @@ export default function App() {
           },
         },
       );
-
-      // Subtle float begins after each card enters; staggered to match the entrance rhythm.
-      serviceCards.forEach((card, idx) => {
-        const floatTween = gsap.to(card, {
-          y: -8,
-          duration: 2.7,
-          ease: "sine.inOut",
-          repeat: -1,
-          yoyo: true,
-          paused: true,
-        });
-
-        ScrollTrigger.create({
-          trigger: card,
-          start: "top 72%",
-          once: true,
-          onEnter: () => {
-            gsap.delayedCall(idx * 0.12, () => floatTween.play());
-          },
-        });
-      });
 
       gsap.utils.toArray(".reveal").forEach((element) => {
         gsap.fromTo(
@@ -135,7 +114,10 @@ export default function App() {
       <main>
         <section className="shell hero section">
           <p className="kicker hero-kicker">27 years EXPERIENCE</p>
-          <h1 className="hero-title">WILLIAM stylist</h1>
+          <h1 className="hero-title">
+            <span className="hero-title-primary">WILLIAM</span>
+            <span className="hero-title-secondary">STYLIST</span>
+          </h1>
           <p className="lead hero-copy">
             High-touch hair artistry, local trust, and twenty-seven years of refined experience in El Paso.
           </p>
@@ -158,7 +140,10 @@ export default function App() {
           <div className="services-grid">
             {servicePillars.map((service) => (
               <article key={service.title} className="service-card">
-                <h3>{service.title}</h3>
+                <div className="service-card-content">
+                  <h3>{service.title}</h3>
+                  {service.detail ? <p className="service-detail">{service.detail}</p> : null}
+                </div>
               </article>
             ))}
           </div>
