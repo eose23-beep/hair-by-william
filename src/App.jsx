@@ -155,7 +155,7 @@ export default function App() {
               High-touch hair artistry, local trust, and twenty-seven years of refined experience in El Paso.
             </p>
             <p className="hero-meta" aria-label="Salon credentials">
-              <span>5411 N. Mesa, Suite 13-C</span>
+              <span>5411 N. Mesa, Suite 13C</span>
               <span>Friday &amp; Saturday</span>
             </p>
             <div className="hero-actions">
@@ -230,10 +230,10 @@ export default function App() {
             <p className="lead">
               A polished local destination for extensions, cuts, color, and Brazilian Blowout appointments.
             </p>
+            {/* TODO: Confirm actual Friday/Saturday hours with William before publishing specific times */}
             <dl className="booking-hours" aria-label="Salon hours">
               <dt>Hours</dt>
-              <dd>Friday — 9:00 AM to 6:00 PM</dd>
-              <dd>Saturday — 9:00 AM to 4:00 PM</dd>
+              <dd>Friday &amp; Saturday — call for current availability</dd>
             </dl>
             <div className="booking-actions">
               <a className="cta-button" href="tel:915-920-7823">
@@ -258,7 +258,7 @@ export default function App() {
             <p>
               <a href="tel:915-920-7823">915-920-7823</a>
             </p>
-            <p className="footer-hours">Open Friday &amp; Saturday — Suite 13-C, LV Hair Salon</p>
+            <p className="footer-hours">Open Friday &amp; Saturday — Suite 13C, LV Hair Salon</p>
             <p>Extensions Service</p>
             <p>Cuts</p>
             <p>Color</p>
