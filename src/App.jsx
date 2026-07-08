@@ -8,23 +8,23 @@ gsap.registerPlugin(ScrollTrigger);
 const servicePillars = [
   {
     index: "I",
-    title: "Custom Hair Extensions",
-    subtext: "Seamless blending, volume, and length",
+    title: "Extensions Service",
+    subtext: "Seamless blending, volume, and length with a refined finish.",
   },
   {
     index: "II",
-    title: "Brazilian Blowouts & Smoothing",
-    subtext: "Frizz-free, radiant, manageable",
+    title: "Cuts",
+    subtext: "Precision shape, movement, and tailored structure.",
   },
   {
     index: "III",
-    title: "Dimensional Color & Balayage",
-    subtext: "Hand-painted, premium lived-in color",
+    title: "Color",
+    subtext: "Dimensional color work with polished tone and depth.",
   },
   {
     index: "IV",
-    title: "Precision Cutting & Texture",
-    subtext: "Bespoke structural cuts",
+    title: "Brazilian Blowout",
+    subtext: "Silken smoothing for radiant, controlled texture.",
   },
 ];
 
@@ -144,18 +144,16 @@ export default function App() {
 
       <main>
         <section className="shell hero section">
-          <p className="kicker hero-kicker">Rosé Luxe Hair Atelier</p>
+          <p className="kicker hero-kicker">27 YEARS EXPERIENCE</p>
           <h1 className="hero-title">
-            Hair by William
+            WILLIAM stylist
           </h1>
-          <h2 className="hero-subtitle">Dimensional Color</h2>
           <p className="lead hero-copy">
-            Bespoke styling, Brazilian blowouts, and transformative treatments in an exclusive, high-touch
-            environment.
+            Private-feeling luxury service, expert technique, and quietly confident hair artistry on Mesa Street.
           </p>
           <div className="hero-actions">
-            <a className="cta-button" href="#booking">
-              Reserve an Experience
+            <a className="cta-button" href="tel:915-920-7823">
+              Reserve by Phone
             </a>
             <a className="secondary-button" href="#services">
               Explore Services
@@ -166,15 +164,15 @@ export default function App() {
         <section id="services" className="shell section reveal">
           <div className="section-heading-wrap">
             <p className="kicker">Services</p>
-            <h2 className="section-heading">Luxury Hair Extensions</h2>
+            <h2 className="section-heading">Refined essentials, shaped by experience.</h2>
             <p className="lead section-copy">
-              Brazilian Blowouts, dimensional color, and extension artistry tailored for an exclusive salon
-              experience.
+              Extensions Service, Cuts, Color, and Brazilian Blowout delivered with a polished, appointment-led
+              approach.
             </p>
           </div>
           <div className="semantic-service-headings">
-            <h2 className="sr-only">Brazilian Blowouts</h2>
-            <h2 className="sr-only">Dimensional Color</h2>
+            <h2 className="sr-only">Extensions Service</h2>
+            <h2 className="sr-only">Brazilian Blowout</h2>
           </div>
           <div className="services-grid">
             {servicePillars.map((service) => (
@@ -193,21 +191,22 @@ export default function App() {
         </section>
 
         <section id="booking" className="shell section reveal booking-panel">
-          <p className="kicker">Booking</p>
-          <h2 className="section-heading">Reserve your Rosé Luxe appointment in under 60 seconds.</h2>
+          <p className="kicker">El Paso Booking</p>
+          <h2 className="section-heading">El Paso Hair, Refined by William</h2>
           <p className="lead">
-            Select your service and preferred stylist. We confirm availability, prep notes, and arrival details by
-            email right away.
+            Private-feeling luxury service, expert technique, and 27 years of experience on Mesa Street.
           </p>
           <div className="booking-actions">
-            <a
-              className="cta-button"
-              href="mailto:bookings@williamluxe.com?subject=Reserve%20an%20Experience%20%E2%80%94%20Hair%20by%20William"
-            >
-              Reserve an Experience
+            <a className="cta-button" href="tel:915-920-7823">
+              Reserve by Phone
             </a>
-            <a className="secondary-button" href="tel:+15550181234">
-              Call Salon Desk
+            <a
+              className="secondary-button"
+              href="https://www.google.com/maps/search/?api=1&query=5411%20N.%20Mesa%2C%20Suite%2013C%2C%20El%20Paso%2C%20TX%2079912"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Get Directions
             </a>
           </div>
         </section>
@@ -215,9 +214,13 @@ export default function App() {
       <footer className="shell section site-footer">
         <p className="kicker">Hair by William</p>
         <p className="site-footer-copy">
-          Luxury hair extensions, Brazilian blowouts, and dimensional color delivered in a premium appointment-only
-          salon setting.
+          Extensions Service, Cuts, Color, Brazilian Blowout.
         </p>
+        <div className="footer-details" aria-label="Salon contact details">
+          <p>915-920-7823</p>
+          <p>5411 N. Mesa, Suite 13C</p>
+          <p>El Paso, TX 79912</p>
+        </div>
       </footer>
     </div>
   );

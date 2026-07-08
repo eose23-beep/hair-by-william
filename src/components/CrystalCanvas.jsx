@@ -1,52 +1,71 @@
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Float, MeshTransmissionMaterial } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-function Crystal() {
+function SilkSurface() {
   const meshRef = useRef(null);
+  const basePositions = useMemo(() => [], []);
+  const geometry = useMemo(() => {
+    const plane = new THREE.PlaneGeometry(8.4, 8.4, 220, 220);
+    const positions = plane.attributes.position;
+    for (let idx = 0; idx < positions.count; idx += 1) {
+      basePositions.push({
+        x: positions.getX(idx),
+        y: positions.getY(idx),
+        z: positions.getZ(idx),
+      });
+    }
 
-  // Higher segment sphere for a smoother dark-glass silhouette.
-  const geometry = useMemo(() => new THREE.SphereGeometry(1.08, 128, 128), []);
-  const coreGeometry = useMemo(() => new THREE.OctahedronGeometry(0.48, 0), []);
+    return plane;
+  }, [basePositions]);
 
   useFrame((state, delta) => {
     if (!meshRef.current) return;
-    meshRef.current.rotation.x += delta * 0.08;
-    meshRef.current.rotation.y += delta * 0.16;
-    meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.4) * 0.06;
-    meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
+    const time = state.clock.elapsedTime;
+    const positions = meshRef.current.geometry.attributes.position;
+
+    for (let idx = 0; idx < positions.count; idx += 1) {
+      const base = basePositions[idx];
+      const radial = Math.sqrt(base.x * base.x + base.y * base.y);
+      const waveA = Math.sin(base.x * 1.15 + time * 0.4);
+      const waveB = Math.cos(base.y * 1.45 - time * 0.34);
+      const swirl = Math.sin(radial * 3.1 - time * 0.55);
+      const drift = Math.cos((base.x + base.y) * 0.82 + time * 0.22);
+
+      positions.setZ(idx, base.z + waveA * 0.2 + waveB * 0.16 + swirl * 0.12 + drift * 0.08);
+    }
+
+    positions.needsUpdate = true;
+    meshRef.current.geometry.computeVertexNormals();
+    meshRef.current.rotation.z = Math.sin(time * 0.1) * 0.08;
+    meshRef.current.rotation.x = -0.92 + Math.cos(time * 0.12) * 0.04;
+    meshRef.current.position.y = Math.sin(time * 0.18) * 0.14;
+    meshRef.current.position.x = 0.7 + Math.sin(time * 0.08) * 0.12;
   });
 
   return (
-    <Float speed={0.65} floatIntensity={0.35} rotationIntensity={0.2}>
-      <group ref={meshRef}>
-        <mesh geometry={geometry}>
-          <MeshTransmissionMaterial
-            color="#070a12"
-            transmission={1}
-            thickness={0.95}
-            roughness={0.02}
-            chromaticAberration={0.03}
-            anisotropy={0.28}
-            distortion={0.028}
-            distortionScale={0.18}
-            temporalDistortion={0.08}
-            ior={1.48}
-            clearcoat={1}
-            clearcoatRoughness={0.06}
-          />
-        </mesh>
-        <mesh geometry={coreGeometry}>
-          <meshStandardMaterial color="#e9b79f" emissive="#a86553" emissiveIntensity={0.3} metalness={0.5} roughness={0.25} />
-        </mesh>
-        <pointLight position={[0, 0.16, 0.4]} color="#fbe8cc" intensity={7} distance={2.4} />
-      </group>
-      <mesh rotation={[0.3, 0.5, 0]}>
-        <torusGeometry args={[1.85, 0.03, 24, 160]} />
-        <meshStandardMaterial color="#e7c4a0" emissive="#be8a69" emissiveIntensity={0.24} metalness={0.88} roughness={0.2} />
+    <group>
+      <mesh ref={meshRef} geometry={geometry} position={[0.7, -0.2, -0.45]} rotation={[-0.92, 0.22, 0.08]}>
+        <meshPhysicalMaterial
+          color="#11161f"
+          emissive="#2d1e1a"
+          emissiveIntensity={0.18}
+          roughness={0.5}
+          metalness={0.08}
+          clearcoat={1}
+          clearcoatRoughness={0.24}
+          sheen={1}
+          sheenColor="#e2b8a0"
+          sheenRoughness={0.62}
+          reflectivity={0.46}
+          side={THREE.DoubleSide}
+        />
       </mesh>
-    </Float>
+      <mesh position={[-1.85, 1.35, -1.8]} rotation={[0.4, 0.1, -0.25]}>
+        <planeGeometry args={[2.8, 2.8, 1, 1]} />
+        <meshBasicMaterial color="#5c3428" transparent opacity={0.1} />
+      </mesh>
+    </group>
   );
 }
 
@@ -54,14 +73,15 @@ export default function CrystalCanvas() {
   return (
     <div className="canvas-wrap" aria-hidden="true">
       <Canvas camera={{ position: [0, 0, 4.8], fov: 38 }} dpr={[1, 1.5]}>
-        <color attach="background" args={["#080a0f"]} />
-        <fog attach="fog" args={["#080a0f", 5, 11]} />
-        <ambientLight intensity={0.2} />
-        <directionalLight position={[2, 3, 5]} intensity={0.9} color="#f9e7d4" />
-        <directionalLight position={[-3, -1, -4]} intensity={0.44} color="#c8927f" />
-        <pointLight position={[0, 1.5, 1.2]} intensity={0.6} color="#fbe3cc" />
-        <Environment preset="city" />
-        <Crystal />
+        <color attach="background" args={["#070a10"]} />
+        <fog attach="fog" args={["#070a10", 4.5, 10.5]} />
+        <ambientLight intensity={0.62} color="#8f7667" />
+        <hemisphereLight intensity={0.55} color="#f2d9ca" groundColor="#080b11" />
+        <directionalLight position={[2.4, 2.6, 3.6]} intensity={1.15} color="#f6d7c1" />
+        <directionalLight position={[-3.4, -1.8, 2.2]} intensity={0.72} color="#b9765f" />
+        <pointLight position={[0.8, 0.8, 1.8]} intensity={1.6} distance={7} color="#f4cbb3" />
+        <pointLight position={[-2.2, -1.6, 1.2]} intensity={0.8} distance={6} color="#7d4b3e" />
+        <SilkSurface />
       </Canvas>
     </div>
   );
