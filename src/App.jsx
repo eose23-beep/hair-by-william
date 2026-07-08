@@ -7,20 +7,24 @@ gsap.registerPlugin(ScrollTrigger);
 
 const servicePillars = [
   {
+    index: "I",
     title: "Custom Hair Extensions",
-    subtext: "Seamless blending for ultimate volume and length",
+    subtext: "Seamless blending, volume, and length",
   },
   {
+    index: "II",
     title: "Brazilian Blowouts & Smoothing",
-    subtext: "Frizz-free, radiant, and effortlessly manageable",
+    subtext: "Frizz-free, radiant, manageable",
   },
   {
+    index: "III",
     title: "Dimensional Color & Balayage",
-    subtext: "Hand-painted, lived-in color tailored to your skin tone",
+    subtext: "Hand-painted, premium lived-in color",
   },
   {
+    index: "IV",
     title: "Precision Cutting & Texture",
-    subtext: "Structural cuts and perms designed for your face shape",
+    subtext: "Bespoke structural cuts",
   },
 ];
 
@@ -134,7 +138,7 @@ export default function App() {
           Services
         </a>
         <a className="cta-button cta-small" href="#booking">
-          Initiate Build
+          Reserve an Experience
         </a>
       </header>
 
@@ -142,10 +146,13 @@ export default function App() {
         <section className="shell hero section">
           <p className="kicker hero-kicker">Rosé Luxe Hair Atelier</p>
           <h1 className="hero-title">
-            The new standard in <br/>dimensional color <br/>& extension artistry.
+            The new standard in <br />
+            dimensional color <br />
+            &amp; extension artistry.
           </h1>
           <p className="lead hero-copy">
-            Bespoke styling, Brazilian blowouts, and transformative treatments in an exclusive, high-touch environment.
+            Bespoke styling, Brazilian blowouts, and transformative treatments in an exclusive, high-touch
+            environment.
           </p>
           <div className="hero-actions">
             <a className="cta-button" href="#booking">
@@ -165,10 +172,13 @@ export default function App() {
           <div className="services-grid">
             {servicePillars.map((service) => (
               <article key={service.title} className="service-card">
+                <div className="service-meta">
+                  <p>{service.index}</p>
+                </div>
                 <h3>{service.title}</h3>
                 <p className="service-subtext">{service.subtext}</p>
                 <a className="service-link" href="#booking">
-                  Book this service
+                  Reserve an Experience
                 </a>
               </article>
             ))}
@@ -179,15 +189,15 @@ export default function App() {
           <p className="kicker">Booking</p>
           <h2 className="section-heading">Reserve your Rosé Luxe appointment in under 60 seconds.</h2>
           <p className="lead">
-            Select your service and preferred stylist. We confirm availability, prep notes, and arrival details
-            by email right away.
+            Select your service and preferred stylist. We confirm availability, prep notes, and arrival details by
+            email right away.
           </p>
           <div className="booking-actions">
             <a
               className="cta-button"
-              href="mailto:bookings@williamluxe.com?subject=Book%20a%20Ros%C3%A9%20Luxe%20Session"
+              href="mailto:bookings@williamluxe.com?subject=Reserve%20an%20Experience%20%E2%80%94%20Hair%20by%20William"
             >
-              Book via Concierge
+              Reserve an Experience
             </a>
             <a className="secondary-button" href="tel:+15550181234">
               Call Salon Desk
