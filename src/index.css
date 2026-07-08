@@ -1,6 +1,6 @@
 :root {
-  --bg-main: #0a0a0a;
-  --bg-panel: #0a0a0a;
+  --bg-main: transparent;
+  --bg-panel: transparent;
   --text-main: #ffffff;
   --text-soft: rgba(255, 255, 255, 0.9);
   --text-dim: rgba(255, 255, 255, 0.58);
@@ -39,7 +39,7 @@ html {
 body {
   margin: 0;
   font-family: "Avenir Next", "Segoe UI", sans-serif;
-  background-color: var(--bg-main) !important;
+  background-color: #050508 !important;
   color: var(--text-main);
   line-height: 1.65;
   letter-spacing: 0.01em;
@@ -64,21 +64,46 @@ a {
   text-decoration: none;
 }
 
+.fluid-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.fluid-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.fluid-canvas--static .fluid-canvas__fallback {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, #0c0e14 0%, #050508 72%);
+}
+
+.typography-layer {
+  position: relative;
+  z-index: 1;
+}
+
 .site-shell {
   position: relative;
   isolation: isolate;
   overflow: clip;
-  background-color: var(--bg-main) !important;
+  background: transparent !important;
   color: var(--text-main);
-}
-
-.overlay-noise {
-  display: none;
 }
 
 .shell {
   width: min(1180px, 100% - 64px);
   margin-inline: auto;
+  background: transparent !important;
 }
 
 .shell--offset {
@@ -90,9 +115,10 @@ a {
 
 .section {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   padding-top: clamp(64px, 8vw, 120px);
   padding-bottom: clamp(64px, 8vw, 120px);
+  background: transparent !important;
 }
 
 .nav-row {
@@ -209,7 +235,7 @@ a {
 .cta-button {
   border: 1px solid var(--text-main);
   background: var(--text-main);
-  color: var(--bg-main);
+  color: #050508;
   position: relative;
   z-index: 3;
 }
@@ -250,6 +276,7 @@ a {
 .section-heading {
   margin: 0;
   max-width: 15ch;
+  font-family: "Times New Roman", "Iowan Old Style", "Baskerville Old Face", serif;
   font-size: var(--type-headline);
   line-height: 1.02;
   letter-spacing: -0.04em;
@@ -292,7 +319,7 @@ a {
   gap: 20px;
   padding: clamp(32px, 6vw, 64px) 0;
   border-bottom: 1px solid var(--stroke-mid);
-  background: var(--bg-main);
+  background: transparent !important;
   transition: var(--transition-luxury);
 }
 
@@ -362,7 +389,7 @@ a {
 .portfolio-placeholder {
   width: 100%;
   aspect-ratio: 4 / 5;
-  background: var(--bg-main);
+  background: transparent !important;
   border: 1px solid var(--stroke);
   position: relative;
   transition: var(--transition-luxury);
@@ -396,19 +423,20 @@ a {
   padding: 8vw 0 0;
   border-radius: 0;
   border-top: 1px solid var(--stroke-mid);
-  background: var(--bg-main);
+  background: transparent !important;
   margin-left: clamp(32px, 10vw, 140px);
   max-width: 720px;
 }
 
 .site-footer {
-  z-index: 2;
+  z-index: 1;
   padding-top: 4vw;
   display: grid;
   gap: 16px;
   padding-bottom: 80px;
   border-top: 1px solid var(--stroke-mid);
   margin-right: clamp(24px, 8vw, 96px);
+  background: transparent !important;
 }
 
 .footer-details {
@@ -464,6 +492,7 @@ a {
 
   .lookbook-section {
     gap: 48px;
+    margin-right: 0;
   }
 
   .essence-entry,
@@ -475,12 +504,9 @@ a {
     padding: 32px 0;
   }
 
-  .lookbook-section {
-    margin-right: 0;
-  }
-
   .booking-panel {
     margin-left: 0;
+    padding-top: 32px;
   }
 
   .site-footer {
@@ -496,10 +522,6 @@ a {
   .portfolio-item:nth-child(2),
   .portfolio-item:nth-child(3) {
     margin-top: 0;
-  }
-
-  .booking-panel {
-    padding-top: 32px;
   }
 }
 

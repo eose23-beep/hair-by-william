@@ -1,88 +1,91 @@
-import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Suspense, useEffect, useRef } from "react";
+import { Canvas } from "@react-three/fiber";
+import ObsidianFluidMesh from "./ObsidianFluidMesh";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const VIDEO_SOURCES = [
-  'https://assets.mixkit.co/videos/8377/8377-720.mp4',
-  'https://assets.mixkit.co/videos/8477/8477-720.mp4',
-];
-
-const POSTER_SRC = 'https://assets.mixkit.co/videos/8377/8377-thumb-720-0.jpg';
-
-export default function LiquidSilkCanvas() {
-  const videoRef = useRef(null);
+function useFluidPointer() {
+  const mouseRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
+  const scrollRef = useRef(0);
+  const rafRef = useRef(0);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return undefined;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) return undefined;
 
-    let scrubTween = null;
-
-    const bindScrub = () => {
-      const duration = video.duration;
-      if (!Number.isFinite(duration) || duration <= 0 || scrubTween) return;
-
-      const proxy = { time: 0 };
-      scrubTween = gsap.to(proxy, {
-        time: duration,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: document.body,
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 1.4,
-          invalidateOnRefresh: true,
-        },
-        onUpdate: () => {
-          if (video.readyState < 2) return;
-          const next = Math.min(Math.max(proxy.time, 0), duration - 0.05);
-          if (Number.isFinite(next)) {
-            video.currentTime = next;
-          }
-        },
-      });
-
-      ScrollTrigger.refresh();
+    const onMove = (event) => {
+      mouseRef.current.tx = (event.clientX / window.innerWidth) * 2 - 1;
+      mouseRef.current.ty = -(event.clientY / window.innerHeight) * 2 + 1;
     };
 
-    video.pause();
+    const onScroll = () => {
+      scrollRef.current = window.scrollY;
+    };
 
-    if (video.readyState >= 1) {
-      bindScrub();
-    } else {
-      video.addEventListener('loadedmetadata', bindScrub, { once: true });
-    }
+    const tick = () => {
+      const m = mouseRef.current;
+      const ease = 0.055;
+      m.x += (m.tx - m.x) * ease;
+      m.y += (m.ty - m.y) * ease;
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    rafRef.current = requestAnimationFrame(tick);
 
     return () => {
-      video.removeEventListener('loadedmetadata', bindScrub);
-      scrubTween?.scrollTrigger?.kill();
-      scrubTween?.kill();
-      scrubTween = null;
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
-  return (
-    <div className="fixed inset-0 z-[-3] overflow-hidden bg-[#0A0A0A] pointer-events-none" aria-hidden="true">
-      <video
-        ref={videoRef}
-        muted
-        playsInline
-        loop
-        preload="auto"
-        poster={POSTER_SRC}
-        className="absolute inset-0 h-full w-full object-cover opacity-80 contrast-125 saturate-0"
-        style={{ objectPosition: 'center' }}
-      >
-        {VIDEO_SOURCES.map((src) => (
-          <source key={src} src={src} type="video/mp4" />
-        ))}
-      </video>
+  return { mouseRef, scrollRef };
+}
 
-      <div className="absolute inset-0 bg-[#0A0A0A]/85" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A]/60 to-[#0A0A0A]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,transparent_0%,transparent_38%,rgba(10,10,10,0.85)_100%)]" />
+function FluidScene({ mouseRef, scrollRef }) {
+  return (
+    <>
+      <color attach="background" args={["#050508"]} />
+      <fog attach="fog" args={["#050508", 3.5, 9]} />
+      <ambientLight intensity={0.08} />
+      <directionalLight position={[2.4, 1.8, 3.2]} intensity={0.35} color="#8a92a8" />
+      <ObsidianFluidMesh mouseRef={mouseRef} scrollRef={scrollRef} />
+    </>
+  );
+}
+
+export default function LiquidSilkCanvas() {
+  const { mouseRef, scrollRef } = useFluidPointer();
+  const reduceMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduceMotion) {
+    return (
+      <div className="fluid-canvas fluid-canvas--static" aria-hidden="true">
+        <div className="fluid-canvas__fallback" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="fluid-canvas" aria-hidden="true">
+      <Canvas
+        dpr={[1, 1.5]}
+        camera={{ position: [0, 0.15, 2.65], fov: 42, near: 0.1, far: 20 }}
+        gl={{
+          antialias: true,
+          alpha: false,
+          powerPreference: "high-performance",
+          stencil: false,
+        }}
+        frameloop="always"
+      >
+        <Suspense fallback={null}>
+          <FluidScene mouseRef={mouseRef} scrollRef={scrollRef} />
+        </Suspense>
+      </Canvas>
     </div>
   );
 }
