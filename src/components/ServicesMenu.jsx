@@ -11,7 +11,7 @@ const services = [
   },
   {
     index: 'III',
-    name: 'Dimensional Color & Balayage',
+    name: 'Dimensional Color',
     description: 'Hand-painted, premium lived-in color',
   },
   {
