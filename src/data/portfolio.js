@@ -20,18 +20,21 @@ export const bookingAmbientClip = {
 export const heroWorkClips = [
   {
     id: "hero-clip-01",
+    slideId: "clip-01",
     src: "/portfolio/clip-01.mp4",
     poster: "/portfolio/clip-01-poster.jpg",
     alt: "Highlighted waves with soft volume in motion",
   },
   {
     id: "hero-clip-02",
+    slideId: "clip-02",
     src: "/portfolio/clip-02.mp4",
     poster: "/portfolio/clip-02-poster.jpg",
     alt: "Dark blowout waves bouncing as the client turns",
   },
   {
     id: "hero-clip-04",
+    slideId: "clip-04",
     src: "/portfolio/clip-04.mp4",
     poster: "/portfolio/clip-04-poster.jpg",
     alt: "Honey balayage waves with soft bounce",

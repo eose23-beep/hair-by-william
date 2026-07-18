@@ -136,8 +136,32 @@ function slideAriaLabel(slide, index, total) {
   return `${kind} slide ${index + 1} of ${total}: ${slide.title}. ${slide.alt}`;
 }
 
+/** Resolve #clip-01 / #portfolio-clip-01 / #portfolio?clip=01 style hashes to a slide index. */
+function slideIndexFromHash(hash = typeof window !== "undefined" ? window.location.hash : "") {
+  const raw = String(hash || "").replace(/^#/, "").trim();
+  if (!raw || raw === "portfolio") return null;
+
+  const queryMatch = raw.match(/^portfolio\?(?:.*&)?clip=([0-9a-z-]+)/i);
+  if (queryMatch) {
+    const clipId = queryMatch[1].startsWith("clip-") ? queryMatch[1] : `clip-${queryMatch[1]}`;
+    const byQuery = portfolioSlides.findIndex((slide) => slide.id === clipId);
+    if (byQuery >= 0) return byQuery;
+  }
+
+  const normalized = raw.replace(/^portfolio-/, "");
+  const candidates = [raw, normalized];
+  const clipMatch = raw.match(/(?:^|-)(clip-\d+)$/i);
+  if (clipMatch) candidates.push(clipMatch[1]);
+
+  for (const id of candidates) {
+    const index = portfolioSlides.findIndex((slide) => slide.id === id);
+    if (index >= 0) return index;
+  }
+  return null;
+}
+
 export default function PortfolioGallery() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(() => slideIndexFromHash() ?? 0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [metrics, setMetrics] = useState(DEFAULT_METRICS);
@@ -156,6 +180,19 @@ export default function PortfolioGallery() {
     syncMetrics();
     window.addEventListener("resize", syncMetrics, { passive: true });
     return () => window.removeEventListener("resize", syncMetrics);
+  }, []);
+
+  useEffect(() => {
+    const applyHashSlide = () => {
+      const index = slideIndexFromHash();
+      if (index == null) return;
+      setActive(index);
+      setDragOffset(0);
+    };
+
+    applyHashSlide();
+    window.addEventListener("hashchange", applyHashSlide);
+    return () => window.removeEventListener("hashchange", applyHashSlide);
   }, []);
 
   useEffect(() => {
@@ -357,6 +394,13 @@ export default function PortfolioGallery() {
         className="shell section portfolio-gallery-section"
         aria-label="William portfolio"
       >
+        <div className="portfolio-deep-links" aria-hidden="true">
+          {portfolioSlides
+            .filter((slide) => slide.type === "video")
+            .map((slide) => (
+              <span key={slide.id} id={slide.id} />
+            ))}
+        </div>
         <div className="portfolio-gallery__header">
           <p className="lookbook-tag">Portfolio</p>
           <h2 className="section-heading portfolio-gallery__heading">Salon Portfolio</h2>

@@ -215,27 +215,30 @@ export default function App() {
             <aside className="hero-film" aria-label="Work in motion — muted salon clips">
               <p className="hero-film__label">In the chair</p>
               <ul className="hero-film__strip">
-                {heroWorkClips.map((clip, index) => (
-                  <li key={clip.id} className="hero-film__cell">
-                    <a
-                      className="hero-film__link"
-                      href="#portfolio"
-                      aria-label={`${clip.alt} — view portfolio`}
-                      data-mcp-action="view-portfolio"
-                      data-mcp-description="Open the salon portfolio from a hero work clip."
-                      data-mcp-params='{"destination":"#portfolio"}'
-                    >
-                      <AmbientVideo
-                        className="hero-film__media"
-                        src={clip.src}
-                        poster={clip.poster}
-                        ariaLabel={clip.alt}
-                        preload={index === 0 ? "metadata" : "none"}
-                        active
-                      />
-                    </a>
-                  </li>
-                ))}
+                {heroWorkClips.map((clip, index) => {
+                  const portfolioHref = `#${clip.slideId}`;
+                  return (
+                    <li key={clip.id} className="hero-film__cell">
+                      <a
+                        className="hero-film__link"
+                        href={portfolioHref}
+                        aria-label={`${clip.alt}. View in portfolio`}
+                        data-mcp-action="view-portfolio"
+                        data-mcp-description="Open the salon portfolio on the matching motion clip."
+                        data-mcp-params={`{"destination":"${portfolioHref}"}`}
+                      >
+                        <AmbientVideo
+                          className="hero-film__media"
+                          src={clip.src}
+                          poster={clip.poster}
+                          ariaLabel={clip.alt}
+                          preload={index === 0 ? "metadata" : "none"}
+                          active
+                        />
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </aside>
           </section>
@@ -268,7 +271,7 @@ export default function App() {
                   </div>
                   <figcaption className="booking-panel__clip-caption">
                     <span className="booking-panel__clip-title">{bookingAmbientClip.title}</span>
-                    <a className="booking-panel__clip-link" href="#portfolio">
+                    <a className="booking-panel__clip-link" href="#clip-03">
                       More in portfolio
                     </a>
                   </figcaption>
