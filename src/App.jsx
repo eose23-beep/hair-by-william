@@ -250,15 +250,61 @@ export default function App() {
           <ServicesGrid />
 
           <section id="booking" className="shell section reveal booking-panel">
-            <div className="booking-panel__layout">
-              <div className="booking-panel__intro">
-                <p className="kicker">Ready When You Are</p>
+            <div className="booking-panel__card">
+              <div className="booking-panel__body">
+                <p className="kicker booking-panel__kicker">Ready When You Are</p>
                 <h2 className="section-heading booking-panel__heading">Book Your Appointment</h2>
                 <p className="lead booking-panel__copy">
                   Extensions, precision cuts, color correction, and Brazilian Blowout in El Paso —
                   tailored to your texture, goals, and schedule.
                 </p>
-                <figure className="booking-panel__clip">
+
+                <dl className="booking-hours" aria-label="Salon hours">
+                  <div className="booking-hours__row">
+                    <dt>Hours</dt>
+                    <dd>Friday–Saturday 10 AM–6 PM</dd>
+                    <dd className="booking-hours__closed">Closed Sunday–Thursday</dd>
+                  </div>
+                  <dd className="booking-hours__note">
+                    Call or text{" "}
+                    <a className="booking-hours__phone" href={PHONE_HREF}>
+                      {PHONE_LABEL}
+                    </a>{" "}
+                    to book
+                  </dd>
+                </dl>
+
+                <div className="booking-actions">
+                  <a
+                    className="cta-button booking-panel__cta"
+                    href="#contact"
+                    data-mcp-action="book-appointment"
+                    data-mcp-description="Book your Hair by William appointment via WhatsApp or text."
+                    data-mcp-params='{"destination":"#contact"}'
+                  >
+                    Book Appointment
+                  </a>
+                  <a
+                    className="secondary-button secondary-button--on-dark"
+                    href="#visit"
+                    data-mcp-action="open-location"
+                    data-mcp-description="Find the Hair by William studio location and directions in El Paso."
+                    data-mcp-params='{"destination":"#visit"}'
+                  >
+                    Find the Studio
+                  </a>
+                </div>
+              </div>
+
+              <figure className="booking-panel__clip">
+                <a
+                  className="booking-panel__clip-hit"
+                  href="#clip-03"
+                  data-mcp-action="open-portfolio"
+                  data-mcp-description="Watch the matching chair-finish clip in the portfolio gallery."
+                  data-mcp-params='{"destination":"#clip-03"}'
+                  aria-label={`${bookingAmbientClip.alt}. Open in portfolio.`}
+                >
                   <div className="booking-panel__clip-frame">
                     <AmbientVideo
                       className="booking-panel__clip-media"
@@ -269,42 +315,14 @@ export default function App() {
                       active
                     />
                   </div>
-                  <figcaption className="booking-panel__clip-caption">
-                    <span className="booking-panel__clip-title">{bookingAmbientClip.title}</span>
-                    <a className="booking-panel__clip-link" href="#clip-03">
-                      More in portfolio
-                    </a>
-                  </figcaption>
-                </figure>
-              </div>
-              <div className="booking-panel__aside">
-                <dl className="booking-hours" aria-label="Salon hours">
-                  <dt>Hours</dt>
-                  <dd>Friday–Saturday 10 AM–6 PM</dd>
-                  <dd className="booking-hours__closed">Closed Sunday–Thursday</dd>
-                  <dd className="booking-hours__note">Call or text 915-920-7823 to book</dd>
-                </dl>
-                <div className="booking-actions">
-                  <a
-                    className="cta-button"
-                    href="#contact"
-                    data-mcp-action="book-appointment"
-                    data-mcp-description="Book your Hair by William appointment via WhatsApp or text."
-                    data-mcp-params='{"destination":"#contact"}'
-                  >
-                    Book Appointment
+                </a>
+                <figcaption className="booking-panel__clip-caption">
+                  <span className="booking-panel__clip-title">{bookingAmbientClip.title}</span>
+                  <a className="booking-panel__clip-link" href="#clip-03">
+                    More in portfolio
                   </a>
-                  <a
-                    className="secondary-button"
-                    href="#visit"
-                    data-mcp-action="open-location"
-                    data-mcp-description="Find the Hair by William studio location and directions in El Paso."
-                    data-mcp-params='{"destination":"#visit"}'
-                  >
-                    Find the Studio
-                  </a>
-                </div>
-              </div>
+                </figcaption>
+              </figure>
             </div>
           </section>
         </main>
