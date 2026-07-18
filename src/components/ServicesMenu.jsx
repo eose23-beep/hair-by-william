@@ -37,7 +37,7 @@ export default function ServicesMenu() {
             </div>
             <h3>{service.name}</h3>
             <p className="service-subtext">{service.description}</p>
-            <a className="service-link" href="#booking">
+            <a className="service-link" href="#contact-form">
               Reserve an Experience
             </a>
           </article>

@@ -42,7 +42,7 @@ const services = [
 
 function ServiceCard({ service, index }) {
   const cardRef = useRef(null);
-  const bookHref = `/?service=${service.bookSlug}#contact`;
+  const bookHref = `/?service=${service.bookSlug}#contact-form`;
 
   const onMove = useCallback((event) => {
     const el = cardRef.current;
@@ -110,7 +110,7 @@ function ServiceCard({ service, index }) {
             href={bookHref}
             data-mcp-action="book-appointment"
             data-mcp-description={`Book a ${service.title} appointment with Hair by William in El Paso via WhatsApp or text. No account required.`}
-            data-mcp-params={`{"service":"${service.bookSlug}","destination":"#contact"}`}
+            data-mcp-params={`{"service":"${service.bookSlug}","destination":"#contact-form"}`}
           >
             Book
           </a>
@@ -134,7 +134,7 @@ export default function ServicesGrid() {
           <a href="#precision-cuts">Cuts</a>
           <a href="#color-correction">Color</a>
           <a href="#brazilian-blowout">Blowout</a>
-          <a href="#contact">Book</a>
+          <a href="#contact-form">Book</a>
         </nav>
       </header>
 

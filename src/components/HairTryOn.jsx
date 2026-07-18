@@ -271,8 +271,8 @@ export default function HairTryOn() {
   };
 
   const bookHref = selected?.service
-    ? `/?service=${selected.service}#contact`
-    : "#contact";
+    ? `/?service=${selected.service}#contact-form`
+    : "#contact-form";
 
   const hintLabel =
     presetId === "custom" || !selected ? "custom prompt" : selected.label;

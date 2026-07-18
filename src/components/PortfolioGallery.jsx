@@ -592,7 +592,7 @@ export default function PortfolioGallery() {
             </div>
 
             <p className="coverflow__book-line">
-              <a className="coverflow__book-link" href="#contact">
+              <a className="coverflow__book-link" href="#contact-form">
                 Book
               </a>
               <span className="coverflow__book-sep" aria-hidden="true">
@@ -666,7 +666,7 @@ export default function PortfolioGallery() {
                 <span id={lightboxCaptionId} className="lightbox__subtitle">
                   {activeSlide.caption}
                 </span>
-                <a className="lightbox__book" href="#contact" onClick={closeLightbox}>
+                <a className="lightbox__book" href="#contact-form" onClick={closeLightbox}>
                   Book
                 </a>
               </figcaption>

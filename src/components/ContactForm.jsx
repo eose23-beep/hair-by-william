@@ -205,7 +205,10 @@ export default function ContactForm() {
           </ol>
         </aside>
 
-        <div className="contact-section__form-wrap motion-block">
+        <div
+          id="contact-form"
+          className="contact-section__form-wrap motion-block"
+        >
           <form
             className="contact-form"
             onSubmit={handleWhatsApp}

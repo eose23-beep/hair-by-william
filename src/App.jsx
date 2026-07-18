@@ -18,7 +18,7 @@ const PHONE_LABEL = "915-920-7823";
 const STUDIO_ADDRESS = "5411 N. Mesa, Suite 13C";
 const STUDIO_CITY = "El Paso, TX 79912 · LV Hair Salon";
 
-/** Map in-page hashes to a real scroll target (clips -> lookbook, visit -> booking card). */
+/** Map in-page hashes to a real scroll target (clips -> lookbook, visit -> booking, contact -> form). */
 function resolveScrollTarget(hash) {
   const id = String(hash || "")
     .replace(/^#/, "")
@@ -31,6 +31,13 @@ function resolveScrollTarget(hash) {
   }
   if (id === "visit") {
     return document.getElementById("booking") || document.getElementById("visit");
+  }
+  /* Book CTAs: land on the form itself, not just the section intro */
+  if (id === "contact" || id === "contact-form") {
+    return (
+      document.getElementById("contact-form") ||
+      document.getElementById("contact")
+    );
   }
   return document.getElementById(id);
 }
@@ -54,7 +61,7 @@ export default function App() {
 
     const onHash = () => {
       if (!window.location.hash) return;
-      ignoreSpyUntil = Date.now() + 900;
+      ignoreSpyUntil = Date.now() + 1600;
       window.requestAnimationFrame(() => scrollToHash(window.location.hash));
     };
 
@@ -83,7 +90,7 @@ export default function App() {
       /* Pure hash: always handle so re-clicks still scroll */
       if (href.startsWith("#")) {
         event.preventDefault();
-        ignoreSpyUntil = Date.now() + 900;
+        ignoreSpyUntil = Date.now() + 1600;
         if (window.location.hash !== url.hash) {
           window.location.hash = url.hash;
         }
@@ -92,7 +99,7 @@ export default function App() {
       }
 
       /* Query + hash (service book links): let URL update, then scroll */
-      ignoreSpyUntil = Date.now() + 900;
+      ignoreSpyUntil = Date.now() + 1600;
       window.setTimeout(() => scrollToHash(url.hash), 0);
     };
 
@@ -385,10 +392,10 @@ export default function App() {
             </a>
             <a
               className="cta-button cta-small"
-              href="#contact"
+              href="#contact-form"
               data-mcp-action="book-appointment"
               data-mcp-description="Jump to the booking form to request an appointment via WhatsApp or text."
-              data-mcp-params='{"destination":"#contact"}'
+              data-mcp-params='{"destination":"#contact-form"}'
             >
               Book
             </a>
@@ -431,10 +438,10 @@ export default function App() {
                 <div className="hero-actions">
                   <a
                     className="cta-button"
-                    href="#contact"
+                    href="#contact-form"
                     data-mcp-action="book-appointment"
                     data-mcp-description="Book an appointment with Hair by William for extensions, cuts, color, or Brazilian Blowout. Opens the guest booking form."
-                    data-mcp-params='{"destination":"#contact"}'
+                    data-mcp-params='{"destination":"#contact-form"}'
                   >
                     Book
                   </a>
@@ -530,10 +537,10 @@ export default function App() {
                 <div className="booking-actions">
                   <a
                     className="cta-button booking-panel__cta"
-                    href="#contact"
+                    href="#contact-form"
                     data-mcp-action="book-appointment"
                     data-mcp-description="Book your Hair by William appointment via WhatsApp or text."
-                    data-mcp-params='{"destination":"#contact"}'
+                    data-mcp-params='{"destination":"#contact-form"}'
                   >
                     Book
                   </a>
@@ -639,7 +646,7 @@ export default function App() {
                     <a href="#try-on">Try On</a>
                   </li>
                   <li>
-                    <a href="#contact">Book</a>
+                    <a href="#contact-form">Book</a>
                   </li>
                   <li>
                     <a href="#booking">Location</a>
