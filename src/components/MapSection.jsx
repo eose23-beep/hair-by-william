@@ -21,8 +21,8 @@ export default function MapSection() {
           Visit Us in El Paso
         </h2>
         <p className="lead map-section__copy">
-          Hair by William — Suite 13C inside LV Hair Salon on North Mesa. Call ahead for Friday and
-          Saturday availability.
+          Hair by William — Suite 13C inside LV Hair Salon on North Mesa. Open Friday–Saturday
+          10 AM–6 PM; call or text to book. Location, directions, and phone below.
         </p>
       </header>
 
@@ -32,7 +32,13 @@ export default function MapSection() {
           <span className="map-section__address-line">79912 · LV Hair Salon</span>
         </address>
         <div className="map-section__actions">
-          <a className="map-section__phone" href={PHONE_HREF}>
+          <a
+            className="map-section__phone"
+            href={PHONE_HREF}
+            data-mcp-action="call-salon"
+            data-mcp-description="Call Hair by William at 915-920-7823 for location questions or to book. No login required."
+            data-mcp-params='{"phone":"+1-915-920-7823"}'
+          >
             {PHONE_LABEL}
           </a>
           <a
@@ -40,6 +46,9 @@ export default function MapSection() {
             href={DIRECTIONS_URL}
             target="_blank"
             rel="noopener noreferrer"
+            data-mcp-action="get-directions"
+            data-mcp-description="Open Google Maps directions to Hair by William at 5411 N. Mesa, Suite 13C, El Paso, TX 79912."
+            data-mcp-params='{"destination":"5411 N. Mesa, Suite 13C, El Paso, TX 79912"}'
           >
             Get Directions
           </a>
@@ -56,7 +65,14 @@ export default function MapSection() {
           allowFullScreen
         />
         <p className="map-section__fallback">
-          <a href={MAPS_SEARCH_URL} target="_blank" rel="noopener noreferrer">
+          <a
+            href={MAPS_SEARCH_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-mcp-action="open-location"
+            data-mcp-description="Open the Hair by William salon location in Google Maps at 5411 N. Mesa, Suite 13C, El Paso, TX 79912."
+            data-mcp-params='{"address":"5411 N. Mesa, Suite 13C, El Paso, TX 79912"}'
+          >
             Open location in Google Maps
           </a>
         </p>

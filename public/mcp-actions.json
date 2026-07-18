@@ -1,0 +1,118 @@
+{
+  "version": "1.0",
+  "site": "https://william-site-snowy.vercel.app/",
+  "name": "Hair by William",
+  "description": "El Paso hair salon — book appointments, call, WhatsApp, view portfolio and services, get directions. Guest-friendly; no account required.",
+  "actions": [
+    {
+      "id": "book-appointment",
+      "name": "Book Appointment",
+      "description": "Request an appointment for extensions, precision cuts, color correction, or Brazilian Blowout. Opens the guest booking form (#contact).",
+      "method": "declarative",
+      "endpoint": "/#contact",
+      "parameters": {
+        "required": [],
+        "optional": ["service"]
+      }
+    },
+    {
+      "id": "request-appointment",
+      "name": "Submit Appointment Request",
+      "description": "Fill name, phone, and preferred service, then send via WhatsApp or SMS. No website account.",
+      "method": "declarative",
+      "endpoint": "/#contact",
+      "parameters": {
+        "required": ["name", "phone", "service"],
+        "optional": ["message"]
+      }
+    },
+    {
+      "id": "book-via-whatsapp",
+      "name": "Book via WhatsApp",
+      "description": "Send a prefilled appointment request to Hair by William on WhatsApp.",
+      "method": "declarative",
+      "endpoint": "https://wa.me/19159207823",
+      "parameters": {
+        "required": ["name", "phone"],
+        "optional": ["service", "message"]
+      }
+    },
+    {
+      "id": "book-via-sms",
+      "name": "Book via Text / SMS",
+      "description": "Send a prefilled appointment request by SMS to 915-920-7823.",
+      "method": "declarative",
+      "endpoint": "sms:+19159207823",
+      "parameters": {
+        "required": ["name", "phone"],
+        "optional": ["service", "message"]
+      }
+    },
+    {
+      "id": "open-whatsapp",
+      "name": "Open WhatsApp",
+      "description": "Open a WhatsApp chat with Hair by William without filling the form first. Guest-friendly.",
+      "method": "declarative",
+      "endpoint": "https://wa.me/19159207823",
+      "parameters": {
+        "required": [],
+        "optional": []
+      }
+    },
+    {
+      "id": "call-salon",
+      "name": "Call Salon",
+      "description": "Call Hair by William at +1-915-920-7823 to book. Open Friday–Saturday 10 AM–6 PM. No login.",
+      "method": "declarative",
+      "endpoint": "tel:915-920-7823",
+      "parameters": {
+        "required": [],
+        "optional": []
+      }
+    },
+    {
+      "id": "get-directions",
+      "name": "Get Directions",
+      "description": "Open Google Maps directions to 5411 N. Mesa, Suite 13C, El Paso, TX 79912.",
+      "method": "declarative",
+      "endpoint": "/#visit",
+      "parameters": {
+        "required": [],
+        "optional": []
+      }
+    },
+    {
+      "id": "open-location",
+      "name": "Open Location",
+      "description": "View Hair by William at LV Hair Salon — 5411 N. Mesa, Suite 13C, El Paso, TX 79912.",
+      "method": "declarative",
+      "endpoint": "/#visit",
+      "parameters": {
+        "required": [],
+        "optional": []
+      }
+    },
+    {
+      "id": "view-portfolio",
+      "name": "View Portfolio",
+      "description": "Browse salon portfolio of hair extensions, color, cuts, and blowouts.",
+      "method": "declarative",
+      "endpoint": "/#portfolio",
+      "parameters": {
+        "required": [],
+        "optional": []
+      }
+    },
+    {
+      "id": "view-services",
+      "name": "View Services",
+      "description": "See signature services: hair extensions, Brazilian Blowout, precision cuts, color correction.",
+      "method": "declarative",
+      "endpoint": "/#services",
+      "parameters": {
+        "required": [],
+        "optional": []
+      }
+    }
+  ]
+}

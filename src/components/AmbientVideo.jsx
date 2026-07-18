@@ -89,6 +89,8 @@ export default function AmbientVideo({
       preload={preload}
       aria-label={ariaLabel}
       disablePictureInPicture
+      width={720}
+      height={1280}
     />
   );
 }

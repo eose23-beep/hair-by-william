@@ -3,6 +3,7 @@ import { MessageCircle, Phone } from "lucide-react";
 
 const PHONE_E164 = "19159207823";
 const PHONE_DISPLAY = "915-920-7823";
+const WHATSAPP_HREF = `https://wa.me/${PHONE_E164}`;
 
 const SERVICE_OPTIONS = [
   "Extensions",
@@ -50,7 +51,7 @@ export default function ContactForm() {
     if (!isValid) return;
 
     const text = buildMessage({ name, phone, service, message });
-    const url = `https://wa.me/${PHONE_E164}?text=${encodeURIComponent(text)}`;
+    const url = `${WHATSAPP_HREF}?text=${encodeURIComponent(text)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
@@ -81,15 +82,36 @@ export default function ContactForm() {
             </div>
             <div>
               <dt>Hours</dt>
-              <dd>Friday &amp; Saturday — call for availability</dd>
+              <dd>Friday–Saturday 10 AM–6 PM · call or text to book</dd>
             </div>
             <div>
               <dt>Direct</dt>
               <dd>
-                <a href={`tel:${PHONE_DISPLAY}`}>{PHONE_DISPLAY}</a>
+                <a
+                  href={`tel:${PHONE_DISPLAY}`}
+                  data-mcp-action="call-salon"
+                  data-mcp-description="Call Hair by William at 915-920-7823 to book. Open Friday–Saturday 10 AM–6 PM. No login required."
+                  data-mcp-params='{"phone":"+1-915-920-7823"}'
+                >
+                  {PHONE_DISPLAY}
+                </a>
               </dd>
             </div>
           </dl>
+
+          <p className="contact-section__guest-links">
+            <a
+              className="secondary-button"
+              href={WHATSAPP_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-mcp-action="open-whatsapp"
+              data-mcp-description="Open WhatsApp chat with Hair by William (915-920-7823) to book an appointment. Guest-friendly — no website account."
+              data-mcp-params='{"phone":"+1-915-920-7823","channel":"whatsapp"}'
+            >
+              WhatsApp William
+            </a>
+          </p>
 
           <ol className="contact-form__steps contact-form__steps--intro" aria-label="Booking steps">
             <li className="contact-form__step is-active" aria-current="step">
@@ -108,9 +130,12 @@ export default function ContactForm() {
             aria-labelledby="contact-form-title"
             aria-describedby={formHintId}
             noValidate
+            data-mcp-action="request-appointment"
+            data-mcp-description="Request a Hair by William appointment in El Paso. Provide name, phone, and preferred service, then send via WhatsApp or SMS. No account required."
+            data-mcp-params='{"required":["name","phone","service"],"optional":["message"],"channels":["whatsapp","sms"]}'
           >
             <h3 id="contact-form-title" className="sr-only">
-              Appointment request form
+              Appointment request form — book extensions, cuts, color, or Brazilian Blowout
             </h3>
             <p id={formHintId} className="contact-form__hint">
               All hair textures and lengths welcome. Required fields are marked with an asterisk.
@@ -136,6 +161,8 @@ export default function ContactForm() {
                     aria-invalid={touched.name && !nameValid}
                     aria-describedby={nameHintId}
                     required
+                    data-mcp-param="name"
+                    data-mcp-description="Full name of the guest requesting the appointment"
                   />
                   {touched.name && !nameValid ? (
                     <span id={nameHintId} className="contact-field__error" role="alert">
@@ -165,6 +192,8 @@ export default function ContactForm() {
                     aria-invalid={touched.phone && !phoneValid}
                     aria-describedby={phoneHintId}
                     required
+                    data-mcp-param="phone"
+                    data-mcp-description="Callback phone number to confirm the booking"
                   />
                   {touched.phone && !phoneValid ? (
                     <span id={phoneHintId} className="contact-field__error" role="alert">
@@ -185,6 +214,8 @@ export default function ContactForm() {
                 name="service"
                 value={service}
                 onChange={(event) => setService(event.target.value)}
+                data-mcp-param="service"
+                data-mcp-description="Preferred service: Extensions, Brazilian Blowout, Precision Cuts, Color Correction, or consultation"
               >
                 {SERVICE_OPTIONS.map((option) => (
                   <option key={option} value={option}>
@@ -202,11 +233,20 @@ export default function ContactForm() {
                 placeholder="Preferred day, hair goals, reference photo, accessibility needs, etc."
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
+                data-mcp-param="message"
+                data-mcp-description="Optional notes: preferred day, hair goals, or accessibility needs"
               />
             </label>
 
             <div className="contact-form__actions">
-              <button type="submit" className="cta-button contact-form__whatsapp" disabled={!isValid}>
+              <button
+                type="submit"
+                className="cta-button contact-form__whatsapp"
+                disabled={!isValid}
+                data-mcp-action="book-via-whatsapp"
+                data-mcp-description="Send the completed appointment request to Hair by William on WhatsApp. Opens WhatsApp with a prefilled message."
+                data-mcp-params='{"channel":"whatsapp","requires":["name","phone"]}'
+              >
                 <MessageCircle size={18} strokeWidth={1.75} aria-hidden="true" />
                 Book via WhatsApp
               </button>
@@ -215,6 +255,9 @@ export default function ContactForm() {
                 className="secondary-button contact-form__text"
                 disabled={!isValid}
                 onClick={handleText}
+                data-mcp-action="book-via-sms"
+                data-mcp-description="Send the completed appointment request to Hair by William by SMS text message."
+                data-mcp-params='{"channel":"sms","requires":["name","phone"]}'
               >
                 <Phone size={16} strokeWidth={1.75} aria-hidden="true" />
                 Book via Text
@@ -229,7 +272,14 @@ export default function ContactForm() {
 
             <p className="contact-form__note contact-form__note--secondary">
               Or call William directly:{" "}
-              <a href={`tel:${PHONE_DISPLAY}`}>{PHONE_DISPLAY}</a>
+              <a
+                href={`tel:${PHONE_DISPLAY}`}
+                data-mcp-action="call-salon"
+                data-mcp-description="Call Hair by William at 915-920-7823. No login required."
+                data-mcp-params='{"phone":"+1-915-920-7823"}'
+              >
+                {PHONE_DISPLAY}
+              </a>
             </p>
           </form>
         </div>

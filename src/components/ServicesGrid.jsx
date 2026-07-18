@@ -4,18 +4,19 @@ const services = [
   {
     id: "extensions",
     label: "01",
-    title: "Extensions",
+    title: "Hair Extensions",
     description:
-      "Custom length and volume with seamless blending — tape-in, weft, and beaded bond installations.",
+      "Custom hair extensions for seamless length and volume — tape-in, weft, I-tip, and beaded bond installations blended to your texture.",
     image: "/portfolio/extensions_after.jpg",
-    imageAlt: "Seamless custom hair extensions with natural length and blended volume by Hair by William",
+    imageAlt:
+      "Seamless custom hair extensions with natural length and blended volume by Hair by William",
   },
   {
     id: "brazilian-blowout",
     label: "02",
     title: "Brazilian Blowout",
     description:
-      "Thermo-active smoothing for lasting shine, softness, and frizz control that still moves like you.",
+      "Professional Brazilian Blowout smoothing for lasting shine, softness, and frizz control that still moves like you.",
     image: "/portfolio/blowout_after.jpg",
     imageAlt: "Brazilian Blowout finish with soft shine and smooth, frizz-controlled movement",
   },
@@ -24,7 +25,7 @@ const services = [
     label: "03",
     title: "Precision Cuts",
     description:
-      "Architectural shaping tailored to your face, texture, and lifestyle — clean lines with editorial finish.",
+      "Precision haircuts shaped to your face, texture, and lifestyle — clean lines with an editorial finish.",
     image: "/portfolio/work-03.png",
     imageAlt: "Precision cut with polished silhouette and editorial finish",
   },
@@ -33,7 +34,7 @@ const services = [
     label: "04",
     title: "Color Correction",
     description:
-      "Thoughtful restoration for uneven tone, brassiness, or past color — healthy hair, refined results.",
+      "Dimensional color and color correction for uneven tone, brassiness, or past color — healthy hair, refined results.",
     image: "/portfolio/work-05.png",
     imageAlt: "Color correction with balanced tone and healthy, refined results",
   },
@@ -68,11 +69,13 @@ function ServiceCard({ service, index }) {
 
   return (
     <article
+      id={service.id}
       ref={cardRef}
       className="service-card"
       style={{ "--card-i": index }}
       onPointerMove={onMove}
       onPointerLeave={onLeave}
+      aria-labelledby={`${service.id}-title`}
     >
       <div className="service-card__face">
         {service.image ? (
@@ -83,17 +86,27 @@ function ServiceCard({ service, index }) {
               alt={service.imageAlt || ""}
               loading="lazy"
               decoding="async"
+              width={800}
+              height={1000}
             />
           </div>
         ) : null}
         <div className="service-card__content">
           <p className="service-card__label">{service.label}</p>
           <div className="service-card__body">
-            <h3 className="service-card__title">{service.title}</h3>
+            <h3 id={`${service.id}-title`} className="service-card__title">
+              {service.title}
+            </h3>
             <p className="service-card__description">{service.description}</p>
           </div>
-          <a className="service-card__cta" href="#contact">
-            Book
+          <a
+            className="service-card__cta"
+            href="#contact"
+            data-mcp-action="book-appointment"
+            data-mcp-description={`Book a ${service.title} appointment with Hair by William in El Paso via WhatsApp or text. No account required.`}
+            data-mcp-params='{"service":"preferred","destination":"#contact"}'
+          >
+            Book {service.title.split(" ")[0]}
           </a>
         </div>
       </div>
@@ -111,6 +124,13 @@ export default function ServicesGrid() {
           Tailored for your texture, length, and goals — custom extensions, Brazilian Blowout,
           precision cuts, and color correction in El Paso.
         </p>
+        <nav className="services-section__jump" aria-label="Jump to a service">
+          <a href="#extensions">Extensions</a>
+          <a href="#precision-cuts">Cuts</a>
+          <a href="#color-correction">Color</a>
+          <a href="#brazilian-blowout">Blowout</a>
+          <a href="#contact">Book</a>
+        </nav>
       </header>
 
       <div className="services-menu-3d" aria-label="Hair by William salon services">

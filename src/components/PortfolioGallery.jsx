@@ -1,7 +1,89 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { portfolioSlides } from "../data/portfolio";
 import AmbientVideo from "./AmbientVideo";
+
+/** Inline gallery glyphs — cream/gold via currentColor; no icon-font / Lucide dependency. */
+function IconChevronLeft({ size = 20 }) {
+  return (
+    <svg
+      className="gallery-icon"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M15 18 9 12l6-6"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconChevronRight({ size = 20 }) {
+  return (
+    <svg
+      className="gallery-icon"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="m9 18 6-6-6-6"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconClose({ size = 22 }) {
+  return (
+    <svg
+      className="gallery-icon"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M18 6 6 18M6 6l12 12"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconPlay({ size = 10 }) {
+  return (
+    <svg
+      className="gallery-icon gallery-icon--play"
+      width={size}
+      height={size}
+      viewBox="0 0 12 12"
+      fill="currentColor"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M3.2 1.6v8.8L10.4 6 3.2 1.6Z" />
+    </svg>
+  );
+}
 
 const DEFAULT_METRICS = {
   visibleSpan: 1.35,
@@ -122,15 +204,43 @@ export default function PortfolioGallery() {
     };
   }, [lightboxOpen]);
 
-  const handleKeyDown = useCallback(
+  const handleStageKeyDown = useCallback(
     (event) => {
-      if (lightboxOpen) {
-        if (event.key === "Escape") closeLightbox();
-        if (event.key === "ArrowLeft") goPrev();
-        if (event.key === "ArrowRight") goNext();
+      if (lightboxOpen) return;
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goPrev();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        goNext();
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        goTo(0);
+      } else if (event.key === "End") {
+        event.preventDefault();
+        goTo(count - 1);
+      } else if (
+        (event.key === "Enter" || event.key === " ") &&
+        event.target === event.currentTarget
+      ) {
+        event.preventDefault();
+        openLightbox(active);
+      }
+    },
+    [lightboxOpen, goPrev, goNext, goTo, count, active],
+  );
+
+  /* Lightbox only: Escape / arrows — do not steal keys while typing in the contact form */
+  useEffect(() => {
+    if (!lightboxOpen) return undefined;
+
+    const onKey = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeLightbox();
         return;
       }
-
       if (event.key === "ArrowLeft") {
         event.preventDefault();
         goPrev();
@@ -139,22 +249,28 @@ export default function PortfolioGallery() {
         event.preventDefault();
         goNext();
       }
-      if (event.key === "Home") {
-        event.preventDefault();
-        goTo(0);
+      if (event.key === "Tab") {
+        const root = document.querySelector(".lightbox.is-open");
+        if (!root) return;
+        const focusable = root.querySelectorAll(
+          'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
-      if (event.key === "End") {
-        event.preventDefault();
-        goTo(count - 1);
-      }
-    },
-    [lightboxOpen, goPrev, goNext, goTo, count, closeLightbox],
-  );
+    };
 
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightboxOpen, closeLightbox, goPrev, goNext]);
 
   const endDrag = useCallback(
     (pointerId) => {
@@ -245,8 +361,8 @@ export default function PortfolioGallery() {
           <p className="lookbook-tag">Portfolio</p>
           <h2 className="section-heading portfolio-gallery__heading">Salon Portfolio</h2>
           <p className="portfolio-gallery__copy">
-            Recent chair work across textures, lengths, and tones — extensions, color, and finish
-            photos plus short muted clips of the work in motion.
+            Recent chair work across textures, lengths, and tones — hair extensions, precision cuts,
+            dimensional color, blowouts, and short muted clips of the work in motion.
           </p>
         </div>
 
@@ -262,7 +378,7 @@ export default function PortfolioGallery() {
           aria-roledescription="carousel"
           aria-label="Salon portfolio carousel"
           aria-describedby={liveRegionId}
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleStageKeyDown}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -341,7 +457,8 @@ export default function PortfolioGallery() {
                     )}
                     {slide.type === "video" ? (
                       <span className="coverflow__video-tag" aria-hidden="true">
-                        Motion
+                        <IconPlay />
+                        <span className="coverflow__video-tag-label">Motion</span>
                       </span>
                     ) : null}
                     <span className="coverflow__caption">
@@ -361,7 +478,7 @@ export default function PortfolioGallery() {
               onClick={goPrev}
               aria-label="Previous work"
             >
-              <ChevronLeft size={20} strokeWidth={1.75} />
+              <IconChevronLeft />
             </button>
             <p className="coverflow__counter" aria-hidden="true">
               {String(active + 1).padStart(2, "0")}
@@ -374,7 +491,7 @@ export default function PortfolioGallery() {
               onClick={goNext}
               aria-label="Next work"
             >
-              <ChevronRight size={20} strokeWidth={1.75} />
+              <IconChevronRight />
             </button>
           </div>
 
@@ -412,7 +529,7 @@ export default function PortfolioGallery() {
           aria-label="Close portfolio media"
           type="button"
         >
-          <X size={24} />
+          <IconClose />
         </button>
         <div className="lightbox__content" onClick={(event) => event.stopPropagation()}>
           {activeSlide ? (
@@ -449,7 +566,7 @@ export default function PortfolioGallery() {
                   onClick={goPrev}
                   aria-label="Previous portfolio item"
                 >
-                  <ChevronLeft size={20} />
+                  <IconChevronLeft />
                 </button>
                 <button
                   type="button"
@@ -457,7 +574,7 @@ export default function PortfolioGallery() {
                   onClick={goNext}
                   aria-label="Next portfolio item"
                 >
-                  <ChevronRight size={20} />
+                  <IconChevronRight />
                 </button>
               </div>
             </figure>

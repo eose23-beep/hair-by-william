@@ -8,7 +8,7 @@ import ContactForm from "./components/ContactForm";
 import MapSection from "./components/MapSection";
 import BookingFab from "./components/BookingFab";
 import AmbientVideo from "./components/AmbientVideo";
-import { bookingAmbientClip } from "./data/portfolio";
+import { bookingAmbientClip, heroWorkClips } from "./data/portfolio";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,6 +49,12 @@ export default function App() {
           { opacity: 0, y: 24 },
           { opacity: 1, y: 0, duration: 0.85, ease: "power3.out" },
           "-=0.5",
+        )
+        .fromTo(
+          ".hero-film",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" },
+          "-=0.45",
         );
 
       gsap.fromTo(
@@ -115,15 +121,27 @@ export default function App() {
               Portfolio
             </a>
             <a className="ghost-link" href="#services">
-              Menu
+              Services
             </a>
             <a className="ghost-link" href="#visit">
-              Visit
+              Location
             </a>
-            <a className="nav-phone" href={PHONE_HREF}>
+            <a
+              className="nav-phone"
+              href={PHONE_HREF}
+              data-mcp-action="call-salon"
+              data-mcp-description="Call Hair by William at 915-920-7823. No login required."
+              data-mcp-params='{"phone":"+1-915-920-7823"}'
+            >
               {PHONE_LABEL}
             </a>
-            <a className="cta-button cta-small" href="#contact">
+            <a
+              className="cta-button cta-small"
+              href="#contact"
+              data-mcp-action="book-appointment"
+              data-mcp-description="Jump to the booking form to request an appointment via WhatsApp or text."
+              data-mcp-params='{"destination":"#contact"}'
+            >
               Book
             </a>
           </div>
@@ -164,18 +182,62 @@ export default function App() {
                   years of refined artistry in El Paso.
                 </p>
                 <div className="hero-actions">
-                  <a className="cta-button" href="#contact">
+                  <a
+                    className="cta-button"
+                    href="#contact"
+                    data-mcp-action="book-appointment"
+                    data-mcp-description="Book an appointment with Hair by William — extensions, cuts, color, or Brazilian Blowout. Opens the guest booking form."
+                    data-mcp-params='{"destination":"#contact"}'
+                  >
                     Book Appointment
                   </a>
-                  <a className="secondary-button secondary-button--on-dark" href="#portfolio">
+                  <a
+                    className="secondary-button secondary-button--on-dark"
+                    href="#portfolio"
+                    data-mcp-action="view-portfolio"
+                    data-mcp-description="View the Hair by William salon portfolio of extensions, color, cuts, and blowouts."
+                    data-mcp-params='{"destination":"#portfolio"}'
+                  >
                     View Portfolio
                   </a>
                 </div>
-                <a className="mobile-book-strip" href="#contact">
+                <a
+                  className="mobile-book-strip"
+                  href="#contact"
+                  data-mcp-action="book-appointment"
+                  data-mcp-description="Book via WhatsApp or text — jump to the guest booking form."
+                  data-mcp-params='{"destination":"#contact"}'
+                >
                   Book · WhatsApp or Text
                 </a>
               </div>
             </div>
+            <aside className="hero-film" aria-label="Work in motion — muted salon clips">
+              <p className="hero-film__label">In the chair</p>
+              <ul className="hero-film__strip">
+                {heroWorkClips.map((clip, index) => (
+                  <li key={clip.id} className="hero-film__cell">
+                    <a
+                      className="hero-film__link"
+                      href="#portfolio"
+                      aria-label={`${clip.alt} — view portfolio`}
+                      data-mcp-action="view-portfolio"
+                      data-mcp-description="Open the salon portfolio from a hero work clip."
+                      data-mcp-params='{"destination":"#portfolio"}'
+                    >
+                      <AmbientVideo
+                        className="hero-film__media"
+                        src={clip.src}
+                        poster={clip.poster}
+                        ariaLabel={clip.alt}
+                        preload={index === 0 ? "metadata" : "none"}
+                        active
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </aside>
           </section>
 
           <PortfolioGallery />
@@ -215,13 +277,26 @@ export default function App() {
               <div className="booking-panel__aside">
                 <dl className="booking-hours" aria-label="Salon hours">
                   <dt>Hours</dt>
-                  <dd>Friday &amp; Saturday — call for current availability</dd>
+                  <dd>Friday–Saturday 10 AM–6 PM</dd>
+                  <dd className="booking-hours__note">Call or text to book</dd>
                 </dl>
                 <div className="booking-actions">
-                  <a className="cta-button" href="#contact">
+                  <a
+                    className="cta-button"
+                    href="#contact"
+                    data-mcp-action="book-appointment"
+                    data-mcp-description="Book your Hair by William appointment via WhatsApp or text."
+                    data-mcp-params='{"destination":"#contact"}'
+                  >
                     Book Appointment
                   </a>
-                  <a className="secondary-button" href="#visit">
+                  <a
+                    className="secondary-button"
+                    href="#visit"
+                    data-mcp-action="open-location"
+                    data-mcp-description="Find the Hair by William studio location and directions in El Paso."
+                    data-mcp-params='{"destination":"#visit"}'
+                  >
                     Find the Studio
                   </a>
                 </div>
@@ -253,24 +328,50 @@ export default function App() {
               <div className="site-footer__col">
                 <p className="site-footer__label">Contact</p>
                 <p>
-                  <a href={PHONE_HREF}>{PHONE_LABEL}</a>
+                  <a
+                    href={PHONE_HREF}
+                    data-mcp-action="call-salon"
+                    data-mcp-description="Call Hair by William at 915-920-7823."
+                    data-mcp-params='{"phone":"+1-915-920-7823"}'
+                  >
+                    {PHONE_LABEL}
+                  </a>
                 </p>
-                <p className="footer-hours">Friday &amp; Saturday — call for availability</p>
+                <p className="footer-hours">Friday–Saturday 10 AM–6 PM</p>
               </div>
               <div className="site-footer__col">
                 <p className="site-footer__label">Explore</p>
                 <ul className="site-footer__tags">
                   <li>
+                    <a href="#extensions">Extensions</a>
+                  </li>
+                  <li>
+                    <a href="#precision-cuts">Cuts</a>
+                  </li>
+                  <li>
+                    <a href="#color-correction">Color</a>
+                  </li>
+                  <li>
+                    <a href="#brazilian-blowout">Blowout</a>
+                  </li>
+                  <li>
                     <a href="#portfolio">Portfolio</a>
                   </li>
                   <li>
-                    <a href="#services">Services</a>
-                  </li>
-                  <li>
-                    <a href="#booking">Booking</a>
+                    <a href="#contact">Book</a>
                   </li>
                   <li>
                     <a href="#visit">Location</a>
+                  </li>
+                  <li>
+                    <a
+                      href={PHONE_HREF}
+                      data-mcp-action="call-salon"
+                      data-mcp-description="Call Hair by William at 915-920-7823."
+                      data-mcp-params='{"phone":"+1-915-920-7823"}'
+                    >
+                      Phone
+                    </a>
                   </li>
                 </ul>
               </div>
