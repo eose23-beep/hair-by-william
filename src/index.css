@@ -642,7 +642,8 @@ a {
 
 .nav-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto auto auto auto;
+  /* brand + 4 links + phone + Book = 7 tracks (Book must not wrap under) */
+  grid-template-columns: minmax(0, 1fr) repeat(6, auto);
   align-items: center;
   gap: clamp(12px, 1.8vw, 24px);
   margin-block: 0;
@@ -4902,7 +4903,7 @@ a {
   font-size: var(--type-caption);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--text-dim);
 }
 
 .hair-tryon__stage {
@@ -4912,13 +4913,22 @@ a {
 
 .hair-tryon__controls {
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-5);
   align-content: start;
 }
 
-.hair-tryon__upload {
+.hair-tryon__step {
   display: grid;
   gap: var(--space-3);
+}
+
+.hair-tryon__step-label {
+  margin: 0;
+  font-size: var(--type-kicker);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  font-weight: 600;
 }
 
 .hair-tryon__upload-actions {
@@ -4926,6 +4936,11 @@ a {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-3);
+}
+
+.hair-tryon__touch {
+  min-height: 44px;
+  white-space: nowrap;
 }
 
 .hair-tryon__camera {
@@ -4958,10 +4973,10 @@ a {
 
 .hair-tryon__textarea {
   width: 100%;
-  min-height: 88px;
+  min-height: 72px;
   padding: var(--space-3) var(--space-4);
   border: var(--rule) solid var(--stroke-mid);
-  background: rgba(245, 240, 230, 0.72);
+  background: rgba(255, 252, 246, 0.92);
   color: var(--ink);
   font-family: var(--font-body);
   font-size: var(--type-body);
@@ -4978,16 +4993,7 @@ a {
 }
 
 .hair-tryon__textarea::placeholder {
-  color: var(--text-muted);
-}
-
-.hair-tryon__upload-label {
-  margin: 0;
-  font-size: var(--type-kicker);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--champagne);
-  font-weight: 600;
+  color: rgba(10, 9, 8, 0.55);
 }
 
 .hair-tryon__styles {
@@ -4997,24 +5003,20 @@ a {
   min-width: 0;
 }
 
-.hair-tryon__legend {
-  margin: 0 0 var(--space-3);
-  padding: 0;
-  font-size: var(--type-kicker);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-dim);
+.hair-tryon__styles .hair-tryon__step-label {
+  margin-bottom: var(--space-3);
 }
 
 .hair-tryon__chips {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
   gap: var(--space-3);
 }
 
 .hair-tryon__chip {
   display: grid;
   gap: var(--space-2);
+  min-height: 44px;
   padding: 0;
   margin: 0;
   border: 0;
@@ -5055,21 +5057,53 @@ a {
   outline-offset: 4px;
 }
 
-.hair-tryon__actions {
-  display: flex;
-  flex-wrap: wrap;
+/* Primary CTA sits after photo + style — always above optional refine */
+.hair-tryon__generate {
+  display: grid;
   gap: var(--space-3);
-  align-items: center;
+  padding-block: var(--space-2);
+  border-top: var(--rule) solid rgba(166, 139, 75, 0.35);
+  border-bottom: var(--rule) solid rgba(166, 139, 75, 0.35);
 }
 
-.hair-tryon__actions .cta-button:disabled {
-  opacity: 0.45;
+.hair-tryon__cta {
+  width: 100%;
+  min-height: 48px;
+  white-space: nowrap;
+  letter-spacing: 0.14em;
+}
+
+.hair-tryon__cta:disabled {
+  opacity: 1;
   cursor: not-allowed;
+  background: rgba(10, 9, 8, 0.42);
+  border-color: rgba(166, 139, 75, 0.45);
+  color: rgba(255, 248, 231, 0.88);
+  box-shadow: var(--frame-inset-gold);
+  filter: none;
+  transform: none;
+}
+
+.hair-tryon__hint {
+  margin: 0;
+  font-size: var(--type-caption);
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+
+.hair-tryon__book {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
 }
 
 .hair-tryon__error {
   margin: 0;
-  color: #7a1f1f;
+  padding: var(--space-3) var(--space-4);
+  border: var(--rule) solid rgba(122, 31, 31, 0.35);
+  background: rgba(122, 31, 31, 0.08);
+  color: #5c1515;
   font-size: var(--type-body);
 }
 
@@ -5078,7 +5112,7 @@ a {
   max-width: 52ch;
   font-size: var(--type-caption);
   line-height: 1.55;
-  color: var(--text-muted);
+  color: var(--text-dim);
 }
 
 .hair-tryon__privacy a {
@@ -5095,66 +5129,87 @@ a {
 .hair-tryon__frame {
   margin: 0;
   display: grid;
-  gap: var(--space-2);
-}
-
-.hair-tryon__frame figcaption {
-  font-size: var(--type-kicker);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--text-dim);
+  gap: 0;
+  min-width: 0;
 }
 
 .hair-tryon__frame img,
-.hair-tryon__placeholder {
+.hair-tryon__empty,
+.hair-tryon__skeleton {
   width: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
-  background: rgba(232, 223, 208, 0.55);
-  border: var(--rule) solid var(--stroke);
+  border: var(--rule) solid var(--stroke-mid);
   box-shadow: var(--frame-inset-gold);
 }
 
-.hair-tryon__placeholder {
+.hair-tryon__empty {
   display: grid;
-  place-items: center;
+  place-content: center;
+  gap: var(--space-2);
   padding: var(--space-6);
   text-align: center;
+  background:
+    linear-gradient(160deg, rgba(255, 252, 246, 0.95), rgba(232, 223, 208, 0.72));
+}
+
+.hair-tryon__empty--result {
+  background:
+    linear-gradient(160deg, rgba(245, 240, 230, 0.98), rgba(214, 200, 170, 0.55));
+}
+
+.hair-tryon__empty-title {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.1vw, 15px);
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.hair-tryon__empty-copy {
   font-size: var(--type-caption);
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  color: var(--text-dim);
+}
+
+.hair-tryon__skeleton {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: rgba(232, 223, 208, 0.7);
+}
+
+.hair-tryon__skeleton-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 252, 246, 0.15) 38%,
+    rgba(240, 208, 96, 0.28) 50%,
+    rgba(255, 252, 246, 0.15) 62%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: hair-tryon-shimmer 1.35s var(--ease-luxury) infinite;
+}
+
+.hair-tryon__skeleton-label {
+  position: relative;
+  z-index: 1;
+  font-size: var(--type-caption);
+  font-weight: 650;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-muted);
+  color: var(--ink);
 }
 
-.hair-tryon__placeholder--pulse {
-  display: grid;
-  justify-items: center;
-  gap: var(--space-4);
-  animation: hair-tryon-pulse 1.4s var(--ease-luxury) infinite;
-}
-
-.hair-tryon__spinner {
-  width: 28px;
-  height: 28px;
-  border: 2px solid rgba(166, 139, 75, 0.28);
-  border-top-color: var(--champagne);
-  border-radius: 50%;
-  animation: hair-tryon-spin 0.9s cubic-bezier(0.22, 1, 0.36, 1) infinite;
-}
-
-@keyframes hair-tryon-spin {
+@keyframes hair-tryon-shimmer {
   to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes hair-tryon-pulse {
-  0%,
-  100% {
-    opacity: 0.55;
-  }
-  50% {
-    opacity: 1;
+    transform: translateX(100%);
   }
 }
 
@@ -5167,20 +5222,62 @@ a {
 
 @media (min-width: 1024px) {
   .hair-tryon__stage {
-    grid-template-columns: minmax(240px, 0.382fr) minmax(320px, 0.618fr);
+    grid-template-columns: minmax(260px, 0.382fr) minmax(320px, 0.618fr);
     column-gap: var(--gap-phi);
     align-items: start;
   }
 
-  .hair-tryon__controls {
+  /* Sticky only the generate strip so CTA stays visible without clipping tall controls */
+  .hair-tryon__generate {
     position: sticky;
-    top: 72px;
+    top: 80px;
+    z-index: 2;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(245, 240, 230, 0.96) 0%,
+        rgba(245, 240, 230, 0.92) 100%
+      );
+    padding: var(--space-4);
+    margin-inline: calc(var(--space-2) * -1);
+    box-shadow: 0 8px 24px rgba(10, 9, 8, 0.06);
+  }
+}
+
+@media (max-width: 767px) {
+  /* Keep controls (incl. Visualize Style) above frames so the CTA is never below the fold */
+  .hair-tryon__stage {
+    gap: var(--space-6);
+  }
+
+  .hair-tryon__generate {
+    position: sticky;
+    bottom: 12px;
+    z-index: 3;
+    padding: var(--space-3);
+    background: linear-gradient(
+      180deg,
+      rgba(245, 240, 230, 0) 0%,
+      rgba(245, 240, 230, 0.96) 28%,
+      rgba(245, 240, 230, 0.98) 100%
+    );
+  }
+
+  .hair-tryon__upload-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hair-tryon__upload-actions .secondary-button {
+    width: 100%;
+    justify-content: center;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hair-tryon__placeholder--pulse,
-  .hair-tryon__spinner {
+  .hair-tryon__skeleton-shine {
     animation: none;
+    opacity: 0.45;
+    transform: none;
   }
 }

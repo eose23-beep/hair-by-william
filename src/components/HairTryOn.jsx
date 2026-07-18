@@ -7,57 +7,61 @@ const STORAGE_KEY = "hbw-hair-edit-timestamps";
 const MAX_EDGE = 1024;
 const JPEG_QUALITY = 0.86;
 
+/** Lookbook-backed presets mapped to William's real services (no generic cuts). */
+function slideThumb(id, fallback) {
+  const slide = portfolioSlides.find((s) => s.id === id);
+  if (!slide) return fallback;
+  return slide.poster || slide.src || fallback;
+}
+
 const STYLE_PRESETS = [
   {
-    id: "blonde-highlights",
-    label: "Blonde Highlights",
+    id: "extension-length",
+    label: "Hair Extensions",
+    service: "extensions",
     prompt:
-      "Change the hair to soft blonde highlights with natural dimension, keeping the current length and texture.",
-    thumb:
-      portfolioSlides.find((s) => s.id === "clip-04")?.poster ||
-      "/portfolio/clip-04-poster.jpg",
+      "Add custom hair extensions for natural mid-back length and blended volume, seamless join at the roots, keeping the face, skin tone, and lighting unchanged.",
+    thumb: slideThumb("extensions-after", "/portfolio/extensions_after.jpg"),
   },
   {
-    id: "buzz-cut",
-    label: "Buzz Cut",
+    id: "honey-waves",
+    label: "Honey Balayage",
+    service: "color",
     prompt:
-      "Change the hairstyle to a clean, even buzz cut while preserving facial features and skin tone.",
-    thumb:
-      portfolioSlides.find((s) => s.id === "work-05")?.src || "/portfolio/work-05.png",
+      "Apply a honey balayage with soft dimensional glow and loose waves, salon bounce through the ends, keeping facial features and lighting unchanged.",
+    thumb: slideThumb("clip-04", "/portfolio/clip-04-poster.jpg"),
   },
   {
-    id: "textured-crop",
-    label: "Textured Crop",
+    id: "gloss-blowout",
+    label: "Brazilian Blowout",
+    service: "blowout",
     prompt:
-      "Restyle the hair into a modern textured crop with soft volume on top and tapered sides.",
-    thumb:
-      portfolioSlides.find((s) => s.id === "work-01")?.src || "/portfolio/work-01.png",
+      "Restyle into a high-shine Brazilian Blowout finish: sleek, smooth length with soft movement and frizz-controlled gloss, preserving the face and skin tone.",
+    thumb: "/portfolio/blowout_after.jpg",
   },
   {
     id: "soft-waves",
     label: "Soft Waves",
+    service: "cuts",
     prompt:
-      "Restyle the hair into soft, glossy waves with a polished salon finish and natural movement.",
-    thumb:
-      portfolioSlides.find((s) => s.id === "work-02")?.src || "/portfolio/work-02.png",
+      "Shape a precision cut with soft glossy waves, blended highlight dimension, and light movement through the ends; keep the face and lighting the same.",
+    thumb: slideThumb("work-02", "/portfolio/work-02.png"),
   },
   {
-    id: "honey-balayage",
-    label: "Honey Balayage",
+    id: "dimensional-color",
+    label: "Color Correction",
+    service: "color",
     prompt:
-      "Apply a honey balayage color with seamless blend from roots to ends; keep the face and lighting unchanged.",
-    thumb:
-      portfolioSlides.find((s) => s.id === "clip-03")?.poster ||
-      "/portfolio/clip-03-poster.jpg",
+      "Apply lived-in dimensional color with balanced tone and soft depth from roots to ends; no harsh lines; preserve facial features and lighting.",
+    thumb: slideThumb("work-05", "/portfolio/work-05.png"),
   },
   {
-    id: "gloss-length",
-    label: "Gloss Length",
+    id: "layered-volume",
+    label: "Precision Cut",
+    service: "cuts",
     prompt:
-      "Extend the hair to glossy mid-back length with healthy shine and blended ends.",
-    thumb:
-      portfolioSlides.find((s) => s.id === "extensions-after")?.src ||
-      "/portfolio/extensions_after.jpg",
+      "Restyle into a layered salon blowout with warm dimensional color, soft volume through the crown, and polished ends; keep the face unchanged.",
+    thumb: slideThumb("work-01", "/portfolio/work-01.png"),
   },
 ];
 
@@ -80,7 +84,7 @@ function writeTimestamps(list) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   } catch {
-    /* private mode — in-session state still enforces the soft cap */
+    /* private mode: in-session state still enforces the soft cap */
   }
 }
 
@@ -119,6 +123,7 @@ export default function HairTryOn() {
   const fileRef = useRef(null);
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+  const ctaRef = useRef(null);
 
   const [timestamps, setTimestamps] = useState(() =>
     typeof window !== "undefined" ? readTimestamps() : [],
@@ -135,6 +140,8 @@ export default function HairTryOn() {
   const capped = remaining <= 0;
   const selected =
     STYLE_PRESETS.find((s) => s.id === presetId) || STYLE_PRESETS[0];
+  const canGenerate = Boolean(preview) && !capped && status !== "loading";
+  const loading = status === "loading";
 
   useEffect(() => {
     return () => {
@@ -230,13 +237,14 @@ export default function HairTryOn() {
       setTimestamps(fresh);
       setStatus("capped");
       window.alert(
-        "You've used your 3 free hair previews for today. Please try again tomorrow, or book a visit to refine the look in chair.",
+        "You've used your 3 free hair previews for today. Try again tomorrow, or book a visit so William can shape the look in chair.",
       );
       return;
     }
     if (!preview) {
       setError("Upload a clear front-facing selfie first.");
       setStatus("error");
+      ctaRef.current?.focus();
       return;
     }
     const trimmed = prompt.trim();
@@ -287,27 +295,26 @@ export default function HairTryOn() {
     >
       <div className="hair-tryon__layout">
         <header className="hair-tryon__intro">
-          <p className="kicker">Preview</p>
           <h2 id="hair-tryon-heading" className="section-heading">
             Try a look
           </h2>
           <p className="lead hair-tryon__copy">
-            Upload a selfie or take one, choose a finish, and see an AI preview
-            before you book.
+            Preview extensions, color, cuts, and blowouts from William&apos;s
+            lookbook, then book the chair finish.
           </p>
           <p className="hair-tryon__meta" aria-live="polite">
             {capped
-              ? "Free previews used for today. Book to refine cut and color in chair."
+              ? "Free previews used for today. Book to refine the look in chair."
               : `${remaining} free preview${remaining === 1 ? "" : "s"} left in the next 24 hours.`}
           </p>
         </header>
 
         <div className="hair-tryon__stage">
           <div className="hair-tryon__controls">
-            <div className="hair-tryon__upload">
-              <label className="hair-tryon__upload-label" htmlFor={fileInputId}>
-                {preview ? "Change photo" : "Your photo"}
-              </label>
+            <div className="hair-tryon__step">
+              <p className="hair-tryon__step-label" id={`${fileInputId}-label`}>
+                Your photo
+              </p>
               <input
                 id={fileInputId}
                 ref={fileRef}
@@ -315,19 +322,20 @@ export default function HairTryOn() {
                 type="file"
                 accept="image/*"
                 capture="user"
+                aria-labelledby={`${fileInputId}-label`}
                 onChange={onPickFile}
               />
               <div className="hair-tryon__upload-actions">
                 <button
                   type="button"
-                  className="secondary-button"
+                  className="secondary-button hair-tryon__touch"
                   onClick={() => fileRef.current?.click()}
                 >
                   {preview ? "Replace photo" : "Upload photo"}
                 </button>
                 <button
                   type="button"
-                  className="secondary-button"
+                  className="secondary-button hair-tryon__touch"
                   onClick={openCamera}
                 >
                   Take selfie
@@ -345,12 +353,12 @@ export default function HairTryOn() {
                   muted
                 />
                 <div className="hair-tryon__camera-actions">
-                  <button type="button" className="cta-button" onClick={captureFrame}>
+                  <button type="button" className="cta-button hair-tryon__touch" onClick={captureFrame}>
                     Capture
                   </button>
                   <button
                     type="button"
-                    className="secondary-button"
+                    className="secondary-button hair-tryon__touch"
                     onClick={closeCamera}
                   >
                     Cancel
@@ -360,7 +368,7 @@ export default function HairTryOn() {
             ) : null}
 
             <fieldset className="hair-tryon__styles">
-              <legend className="hair-tryon__legend">Style presets</legend>
+              <legend className="hair-tryon__step-label">Style</legend>
               <div className="hair-tryon__chips" role="list">
                 {STYLE_PRESETS.map((style) => {
                   const active = style.id === presetId;
@@ -387,35 +395,51 @@ export default function HairTryOn() {
               </div>
             </fieldset>
 
+            <div className="hair-tryon__generate">
+              <button
+                ref={ctaRef}
+                type="button"
+                className="cta-button hair-tryon__cta"
+                onClick={onVisualize}
+                disabled={!canGenerate}
+                aria-describedby="hair-tryon-cta-hint"
+              >
+                {loading ? "Styling…" : "Visualize Style"}
+              </button>
+              <p id="hair-tryon-cta-hint" className="hair-tryon__hint">
+                {!preview
+                  ? "Add a photo first, then visualize."
+                  : capped
+                    ? "Daily free previews used. Book to continue in chair."
+                    : `Ready: ${selected.label} from William's lookbook.`}
+              </p>
+              {(capped || status === "done") && (
+                <a
+                  className="secondary-button hair-tryon__touch hair-tryon__book"
+                  href={
+                    selected.service
+                      ? `/?service=${selected.service}#contact`
+                      : "#contact"
+                  }
+                >
+                  Book this look
+                </a>
+              )}
+            </div>
+
             <div className="hair-tryon__prompt">
-              <label className="hair-tryon__legend" htmlFor={promptId}>
-                Describe the look
+              <label className="hair-tryon__step-label" htmlFor={promptId}>
+                Refine (optional)
               </label>
               <textarea
                 id={promptId}
                 className="hair-tryon__textarea"
-                rows={3}
+                rows={2}
                 maxLength={500}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="e.g. Change hair color to platinum blonde"
+                placeholder="e.g. Longer extensions with soft honey ends"
               />
-            </div>
-
-            <div className="hair-tryon__actions">
-              <button
-                type="button"
-                className="cta-button"
-                onClick={onVisualize}
-                disabled={status === "loading" || capped || !preview}
-              >
-                {status === "loading" ? "Styling…" : "Visualize Style"}
-              </button>
-              {(capped || status === "done") && (
-                <a className="secondary-button" href="#contact">
-                  Book this look
-                </a>
-              )}
             </div>
 
             {error ? (
@@ -433,7 +457,7 @@ export default function HairTryOn() {
 
           <div className="hair-tryon__frames" aria-live="polite">
             <figure className="hair-tryon__frame">
-              <figcaption>Your photo</figcaption>
+              <figcaption className="sr-only">Source photo</figcaption>
               {preview ? (
                 <img
                   src={preview}
@@ -442,28 +466,39 @@ export default function HairTryOn() {
                   height={640}
                 />
               ) : (
-                <div className="hair-tryon__placeholder">Front-facing, good light</div>
+                <div className="hair-tryon__empty" aria-hidden="true">
+                  <span className="hair-tryon__empty-title">Add your photo</span>
+                  <span className="hair-tryon__empty-copy">
+                    Front-facing, good light
+                  </span>
+                </div>
               )}
             </figure>
             <figure className="hair-tryon__frame">
-              <figcaption>Preview</figcaption>
-              {status === "loading" ? (
+              <figcaption className="sr-only">Style preview</figcaption>
+              {loading ? (
                 <div
-                  className="hair-tryon__placeholder hair-tryon__placeholder--pulse"
+                  className="hair-tryon__skeleton"
                   role="status"
+                  aria-label="Generating style preview"
                 >
-                  <span className="hair-tryon__spinner" aria-hidden="true" />
-                  <span>AI is styling their hair…</span>
+                  <span className="hair-tryon__skeleton-shine" aria-hidden="true" />
+                  <span className="hair-tryon__skeleton-label">Styling your look…</span>
                 </div>
               ) : resultUrl ? (
                 <img
                   src={resultUrl}
-                  alt={`AI preview — ${selected.label}`}
+                  alt={`AI preview of ${selected.label}`}
                   width={480}
                   height={640}
                 />
               ) : (
-                <div className="hair-tryon__placeholder">Result appears here</div>
+                <div className="hair-tryon__empty hair-tryon__empty--result" aria-hidden="true">
+                  <span className="hair-tryon__empty-title">Result</span>
+                  <span className="hair-tryon__empty-copy">
+                    Appears after you visualize
+                  </span>
+                </div>
               )}
             </figure>
           </div>

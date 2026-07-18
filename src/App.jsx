@@ -50,8 +50,11 @@ export default function App() {
   const rootRef = useRef(null);
 
   useEffect(() => {
+    let ignoreSpyUntil = 0;
+
     const onHash = () => {
       if (!window.location.hash) return;
+      ignoreSpyUntil = Date.now() + 900;
       window.requestAnimationFrame(() => scrollToHash(window.location.hash));
     };
 
@@ -80,6 +83,7 @@ export default function App() {
       /* Pure hash: always handle so re-clicks still scroll */
       if (href.startsWith("#")) {
         event.preventDefault();
+        ignoreSpyUntil = Date.now() + 900;
         if (window.location.hash !== url.hash) {
           window.location.hash = url.hash;
         }
@@ -88,13 +92,49 @@ export default function App() {
       }
 
       /* Query + hash (service book links): let URL update, then scroll */
+      ignoreSpyUntil = Date.now() + 900;
       window.setTimeout(() => scrollToHash(url.hash), 0);
     };
+
+    /* Keep hash aligned with the section in view (fixes #contact while reading Try On). */
+    const sectionIds = ["portfolio", "try-on", "contact", "services", "booking"];
+    const ratios = new Map();
+    const spyObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          ratios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+        });
+        if (Date.now() < ignoreSpyUntil) return;
+        let bestId = "";
+        let bestRatio = 0;
+        ratios.forEach((ratio, id) => {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestId = id;
+          }
+        });
+        if (!bestId || bestRatio < 0.22) return;
+        const next = `#${bestId}`;
+        if (window.location.hash === next) return;
+        window.history.replaceState(null, "", next);
+      },
+      {
+        root: null,
+        threshold: [0.22, 0.35, 0.5, 0.65],
+        rootMargin: "-20% 0px -45% 0px",
+      },
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) spyObserver.observe(el);
+    });
 
     onHash();
     window.addEventListener("hashchange", onHash);
     document.addEventListener("click", onClick);
     return () => {
+      spyObserver.disconnect();
       window.removeEventListener("hashchange", onHash);
       document.removeEventListener("click", onClick);
     };
