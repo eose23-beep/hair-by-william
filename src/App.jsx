@@ -319,7 +319,7 @@ export default function App() {
                 </a>
               </div>
             </div>
-            <aside className="hero-film" aria-label="Work in motion — muted salon clips">
+            <aside className="hero-film" aria-label="Salon work in the chair">
               <p className="hero-film__label">In the chair</p>
               <ul className="hero-film__strip">
                 {heroWorkClips.map((clip, index) => {

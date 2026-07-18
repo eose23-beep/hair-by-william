@@ -1,0 +1,63 @@
+{
+  "t0": {
+    "hasSwiper": true,
+    "loop": false,
+    "rewind": true,
+    "autoplayRunning": true,
+    "activeIndex": 0,
+    "slideCount": 10,
+    "title": "Layered Blowout",
+    "counter": "01",
+    "copy": "Chair finishes across texture, length, and tone — extensions, precision cuts, and dimensional color.",
+    "videoTagsInDom": 0,
+    "stageBorder": "0px",
+    "stageBg": "linear-gradient(rgba(150, 133, 116, 0) 0%, rgba(40, 32, 26, 0.22) 22%, rgba(22, 18, 14, 0.48) 58%, rgba(14, 12, 10, 0.62"
+  },
+  "t5": {
+    "hasSwiper": true,
+    "loop": false,
+    "rewind": true,
+    "autoplayRunning": true,
+    "activeIndex": 1,
+    "slideCount": 10,
+    "title": "Volume Reveal",
+    "counter": "02",
+    "copy": "Chair finishes across texture, length, and tone — extensions, precision cuts, and dimensional color.",
+    "videoTagsInDom": 0,
+    "stageBorder": "0px",
+    "stageBg": "linear-gradient(rgba(150, 133, 116, 0) 0%, rgba(40, 32, 26, 0.22) 22%, rgba(22, 18, 14, 0.48) 58%, rgba(14, 12, 10, 0.62"
+  },
+  "after": {
+    "hasSwiper": true,
+    "loop": false,
+    "rewind": true,
+    "autoplayRunning": true,
+    "activeIndex": 2,
+    "slideCount": 10,
+    "title": "Soft Waves",
+    "counter": "03",
+    "copy": "Chair finishes across texture, length, and tone — extensions, precision cuts, and dimensional color.",
+    "videoTagsInDom": 0,
+    "stageBorder": "0px",
+    "stageBg": "linear-gradient(rgba(150, 133, 116, 0) 0%, rgba(40, 32, 26, 0.22) 22%, rgba(22, 18, 14, 0.48) 58%, rgba(14, 12, 10, 0.62"
+  },
+  "mobState": {
+    "hasSwiper": true,
+    "loop": false,
+    "rewind": true,
+    "autoplayRunning": false,
+    "activeIndex": 0,
+    "slideCount": 10,
+    "title": "Layered Blowout",
+    "counter": "01",
+    "copy": "Chair finishes across texture, length, and tone — extensions, precision cuts, and dimensional color.",
+    "videoTagsInDom": 0,
+    "stageBorder": "0px",
+    "stageBg": "linear-gradient(rgba(150, 133, 116, 0) 0%, rgba(40, 32, 26, 0.22) 22%, rgba(22, 18, 14, 0.48) 58%, rgba(14, 12, 10, 0.62"
+  },
+  "autoplayAdvanced": true,
+  "clickAdvanced": true,
+  "warns": [],
+  "errs": [],
+  "generatedAt": "2026-07-18T06:41:01.730Z"
+}

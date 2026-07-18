@@ -11,18 +11,19 @@ import "swiper/css/effect-coverflow";
 const AUTOPLAY_MS = 4500;
 const SLIDE_SPEED_MS = 720;
 
+/** Soft coverflow — readable side peeks, not razor-thin 3D */
 const COVERFLOW_DESKTOP = {
-  rotate: 22,
-  stretch: -24,
-  depth: 148,
-  modifier: 0.85,
+  rotate: 8,
+  stretch: 12,
+  depth: 72,
+  modifier: 1,
   slideShadows: false,
 };
 
 const COVERFLOW_MOBILE = {
   rotate: 0,
   stretch: 0,
-  depth: 64,
+  depth: 28,
   modifier: 1,
   slideShadows: false,
 };
@@ -90,22 +91,6 @@ function IconClose({ size = 22 }) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </svg>
-  );
-}
-
-function IconPlay({ size = 10 }) {
-  return (
-    <svg
-      className="gallery-icon gallery-icon--play"
-      width={size}
-      height={size}
-      viewBox="0 0 12 12"
-      fill="currentColor"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <path d="M3.2 1.6v8.8L10.4 6 3.2 1.6Z" />
     </svg>
   );
 }
@@ -210,9 +195,8 @@ export default function PortfolioGallery() {
   const goTo = useCallback((next) => {
     const index = wrapIndex(next, count);
     const swiper = swiperRef.current;
-    if (swiper) {
-      if (swiper.params.loop) swiper.slideToLoop(index);
-      else swiper.slideTo(index);
+    if (swiper && !swiper.destroyed) {
+      swiper.slideTo(index);
     } else {
       setActive(index);
     }
@@ -220,13 +204,13 @@ export default function PortfolioGallery() {
 
   const goPrev = useCallback(() => {
     const swiper = swiperRef.current;
-    if (swiper) swiper.slidePrev();
+    if (swiper && !swiper.destroyed) swiper.slidePrev();
     else setActive((prev) => wrapIndex(prev - 1, count));
   }, [count]);
 
   const goNext = useCallback(() => {
     const swiper = swiperRef.current;
-    if (swiper) swiper.slideNext();
+    if (swiper && !swiper.destroyed) swiper.slideNext();
     else setActive((prev) => wrapIndex(prev + 1, count));
   }, [count]);
 
@@ -236,9 +220,8 @@ export default function PortfolioGallery() {
       if (index == null) return;
       setActive(index);
       const swiper = swiperRef.current;
-      if (!swiper) return;
-      if (swiper.params.loop) swiper.slideToLoop(index, 0);
-      else swiper.slideTo(index, 0);
+      if (!swiper || swiper.destroyed) return;
+      swiper.slideTo(index, 0);
     };
 
     applyHashSlide();
@@ -308,7 +291,7 @@ export default function PortfolioGallery() {
   }, [lightboxOpen, closeLightbox, goPrev, goNext]);
 
   const onSlideActivate = (swiper) => {
-    setActive(swiper.realIndex);
+    setActive(typeof swiper.realIndex === "number" ? swiper.realIndex : swiper.activeIndex);
   };
 
   const handleSlideClick = (index) => {
@@ -337,7 +320,7 @@ export default function PortfolioGallery() {
           <h2 className="section-heading portfolio-gallery__heading">Salon Lookbook</h2>
           <p className="portfolio-gallery__copy">
             Chair finishes across texture, length, and tone — extensions, precision cuts,
-            dimensional color, and muted motion clips.
+            and dimensional color.
           </p>
         </header>
 
@@ -363,8 +346,10 @@ export default function PortfolioGallery() {
               grabCursor
               centeredSlides
               slidesPerView="auto"
-              loop
-              loopAdditionalSlides={2}
+              /* loop + slidesPerView:auto needs more slides than we ship — rewind wraps instead */
+              rewind
+              observer
+              observeParents
               speed={SLIDE_SPEED_MS}
               watchSlidesProgress
               initialSlide={hashIndex ?? 0}
@@ -397,8 +382,11 @@ export default function PortfolioGallery() {
               }}
               onSwiper={(instance) => {
                 swiperRef.current = instance;
-                setActive(instance.realIndex);
+                setActive(instance.activeIndex);
                 syncAutoplay(instance, autoplayEnabled);
+              }}
+              onDestroy={() => {
+                swiperRef.current = null;
               }}
               onSlideChange={onSlideActivate}
               onRealIndexChange={onSlideActivate}
@@ -457,14 +445,6 @@ export default function PortfolioGallery() {
                             />
                           </picture>
                         )}
-                        {slide.type === "video" ? (
-                          <span className="coverflow__video-tag" aria-hidden="true">
-                            <IconPlay />
-                            <span className="coverflow__video-tag-label">
-                              {isCenter ? "Playing" : "Motion"}
-                            </span>
-                          </span>
-                        ) : null}
                         <span className="coverflow__caption">
                           <span className="coverflow__title">{slide.title}</span>
                           <span className="coverflow__subtitle">{slide.caption}</span>

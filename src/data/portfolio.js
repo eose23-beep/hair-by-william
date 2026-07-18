@@ -13,7 +13,7 @@ export const bookingAmbientClip = {
   poster: "/portfolio/clip-03-poster.jpg",
   alt: "Long glossy hair reveal — shine and length in motion",
   title: "Watch the work",
-  caption: "Muted loop · chair finish",
+  caption: "Chair finish · shine and length",
 };
 
 /** Hero lookbook strip — muted loops beside the primary still (not a second full-bleed). */
