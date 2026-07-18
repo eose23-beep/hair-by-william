@@ -559,8 +559,8 @@ a {
 @media (max-width: 767px) {
   /* Mobile GPU relief — desktop atmosphere stays full fidelity */
   .salon-atmosphere {
-    /* Avoid expensive paint isolation thrash on weak GPUs */
-    contain: strict;
+    /* paint-only: strict contain + Swiper transforms caused layer thrash */
+    contain: paint;
   }
 
   .salon-atmosphere__veil {
@@ -579,25 +579,26 @@ a {
     will-change: auto;
   }
 
-  /* Drop heaviest layers: one brush + lock-c + shimmer cause flicker */
+  /* Freeze silk under the page — moving backdrop + coverflow = flicker */
+  .salon-atmosphere__ribbon--brush-a,
   .salon-atmosphere__ribbon--brush-b,
+  .salon-atmosphere__ribbon--lock-a,
+  .salon-atmosphere__ribbon--lock-b,
   .salon-atmosphere__ribbon--lock-c {
     animation: none !important;
-    opacity: 0.35;
     transform: none !important;
   }
 
-  .salon-atmosphere__ribbon--brush-a,
-  .salon-atmosphere__ribbon--lock-a,
-  .salon-atmosphere__ribbon--lock-b {
-    animation-duration: 28s;
-    animation-timing-function: ease-in-out;
+  .salon-atmosphere__ribbon--brush-b,
+  .salon-atmosphere__ribbon--lock-c {
+    opacity: 0.28;
   }
 
   .salon-atmosphere__bloom {
     filter: blur(48px);
     will-change: auto;
-    animation-duration: 36s;
+    animation: none !important;
+    transform: none !important;
   }
 
   .salon-atmosphere__bloom--c {
@@ -612,11 +613,52 @@ a {
     opacity: 0.012;
   }
 
-  /* Lookbook: less 3D paint + softer chrome on small screens */
+  /*
+   * Lookbook isolation: opaque parchment pit so Swiper never composites
+   * against the fixed atmosphere (root cause of carousel/background flicker).
+   */
+  .portfolio-gallery-section {
+    isolation: isolate;
+    transform: translateZ(0);
+    background: var(--atmosphere-depth-mid);
+  }
+
+  .portfolio-gallery-section::before {
+    background:
+      linear-gradient(
+        180deg,
+        var(--atmosphere-depth-top) 0%,
+        var(--atmosphere-depth-mid) 42%,
+        var(--atmosphere-depth-base) 100%
+      );
+    opacity: 1;
+  }
+
+  .coverflow__stage,
+  .lookbook__stage {
+    /* Masks + 3D transforms repaint the whole stage every frame on mobile GPUs */
+    -webkit-mask-image: none;
+    mask-image: none;
+    perspective: none;
+    contain: paint;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    background:
+      linear-gradient(
+        180deg,
+        #f7f0e4 0%,
+        #ebe0d0 48%,
+        #dfd2be 100%
+      );
+    box-shadow:
+      inset 0 1px 0 rgba(240, 208, 96, 0.12),
+      inset 0 0 0 1px rgba(212, 175, 55, 0.1);
+  }
+
   .coverflow__stage::before,
   .coverflow__stage::after,
   .lookbook__rim {
-    opacity: 0.45;
+    opacity: 0.4;
   }
 
   .coverflow__frame::after {
@@ -629,10 +671,17 @@ a {
     padding: 20px 0 28px;
   }
 
+  .coverflow__swiper .swiper-wrapper,
+  .lookbook__swiper .swiper-wrapper {
+    transform-style: flat;
+  }
+
   .coverflow__slide.swiper-slide,
   .lookbook__slide.swiper-slide {
     width: min(280px, 72vw);
     max-width: min(280px, 72vw);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 }
 

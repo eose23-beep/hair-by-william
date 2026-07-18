@@ -20,11 +20,11 @@ const COVERFLOW_3D = {
   slideShadows: false,
 };
 
-/** Gentler coverflow for phones — less GPU thrash while keeping depth */
+/** Near-flat coverflow on phones — avoids 3D/atmosphere compositor flicker */
 const COVERFLOW_MOBILE = {
-  rotate: 16,
-  stretch: -18,
-  depth: 96,
+  rotate: 0,
+  stretch: -12,
+  depth: 24,
   modifier: 1,
   slideShadows: false,
 };
