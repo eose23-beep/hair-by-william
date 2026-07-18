@@ -442,7 +442,7 @@ export default function PortfolioGallery() {
               <span key={slide.id} id={slide.id} />
             ))}
         </div>
-        <header className="portfolio-gallery__intro">
+        <header className="portfolio-gallery__intro motion-block">
           <p className="lookbook-tag portfolio-gallery__kicker">Portfolio</p>
           <span className="portfolio-gallery__hairline" aria-hidden="true" />
           <h2 className="section-heading portfolio-gallery__heading">Salon Lookbook</h2>

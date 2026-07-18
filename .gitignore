@@ -25,3 +25,10 @@ dist-ssr
 
 .vercel
 .env*
+
+# Local media backups + encode scratch (do not ship)
+public/portfolio/_originals/
+scripts/output/_video_tmp/
+gcloud_out.txt
+gcloud_stderr.txt
+gcloud_stdout.txt

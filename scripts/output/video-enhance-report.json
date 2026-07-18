@@ -1,0 +1,42 @@
+{
+  "videos": [
+    {
+      "file": "clip-01.mp4",
+      "codedBefore": "1024x576 (+rot -90)",
+      "after": "864x1536",
+      "beforeMB": 1.44,
+      "afterMB": 2.8,
+      "beforeBytes": 1437239,
+      "afterBytes": 2803501
+    },
+    {
+      "file": "clip-02.mp4",
+      "codedBefore": "1024x576 (+rot -90)",
+      "after": "864x1536",
+      "beforeMB": 2.19,
+      "afterMB": 4.17,
+      "beforeBytes": 2188764,
+      "afterBytes": 4173041
+    },
+    {
+      "file": "clip-03.mp4",
+      "codedBefore": "1024x576 (+rot -90)",
+      "after": "864x1536",
+      "beforeMB": 1.15,
+      "afterMB": 2.31,
+      "beforeBytes": 1152940,
+      "afterBytes": 2307019
+    },
+    {
+      "file": "clip-04.mp4",
+      "codedBefore": "1024x576 (+rot -90)",
+      "after": "864x1536",
+      "beforeMB": 2.24,
+      "afterMB": 4.36,
+      "beforeBytes": 2242703,
+      "afterBytes": 4357853
+    }
+  ],
+  "errors": [],
+  "note": "portrait 864x1536 baked rotation, CRF24"
+}

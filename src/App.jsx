@@ -24,40 +24,110 @@ export default function App() {
     if (!rootRef.current) return undefined;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) return undefined;
+    const motionTargets =
+      ".reveal, .motion-block, .service-card, .site-footer__brand, .site-footer__col, .nav-row > *, .services-section__header > *, .portfolio-gallery__intro > *, .contact-section__intro, .contact-section__form-wrap, .booking-panel__card > *";
+
+    if (reduceMotion) {
+      gsap.set(motionTargets, { clearProps: "opacity,transform" });
+      return undefined;
+    }
 
     const context = gsap.context(() => {
+      const easeOut = "power3.out";
+      const revealOnce = { start: "top 86%", once: true };
+
+      gsap.fromTo(
+        ".nav-row > *",
+        { opacity: 0, y: -10 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.72,
+          stagger: 0.055,
+          ease: easeOut,
+          delay: 0.08,
+        },
+      );
+
       const heroTl = gsap.timeline();
       heroTl
         .fromTo(
           ".hero-kicker",
           { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+          { opacity: 1, y: 0, duration: 0.8, ease: easeOut },
         )
         .fromTo(
           ".hero-title",
           { opacity: 0, y: 48 },
-          { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" },
+          { opacity: 1, y: 0, duration: 1.1, ease: easeOut },
           "-=0.42",
         )
         .fromTo(
           ".hero-copy",
           { opacity: 0, y: 32 },
-          { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" },
+          { opacity: 1, y: 0, duration: 0.9, ease: easeOut },
           "-=0.64",
         )
         .fromTo(
           ".hero-actions",
           { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 0.85, ease: "power3.out" },
+          { opacity: 1, y: 0, duration: 0.85, ease: easeOut },
           "-=0.5",
         )
         .fromTo(
           ".hero-film",
           { opacity: 0, y: -16 },
-          { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" },
+          { opacity: 1, y: 0, duration: 0.9, ease: easeOut },
           "-=0.45",
         );
+
+      gsap.fromTo(
+        ".portfolio-gallery__intro > *",
+        { opacity: 0, y: 22 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.85,
+          stagger: 0.07,
+          ease: easeOut,
+          scrollTrigger: {
+            trigger: "#portfolio",
+            ...revealOnce,
+          },
+        },
+      );
+
+      gsap.fromTo(
+        [".contact-section__intro", ".contact-section__form-wrap"],
+        { opacity: 0, y: 28 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          stagger: 0.12,
+          ease: easeOut,
+          scrollTrigger: {
+            trigger: "#contact",
+            ...revealOnce,
+          },
+        },
+      );
+
+      gsap.fromTo(
+        ".services-section__header > *",
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.08,
+          ease: easeOut,
+          scrollTrigger: {
+            trigger: "#services",
+            ...revealOnce,
+          },
+        },
+      );
 
       gsap.fromTo(
         gsap.utils.toArray(".service-card"),
@@ -65,35 +135,70 @@ export default function App() {
         {
           opacity: 1,
           y: 0,
-          duration: 0.85,
+          duration: 0.88,
           stagger: 0.1,
-          ease: "power3.out",
+          ease: easeOut,
           clearProps: "transform",
           scrollTrigger: {
-            trigger: ".services-menu-3d",
-            start: "top 86%",
+            trigger: "#services",
+            start: "top 78%",
             once: true,
           },
         },
       );
 
-      gsap.utils.toArray(".reveal").forEach((element) => {
-        gsap.fromTo(
-          element,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.95,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: element,
-              start: "top 84%",
-              once: true,
-            },
+      gsap.fromTo(
+        ".booking-panel__card > *",
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          stagger: 0.1,
+          ease: easeOut,
+          scrollTrigger: {
+            trigger: "#booking",
+            ...revealOnce,
           },
-        );
-      });
+        },
+      );
+
+      gsap.fromTo(
+        [".site-footer__brand", ...gsap.utils.toArray(".site-footer__col")],
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.85,
+          stagger: 0.09,
+          ease: easeOut,
+          scrollTrigger: {
+            trigger: ".site-footer",
+            start: "top 92%",
+            once: true,
+          },
+        },
+      );
+
+      gsap.utils.toArray(".reveal:not(.services-section):not(.contact-section):not(.booking-panel)").forEach(
+        (element) => {
+          gsap.fromTo(
+            element,
+            { opacity: 0, y: 32 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.95,
+              ease: easeOut,
+              scrollTrigger: {
+                trigger: element,
+                start: "top 84%",
+                once: true,
+              },
+            },
+          );
+        },
+      );
     }, rootRef);
 
     return () => context.revert();
@@ -253,10 +358,10 @@ export default function App() {
 
           <section
             id="booking"
-            className="shell section reveal booking-panel"
+            className="shell section booking-panel"
             aria-labelledby="booking-visit-heading"
           >
-            <div className="booking-panel__card">
+            <div className="booking-panel__card motion-block">
               <div className="booking-panel__body">
                 <p className="kicker booking-panel__kicker">Book · Visit</p>
                 <h2 id="booking-visit-heading" className="section-heading booking-panel__heading">
@@ -350,7 +455,7 @@ export default function App() {
 
         <footer className="site-footer">
           <div className="shell site-footer__inner">
-            <div className="site-footer__brand">
+            <div className="site-footer__brand motion-block">
               <p className="kicker">Hair by William</p>
               <p className="site-footer-copy">
                 El Paso hair stylist for custom extensions, precision cuts, color correction, and
@@ -359,14 +464,14 @@ export default function App() {
               </p>
             </div>
             <div className="site-footer__grid" aria-label="Salon contact details">
-              <div className="site-footer__col">
+              <div className="site-footer__col motion-block">
                 <p className="site-footer__label">Studio</p>
                 <p>
                   <a href="#visit">5411 N. Mesa, Suite 13C</a>
                 </p>
                 <p className="footer-hours">El Paso, TX 79912 · LV Hair Salon</p>
               </div>
-              <div className="site-footer__col">
+              <div className="site-footer__col motion-block">
                 <p className="site-footer__label">Contact</p>
                 <p>
                   <a
@@ -381,7 +486,7 @@ export default function App() {
                 <p className="footer-hours">Friday–Saturday 10 AM–6 PM</p>
                 <p className="footer-hours">Closed Sunday–Thursday</p>
               </div>
-              <div className="site-footer__col">
+              <div className="site-footer__col motion-block">
                 <p className="site-footer__label">Explore</p>
                 <ul className="site-footer__tags">
                   <li>

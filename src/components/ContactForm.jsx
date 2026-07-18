@@ -146,9 +146,9 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="contact" className="shell section reveal contact-section">
+    <section id="contact" className="shell section contact-section">
       <div className="contact-section__layout">
-        <aside className="contact-section__intro">
+        <aside className="contact-section__intro motion-block">
           <p className="kicker">Book Appointment</p>
           <h2 className="section-heading">Request Your Visit</h2>
           <p className="lead contact-section__copy">
@@ -206,7 +206,7 @@ export default function ContactForm() {
           </ol>
         </aside>
 
-        <div className="contact-section__form-wrap">
+        <div className="contact-section__form-wrap motion-block">
           <form
             className="contact-form"
             onSubmit={handleWhatsApp}

@@ -127,8 +127,8 @@ function ServiceCard({ service, index }) {
 
 export default function ServicesGrid() {
   return (
-    <section id="services" className="shell section services-section reveal">
-      <header className="services-section__header">
+    <section id="services" className="shell section services-section">
+      <header className="services-section__header motion-block">
         <p className="lookbook-tag">Signature Services</p>
         <h2 className="section-heading">Hair Services</h2>
         <p className="lead services-section__copy">
