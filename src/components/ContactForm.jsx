@@ -62,17 +62,22 @@ export default function ContactForm() {
   const [service, setService] = useState(SERVICE_OPTIONS[0]);
   const [message, setMessage] = useState("");
   const [touched, setTouched] = useState({ name: false, phone: false });
+  const [attempted, setAttempted] = useState(false);
   const [serviceHighlighted, setServiceHighlighted] = useState(false);
 
   const formHintId = useId();
   const nameHintId = useId();
   const phoneHintId = useId();
+  const statusId = useId();
   const serviceSelectRef = useRef(null);
   const highlightTimerRef = useRef(null);
+  const nameInputRef = useRef(null);
 
   const nameValid = name.trim().length > 1;
   const phoneValid = phone.trim().length >= 7;
   const isValid = nameValid && phoneValid;
+  const showNameError = (touched.name || attempted) && !nameValid;
+  const showPhoneError = (touched.phone || attempted) && !phoneValid;
 
   useEffect(() => {
     const applyService = (resolved) => {
@@ -126,24 +131,41 @@ export default function ContactForm() {
     setTouched((current) => ({ ...current, [field]: true }));
   };
 
+  const gateOrSend = (send) => {
+    setAttempted(true);
+    setTouched({ name: true, phone: true });
+    if (!isValid) {
+      nameInputRef.current?.focus();
+      return false;
+    }
+    send();
+    return true;
+  };
+
   const handleWhatsApp = (event) => {
     event.preventDefault();
-    setTouched({ name: true, phone: true });
-    if (!isValid) return;
-
-    const text = buildMessage({ name, phone, service, message });
-    /* Same-tab navigate — avoids popup blockers that kill window.open */
-    window.location.assign(`${WHATSAPP_HREF}?text=${encodeURIComponent(text)}`);
+    gateOrSend(() => {
+      const text = buildMessage({ name, phone, service, message });
+      /* Same-tab navigate — avoids popup blockers that kill window.open */
+      window.location.assign(`${WHATSAPP_HREF}?text=${encodeURIComponent(text)}`);
+    });
   };
 
   const handleText = (event) => {
     event.preventDefault();
-    setTouched({ name: true, phone: true });
-    if (!isValid) return;
-
-    const body = buildMessage({ name, phone, service, message });
-    window.location.assign(`sms:+${PHONE_E164}?body=${encodeURIComponent(body)}`);
+    gateOrSend(() => {
+      const body = buildMessage({ name, phone, service, message });
+      window.location.assign(`sms:+${PHONE_E164}?body=${encodeURIComponent(body)}`);
+    });
   };
+
+  const statusMessage = (() => {
+    if (isValid) return "Ready to send. Choose WhatsApp or Text.";
+    if (attempted || (touched.name && !nameValid) || (touched.phone && !phoneValid)) {
+      return "Add your name and phone, then choose WhatsApp or Text.";
+    }
+    return "Fill in your details below, then send by WhatsApp or Text.";
+  })();
 
   return (
     <section id="contact" className="shell section contact-section">
@@ -151,7 +173,7 @@ export default function ContactForm() {
         <aside className="contact-section__intro motion-block">
           <h2 className="section-heading">Request Your Visit</h2>
           <p className="lead contact-section__copy">
-            Share your details and send via WhatsApp or Text. Your message opens ready to send. No
+            Tell William what you need. Your message opens in WhatsApp or Text, ready to send. No
             account needed.
           </p>
 
@@ -167,7 +189,7 @@ export default function ContactForm() {
               </dd>
             </div>
             <div>
-              <dt>Direct</dt>
+              <dt>Call</dt>
               <dd>
                 <a
                   href={`tel:${PHONE_DISPLAY}`}
@@ -180,118 +202,89 @@ export default function ContactForm() {
               </dd>
             </div>
           </dl>
-
-          <p className="contact-section__guest-links">
-            <a
-              className="secondary-button"
-              href={WHATSAPP_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-mcp-action="open-whatsapp"
-              data-mcp-description="Open WhatsApp chat with Hair by William (915-920-7823) to book an appointment. Guest-friendly, no website account."
-              data-mcp-params='{"phone":"+1-915-920-7823","channel":"whatsapp"}'
-            >
-              WhatsApp William
-            </a>
-          </p>
-
-          <ol className="contact-form__steps contact-form__steps--intro" aria-label="Booking steps">
-            <li className="contact-form__step is-active" aria-current="step">
-              <span className="contact-form__step-label">Your details</span>
-            </li>
-            <li className="contact-form__step">
-              <span className="contact-form__step-label">Send request</span>
-            </li>
-          </ol>
         </aside>
 
-        <div
-          id="contact-form"
-          className="contact-section__form-wrap motion-block"
-        >
+        <div id="contact-form" className="contact-section__form-wrap motion-block">
           <form
             className="contact-form"
             onSubmit={handleWhatsApp}
             aria-labelledby="contact-form-title"
-            aria-describedby={formHintId}
+            aria-describedby={`${formHintId} ${statusId}`}
             noValidate
             data-mcp-action="request-appointment"
             data-mcp-description="Request a Hair by William appointment in El Paso. Provide name, phone, and preferred service, then send via WhatsApp or SMS. No account required."
             data-mcp-params='{"required":["name","phone","service"],"optional":["message"],"channels":["whatsapp","sms"]}'
           >
-            <h3 id="contact-form-title" className="sr-only">
-              Appointment request form: book extensions, cuts, color, or Brazilian Blowout
+            <h3 id="contact-form-title" className="contact-form__title">
+              Send your request
             </h3>
             <p id={formHintId} className="contact-form__hint">
-              All hair textures and lengths welcome. Required fields are marked with an asterisk.
+              All hair textures and lengths welcome. Required fields marked with an asterisk.
             </p>
 
-            <fieldset className="contact-form__fieldset">
-              <legend className="contact-form__legend">Contact information</legend>
-
-              <div className="contact-form__grid">
-                <label className="contact-field">
-                  <span>
-                    Your name <span aria-hidden="true">*</span>
+            <div className="contact-form__grid">
+              <label className="contact-field">
+                <span>
+                  Your name <span aria-hidden="true">*</span>
+                </span>
+                <input
+                  ref={nameInputRef}
+                  type="text"
+                  name="name"
+                  autoComplete="name"
+                  placeholder="Alex Rivera"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  onBlur={() => markTouched("name")}
+                  aria-required="true"
+                  aria-invalid={showNameError}
+                  aria-describedby={nameHintId}
+                  required
+                  data-mcp-param="name"
+                  data-mcp-description="Full name of the guest requesting the appointment"
+                />
+                {showNameError ? (
+                  <span id={nameHintId} className="contact-field__error" role="alert">
+                    Enter your full name so William can confirm.
                   </span>
-                  <input
-                    type="text"
-                    name="name"
-                    autoComplete="name"
-                    placeholder="Alex Rivera"
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    onBlur={() => markTouched("name")}
-                    aria-required="true"
-                    aria-invalid={touched.name && !nameValid}
-                    aria-describedby={nameHintId}
-                    required
-                    data-mcp-param="name"
-                    data-mcp-description="Full name of the guest requesting the appointment"
-                  />
-                  {touched.name && !nameValid ? (
-                    <span id={nameHintId} className="contact-field__error" role="alert">
-                      Enter your full name so William can confirm your appointment.
-                    </span>
-                  ) : (
-                    <span id={nameHintId} className="contact-field__hint">
-                      First and last name preferred.
-                    </span>
-                  )}
-                </label>
-
-                <label className="contact-field">
-                  <span>
-                    Your phone <span aria-hidden="true">*</span>
+                ) : (
+                  <span id={nameHintId} className="contact-field__hint">
+                    First and last name preferred.
                   </span>
-                  <input
-                    type="tel"
-                    name="phone"
-                    autoComplete="tel"
-                    inputMode="tel"
-                    placeholder="915-555-1234"
-                    value={phone}
-                    onChange={(event) => setPhone(event.target.value)}
-                    onBlur={() => markTouched("phone")}
-                    aria-required="true"
-                    aria-invalid={touched.phone && !phoneValid}
-                    aria-describedby={phoneHintId}
-                    required
-                    data-mcp-param="phone"
-                    data-mcp-description="Callback phone number to confirm the booking"
-                  />
-                  {touched.phone && !phoneValid ? (
-                    <span id={phoneHintId} className="contact-field__error" role="alert">
-                      Add a phone number where William can reach you.
-                    </span>
-                  ) : (
-                    <span id={phoneHintId} className="contact-field__hint">
-                      Used only to confirm your booking.
-                    </span>
-                  )}
-                </label>
-              </div>
-            </fieldset>
+                )}
+              </label>
+
+              <label className="contact-field">
+                <span>
+                  Your phone <span aria-hidden="true">*</span>
+                </span>
+                <input
+                  type="tel"
+                  name="phone"
+                  autoComplete="tel"
+                  inputMode="tel"
+                  placeholder="915-555-1234"
+                  value={phone}
+                  onChange={(event) => setPhone(event.target.value)}
+                  onBlur={() => markTouched("phone")}
+                  aria-required="true"
+                  aria-invalid={showPhoneError}
+                  aria-describedby={phoneHintId}
+                  required
+                  data-mcp-param="phone"
+                  data-mcp-description="Callback phone number to confirm the booking"
+                />
+                {showPhoneError ? (
+                  <span id={phoneHintId} className="contact-field__error" role="alert">
+                    Add a phone number where William can reach you.
+                  </span>
+                ) : (
+                  <span id={phoneHintId} className="contact-field__hint">
+                    Used only to confirm your booking.
+                  </span>
+                )}
+              </label>
+            </div>
 
             <label
               className={`contact-field${serviceHighlighted ? " contact-field--service-focus" : ""}`}
@@ -321,7 +314,7 @@ export default function ContactForm() {
               <textarea
                 name="message"
                 rows={3}
-                placeholder="Preferred day, hair goals, reference photo, accessibility needs, etc."
+                placeholder="Preferred day, hair goals, reference photo, accessibility needs…"
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
                 data-mcp-param="message"
@@ -329,11 +322,11 @@ export default function ContactForm() {
               />
             </label>
 
-            <div className="contact-form__actions">
+            <div className="contact-form__actions" role="group" aria-label="Send request">
               <button
                 type="submit"
                 className="cta-button contact-form__whatsapp"
-                disabled={!isValid}
+                aria-disabled={!isValid}
                 data-mcp-action="book-via-whatsapp"
                 data-mcp-description="Send the completed appointment request to Hair by William on WhatsApp. Opens WhatsApp with a prefilled message."
                 data-mcp-params='{"channel":"whatsapp","requires":["name","phone"]}'
@@ -344,7 +337,7 @@ export default function ContactForm() {
               <button
                 type="button"
                 className="secondary-button contact-form__text"
-                disabled={!isValid}
+                aria-disabled={!isValid}
                 onClick={handleText}
                 data-mcp-action="book-via-sms"
                 data-mcp-description="Send the completed appointment request to Hair by William by SMS text message."
@@ -355,14 +348,19 @@ export default function ContactForm() {
               </button>
             </div>
 
-            <p className="contact-form__note" role="status" aria-live="polite">
-              {isValid
-                ? "Ready to send. Choose WhatsApp or Text above."
-                : "Complete your name and phone to continue."}
+            <p
+              id={statusId}
+              className={`contact-form__note${isValid ? " contact-form__note--ready" : ""}${
+                attempted && !isValid ? " contact-form__note--warn" : ""
+              }`}
+              role="status"
+              aria-live="polite"
+            >
+              {statusMessage}
             </p>
 
             <p className="contact-form__note contact-form__note--secondary">
-              Or call William directly:{" "}
+              Prefer to call?{" "}
               <a
                 href={`tel:${PHONE_DISPLAY}`}
                 data-mcp-action="call-salon"
