@@ -1,13 +1,5 @@
 import { useCallback, useRef } from "react";
-import AmbientVideo from "./AmbientVideo";
 
-/**
- * Service → clip map (poster judgment + portfolio captions):
- * - extensions → clip-03 (sleek length / gloss length reveal)
- * - blowout → clip-02 (Blowout Motion · bounce & fall)
- * - cuts → clip-04 (honey waves · soft bounce / shape)
- * - color → clip-01 (highlighted waves · color dimension)
- */
 const services = [
   {
     id: "extensions",
@@ -17,8 +9,6 @@ const services = [
     description:
       "Custom hair extensions for seamless length and volume — tape-in, weft, I-tip, and beaded bond installations blended to your texture.",
     image: "/portfolio/extensions_after.jpg",
-    video: "/portfolio/clip-03.mp4",
-    poster: "/portfolio/clip-03-poster.jpg",
     imageAlt:
       "Seamless custom hair extensions with natural length and blended volume by Hair by William",
   },
@@ -30,8 +20,6 @@ const services = [
     description:
       "Professional Brazilian Blowout smoothing for lasting shine, softness, and frizz control that still moves like you.",
     image: "/portfolio/blowout_after.jpg",
-    video: "/portfolio/clip-02.mp4",
-    poster: "/portfolio/clip-02-poster.jpg",
     imageAlt: "Brazilian Blowout finish with soft shine and smooth, frizz-controlled movement",
   },
   {
@@ -42,8 +30,6 @@ const services = [
     description:
       "Precision haircuts shaped to your face, texture, and lifestyle — clean lines with an editorial finish.",
     image: "/portfolio/work-03.png",
-    video: "/portfolio/clip-04.mp4",
-    poster: "/portfolio/clip-04-poster.jpg",
     imageAlt: "Precision cut with polished silhouette and editorial finish",
   },
   {
@@ -54,8 +40,6 @@ const services = [
     description:
       "Dimensional color and color correction for uneven tone, brassiness, or past color — healthy hair, refined results.",
     image: "/portfolio/work-05.png",
-    video: "/portfolio/clip-01.mp4",
-    poster: "/portfolio/clip-01-poster.jpg",
     imageAlt: "Color correction with balanced tone and healthy, refined results",
   },
 ];
@@ -63,7 +47,6 @@ const services = [
 function ServiceCard({ service, index }) {
   const cardRef = useRef(null);
   const bookHref = `?service=${service.bookSlug}#contact`;
-  const hasVideo = Boolean(service.video);
 
   const onMove = useCallback((event) => {
     const el = cardRef.current;
@@ -100,33 +83,23 @@ function ServiceCard({ service, index }) {
       aria-labelledby={`${service.id}-title`}
     >
       <div className="service-card__face">
-        {hasVideo || service.image ? (
+        {service.image ? (
           <div className="service-card__media">
-            {hasVideo ? (
-              <AmbientVideo
-                className="service-card__video"
-                src={service.video}
-                poster={service.poster || service.image}
-                ariaLabel={service.imageAlt || ""}
-                preload="metadata"
+            <picture>
+              <source
+                srcSet={service.image.replace(/\.(png|jpe?g)$/i, ".webp")}
+                type="image/webp"
               />
-            ) : (
-              <picture>
-                <source
-                  srcSet={service.image.replace(/\.(png|jpe?g)$/i, ".webp")}
-                  type="image/webp"
-                />
-                <img
-                  className="service-card__image"
-                  src={service.image}
-                  alt={service.imageAlt || ""}
-                  loading="lazy"
-                  decoding="async"
-                  width={800}
-                  height={1000}
-                />
-              </picture>
-            )}
+              <img
+                className="service-card__image"
+                src={service.image}
+                alt={service.imageAlt || ""}
+                loading="lazy"
+                decoding="async"
+                width={800}
+                height={1000}
+              />
+            </picture>
           </div>
         ) : null}
         <div className="service-card__content">
