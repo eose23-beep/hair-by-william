@@ -861,7 +861,7 @@ a {
   }
 }
 
-/* Hero lookbook strip — muted work loops; photo stays the full-bleed primary */
+/* Hero lookbook strip — top-right muted work loops; photo stays full-bleed */
 .hero-film {
   position: absolute;
   z-index: 3;
@@ -887,14 +887,19 @@ a {
   padding: 0;
   list-style: none;
   gap: 8px;
+  overflow: visible;
 }
 
 .hero-film__cell {
   flex: 0 0 auto;
+  position: relative;
+  z-index: 0;
 }
 
 .hero-film__link {
   display: block;
+  position: relative;
+  z-index: 0;
   pointer-events: auto;
   cursor: pointer;
   width: 84px;
@@ -908,11 +913,13 @@ a {
     var(--frame-inset-gold),
     0 12px 28px rgba(0, 0, 0, 0.38);
   opacity: 0.88;
+  transform: scale(1);
+  transform-origin: center center;
   transition:
     opacity 0.45s var(--ease-luxury),
     border-color 0.45s var(--ease-luxury),
-    box-shadow 0.45s var(--ease-luxury),
-    transform 0.45s var(--ease-luxury);
+    box-shadow 0.55s var(--ease-luxury),
+    transform 0.55s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
 .hero-film__media {
@@ -924,27 +931,50 @@ a {
   object-fit: cover;
   object-position: center 20%;
   filter: saturate(1.14) contrast(1.1) brightness(1.02);
+  transition: transform 0.55s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
 .hero-film__link:hover,
-.hero-film__link:focus-visible {
+.hero-film__link:focus-visible,
+.hero-film__link:active {
+  z-index: 6;
   opacity: 1;
   border-color: var(--champagne-bright);
   box-shadow:
-    inset 0 0 0 1px rgba(240, 208, 96, 0.35),
-    0 16px 32px rgba(0, 0, 0, 0.42);
-  transform: translateY(-2px);
+    inset 0 0 0 1px rgba(240, 208, 96, 0.42),
+    0 0 0 1px rgba(232, 197, 71, 0.22),
+    0 20px 40px rgba(0, 0, 0, 0.48),
+    0 8px 24px rgba(212, 175, 55, 0.18);
+  transform: scale(1.12);
+}
+
+.hero-film__cell:has(.hero-film__link:hover),
+.hero-film__cell:has(.hero-film__link:focus-visible),
+.hero-film__cell:has(.hero-film__link:active) {
+  z-index: 6;
+}
+
+.hero-film__link:hover .hero-film__media,
+.hero-film__link:focus-visible .hero-film__media,
+.hero-film__link:active .hero-film__media {
+  transform: scale(1.04);
 }
 
 @media (min-width: 1024px) {
   .hero-film {
+    top: clamp(20px, 2.8vw, 32px);
     right: clamp(24px, 4vw, 56px);
-    bottom: clamp(28px, 4vw, 48px);
+    bottom: auto;
     align-items: flex-end;
   }
 
   .hero-film__link {
     width: 104px;
+  }
+
+  .hero-film__link:hover,
+  .hero-film__link:focus-visible {
+    transform: scale(1.14);
   }
 }
 
@@ -952,10 +982,16 @@ a {
   .hero-film {
     left: 0;
     right: 0;
-    bottom: 0;
+    top: 0;
+    bottom: auto;
     align-items: stretch;
     padding: 12px var(--container-pad) 16px;
-    background: linear-gradient(180deg, transparent 0%, rgba(5, 4, 3, 0.72) 55%, rgba(5, 4, 3, 0.88) 100%);
+    background: linear-gradient(
+      180deg,
+      rgba(5, 4, 3, 0.88) 0%,
+      rgba(5, 4, 3, 0.72) 55%,
+      transparent 100%
+    );
   }
 
   .hero-film__label {
@@ -966,8 +1002,10 @@ a {
     width: 100%;
     gap: 8px;
     overflow-x: auto;
+    overflow-y: visible;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    padding-block: 4px;
   }
 
   .hero-film__strip::-webkit-scrollbar {
@@ -975,22 +1013,41 @@ a {
   }
 
   .hero-film__link {
-    width: 76px;
+    width: 80px;
     opacity: 0.9;
   }
 
-  .hero-stage__content {
-    padding-bottom: clamp(128px, 24vw, 160px);
+  /* Tap / press: slightly larger — hover may be unavailable */
+  .hero-film__link:active {
+    transform: scale(1.1);
   }
 }
 
 @media (max-width: 768px) {
   .hero-film__link {
-    width: 68px;
+    width: 72px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-film__link,
+  .hero-film__media {
+    transition:
+      opacity 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
   }
 
-  .hero-stage__content {
-    padding-bottom: clamp(120px, 28vw, 152px);
+  .hero-film__link:hover,
+  .hero-film__link:focus-visible,
+  .hero-film__link:active {
+    transform: none;
+  }
+
+  .hero-film__link:hover .hero-film__media,
+  .hero-film__link:focus-visible .hero-film__media,
+  .hero-film__link:active .hero-film__media {
+    transform: none;
   }
 }
 
@@ -1907,6 +1964,7 @@ a {
   object-fit: cover;
   object-position: center;
   background: #0a0908;
+  filter: saturate(1.1) contrast(1.06) brightness(1.02);
 }
 
 .lightbox__caption {

@@ -54,7 +54,7 @@ export default function App() {
         )
         .fromTo(
           ".hero-film",
-          { opacity: 0, y: 20 },
+          { opacity: 0, y: -16 },
           { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" },
           "-=0.45",
         );
