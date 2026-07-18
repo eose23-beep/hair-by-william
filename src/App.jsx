@@ -17,8 +17,87 @@ const PHONE_LABEL = "915-920-7823";
 const STUDIO_ADDRESS = "5411 N. Mesa, Suite 13C";
 const STUDIO_CITY = "El Paso, TX 79912 · LV Hair Salon";
 
+/** Map in-page hashes to a real scroll target (clips -> lookbook, visit -> booking card). */
+function resolveScrollTarget(hash) {
+  const id = String(hash || "")
+    .replace(/^#/, "")
+    .split("?")[0]
+    .trim();
+  if (!id) return null;
+
+  if (/^clip-\d+/i.test(id) || /^portfolio-clip-/i.test(id)) {
+    return document.getElementById("portfolio");
+  }
+  if (id === "visit") {
+    return document.getElementById("booking") || document.getElementById("visit");
+  }
+  return document.getElementById(id);
+}
+
+function scrollToHash(hash, { smooth = true } = {}) {
+  const target = resolveScrollTarget(hash);
+  if (!target) return false;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  target.scrollIntoView({
+    behavior: smooth && !reduce ? "smooth" : "auto",
+    block: "start",
+  });
+  return true;
+}
+
 export default function App() {
   const rootRef = useRef(null);
+
+  useEffect(() => {
+    const onHash = () => {
+      if (!window.location.hash) return;
+      window.requestAnimationFrame(() => scrollToHash(window.location.hash));
+    };
+
+    const onClick = (event) => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const anchor = event.target.closest("a[href]");
+      if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return;
+
+      const href = anchor.getAttribute("href");
+      if (!href || /^(tel:|sms:|mailto:|https?:)/i.test(href)) return;
+
+      let url;
+      try {
+        url = new URL(href, window.location.href);
+      } catch {
+        return;
+      }
+      if (url.origin !== window.location.origin) return;
+      if (!url.hash) return;
+
+      const samePath =
+        url.pathname.replace(/\/$/, "") === window.location.pathname.replace(/\/$/, "");
+      if (!samePath) return;
+
+      /* Pure hash: always handle so re-clicks still scroll */
+      if (href.startsWith("#")) {
+        event.preventDefault();
+        if (window.location.hash !== url.hash) {
+          window.location.hash = url.hash;
+        }
+        scrollToHash(url.hash);
+        return;
+      }
+
+      /* Query + hash (service book links): let URL update, then scroll */
+      window.setTimeout(() => scrollToHash(url.hash), 0);
+    };
+
+    onHash();
+    window.addEventListener("hashchange", onHash);
+    document.addEventListener("click", onClick);
+    return () => {
+      window.removeEventListener("hashchange", onHash);
+      document.removeEventListener("click", onClick);
+    };
+  }, []);
 
   useEffect(() => {
     if (!rootRef.current) return undefined;
@@ -46,21 +125,16 @@ export default function App() {
           stagger: 0.055,
           ease: easeOut,
           delay: 0.08,
+          clearProps: "opacity,transform",
         },
       );
 
       const heroTl = gsap.timeline();
       heroTl
         .fromTo(
-          ".hero-kicker",
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 0.8, ease: easeOut },
-        )
-        .fromTo(
           ".hero-title",
           { opacity: 0, y: 48 },
           { opacity: 1, y: 0, duration: 1.1, ease: easeOut },
-          "-=0.42",
         )
         .fromTo(
           ".hero-copy",
@@ -90,6 +164,7 @@ export default function App() {
           duration: 0.85,
           stagger: 0.07,
           ease: easeOut,
+          clearProps: "opacity,transform",
           scrollTrigger: {
             trigger: "#portfolio",
             ...revealOnce,
@@ -106,6 +181,7 @@ export default function App() {
           duration: 0.9,
           stagger: 0.12,
           ease: easeOut,
+          clearProps: "opacity,transform",
           scrollTrigger: {
             trigger: "#contact",
             ...revealOnce,
@@ -122,6 +198,7 @@ export default function App() {
           duration: 0.8,
           stagger: 0.08,
           ease: easeOut,
+          clearProps: "opacity,transform",
           scrollTrigger: {
             trigger: "#services",
             ...revealOnce,
@@ -156,6 +233,7 @@ export default function App() {
           duration: 0.9,
           stagger: 0.1,
           ease: easeOut,
+          clearProps: "opacity,transform",
           scrollTrigger: {
             trigger: "#booking",
             ...revealOnce,
@@ -172,6 +250,7 @@ export default function App() {
           duration: 0.85,
           stagger: 0.09,
           ease: easeOut,
+          clearProps: "opacity,transform",
           scrollTrigger: {
             trigger: ".site-footer",
             start: "top 92%",
@@ -190,6 +269,7 @@ export default function App() {
               y: 0,
               duration: 0.95,
               ease: easeOut,
+              clearProps: "opacity,transform",
               scrollTrigger: {
                 trigger: element,
                 start: "top 84%",
@@ -230,7 +310,7 @@ export default function App() {
             <a className="ghost-link" href="#services">
               Services
             </a>
-            <a className="ghost-link" href="#visit">
+            <a className="ghost-link" href="#booking">
               Location
             </a>
             <a
@@ -264,7 +344,7 @@ export default function App() {
                 />
                 <img
                   src="/portfolio/extensions_after-hero.jpg"
-                  alt="Long strawberry-blonde waves and soft fringe — custom extension finish by Hair by William in El Paso"
+                  alt="Long strawberry-blonde waves and soft fringe, custom extension finish by Hair by William in El Paso"
                   width={2160}
                   height={2160}
                   fetchPriority="high"
@@ -274,29 +354,28 @@ export default function App() {
             <div className="hero-stage__overlay" aria-hidden="true" />
             <div className="hero-stage__content shell">
               <div className="hero-stage__copy">
-                <p className="kicker hero-kicker">Luxury Salon · El Paso</p>
                 <h1 className="hero-title">
                   <span className="hero-title-secondary">Hair by</span>
                   <span className="hero-title-rule" aria-hidden="true" />
                   <span className="hero-title-primary">William</span>
                   <span className="sr-only">
                     {" "}
-                    — El Paso hair stylist for extensions, cuts, and color
+                    El Paso hair stylist for extensions, cuts, and color
                   </span>
                 </h1>
                 <p className="lead hero-copy">
-                  Precision cuts, custom extensions, color correction, and smoothing — twenty-seven
-                  years of refined artistry in El Paso.
+                  Custom extensions, precision cuts, and color in El Paso. Twenty-seven years in the
+                  chair.
                 </p>
                 <div className="hero-actions">
                   <a
                     className="cta-button"
                     href="#contact"
                     data-mcp-action="book-appointment"
-                    data-mcp-description="Book an appointment with Hair by William — extensions, cuts, color, or Brazilian Blowout. Opens the guest booking form."
+                    data-mcp-description="Book an appointment with Hair by William for extensions, cuts, color, or Brazilian Blowout. Opens the guest booking form."
                     data-mcp-params='{"destination":"#contact"}'
                   >
-                    Book Appointment
+                    Book
                   </a>
                   <a
                     className="secondary-button secondary-button--on-dark"
@@ -305,22 +384,12 @@ export default function App() {
                     data-mcp-description="View the Hair by William salon portfolio of extensions, color, cuts, and blowouts."
                     data-mcp-params='{"destination":"#portfolio"}'
                   >
-                    View Portfolio
+                    Portfolio
                   </a>
                 </div>
-                <a
-                  className="mobile-book-strip"
-                  href="#contact"
-                  data-mcp-action="book-appointment"
-                  data-mcp-description="Book via WhatsApp or text — jump to the guest booking form."
-                  data-mcp-params='{"destination":"#contact"}'
-                >
-                  Book · WhatsApp or Text
-                </a>
               </div>
             </div>
             <aside className="hero-film" aria-label="Salon work in the chair">
-              <p className="hero-film__label">In the chair</p>
               <ul className="hero-film__strip">
                 {heroWorkClips.map((clip, index) => {
                   const portfolioHref = `#${clip.slideId}`;
@@ -363,26 +432,25 @@ export default function App() {
           >
             <div className="booking-panel__card motion-block">
               <div className="booking-panel__body">
-                <p className="kicker booking-panel__kicker">Book · Visit</p>
                 <h2 id="booking-visit-heading" className="section-heading booking-panel__heading">
                   Your Appointment in El Paso
                 </h2>
                 <p className="lead booking-panel__copy">
-                  Extensions, precision cuts, color correction, and Brazilian Blowout — Suite 13C
+                  Extensions, precision cuts, color correction, and Brazilian Blowout at Suite 13C
                   inside LV Hair Salon. Book ahead, then find us on North Mesa.
                 </p>
 
                 <dl className="booking-hours" aria-label="Salon hours and studio address">
                   <div className="booking-hours__row">
                     <dt>Hours</dt>
-                    <dd>Friday–Saturday 10 AM–6 PM</dd>
-                    <dd className="booking-hours__closed">Closed Sunday–Thursday</dd>
+                    <dd>Friday-Saturday 10 AM-6 PM</dd>
+                    <dd className="booking-hours__closed">Closed Sunday-Thursday</dd>
                   </div>
                   <div className="booking-hours__row booking-hours__row--studio">
                     <dt>Studio</dt>
                     <dd>
                       <address className="booking-hours__address">
-                        <a href="#visit">{STUDIO_ADDRESS}</a>
+                        <a href="#booking">{STUDIO_ADDRESS}</a>
                         <span className="booking-hours__city">{STUDIO_CITY}</span>
                       </address>
                     </dd>
@@ -404,7 +472,7 @@ export default function App() {
                     data-mcp-description="Book your Hair by William appointment via WhatsApp or text."
                     data-mcp-params='{"destination":"#contact"}'
                   >
-                    Book Appointment
+                    Book
                   </a>
                   <a
                     className="secondary-button secondary-button--on-dark"
@@ -459,7 +527,7 @@ export default function App() {
               <p className="kicker">Hair by William</p>
               <p className="site-footer-copy">
                 El Paso hair stylist for custom extensions, precision cuts, color correction, and
-                Brazilian Blowouts — twenty-seven years of refined artistry. Every texture and length
+                Brazilian Blowouts. Twenty-seven years of refined artistry. Every texture and length
                 welcome.
               </p>
             </div>
@@ -467,7 +535,7 @@ export default function App() {
               <div className="site-footer__col motion-block">
                 <p className="site-footer__label">Studio</p>
                 <p>
-                  <a href="#visit">5411 N. Mesa, Suite 13C</a>
+                  <a href="#booking">5411 N. Mesa, Suite 13C</a>
                 </p>
                 <p className="footer-hours">El Paso, TX 79912 · LV Hair Salon</p>
               </div>
@@ -483,8 +551,8 @@ export default function App() {
                     {PHONE_LABEL}
                   </a>
                 </p>
-                <p className="footer-hours">Friday–Saturday 10 AM–6 PM</p>
-                <p className="footer-hours">Closed Sunday–Thursday</p>
+                <p className="footer-hours">Friday-Saturday 10 AM-6 PM</p>
+                <p className="footer-hours">Closed Sunday-Thursday</p>
               </div>
               <div className="site-footer__col motion-block">
                 <p className="site-footer__label">Explore</p>
@@ -508,7 +576,7 @@ export default function App() {
                     <a href="#contact">Book</a>
                   </li>
                   <li>
-                    <a href="#visit">Location</a>
+                    <a href="#booking">Location</a>
                   </li>
                   <li>
                     <a
@@ -517,7 +585,7 @@ export default function App() {
                       data-mcp-description="Call Hair by William at 915-920-7823."
                       data-mcp-params='{"phone":"+1-915-920-7823"}'
                     >
-                      Phone
+                      Call
                     </a>
                   </li>
                 </ul>

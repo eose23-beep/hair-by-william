@@ -10,10 +10,10 @@ const SERVICE_OPTIONS = [
   "Brazilian Blowout",
   "Precision Cuts",
   "Color Correction",
-  "Not sure yet — consultation",
+  "Not sure yet - consultation",
 ];
 
-/** Slugs from service card Book links (?service=…#contact or #booking-…). */
+/** Slugs from service card Book links (/?service=…#contact or #booking-…). */
 const SERVICE_SLUG_MAP = {
   extensions: "Extensions",
   blowout: "Brazilian Blowout",
@@ -22,7 +22,7 @@ const SERVICE_SLUG_MAP = {
   "precision-cuts": "Precision Cuts",
   color: "Color Correction",
   "color-correction": "Color Correction",
-  consultation: "Not sure yet — consultation",
+  consultation: "Not sure yet - consultation",
 };
 
 function resolveServiceSlug(raw) {
@@ -45,7 +45,7 @@ function resolveServiceFromLocation() {
 
 function buildMessage({ name, phone, service, message }) {
   return [
-    "Hi William — I'd like to book an appointment.",
+    "Hi William - I'd like to book an appointment.",
     "",
     `Name: ${name}`,
     `Phone: ${phone}`,
@@ -132,8 +132,8 @@ export default function ContactForm() {
     if (!isValid) return;
 
     const text = buildMessage({ name, phone, service, message });
-    const url = `${WHATSAPP_HREF}?text=${encodeURIComponent(text)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    /* Same-tab navigate — avoids popup blockers that kill window.open */
+    window.location.assign(`${WHATSAPP_HREF}?text=${encodeURIComponent(text)}`);
   };
 
   const handleText = (event) => {
@@ -142,17 +142,16 @@ export default function ContactForm() {
     if (!isValid) return;
 
     const body = buildMessage({ name, phone, service, message });
-    window.location.href = `sms:+${PHONE_E164}?body=${encodeURIComponent(body)}`;
+    window.location.assign(`sms:+${PHONE_E164}?body=${encodeURIComponent(body)}`);
   };
 
   return (
     <section id="contact" className="shell section contact-section">
       <div className="contact-section__layout">
         <aside className="contact-section__intro motion-block">
-          <p className="kicker">Book Appointment</p>
           <h2 className="section-heading">Request Your Visit</h2>
           <p className="lead contact-section__copy">
-            Share your details and send via WhatsApp or Text — your message opens ready to send. No
+            Share your details and send via WhatsApp or Text. Your message opens ready to send. No
             account needed.
           </p>
 
@@ -164,7 +163,7 @@ export default function ContactForm() {
             <div>
               <dt>Hours</dt>
               <dd>
-                Friday–Saturday 10 AM–6 PM · closed Sunday–Thursday · call or text to book
+                Friday-Saturday 10 AM-6 PM · closed Sunday-Thursday · call or text to book
               </dd>
             </div>
             <div>
@@ -173,7 +172,7 @@ export default function ContactForm() {
                 <a
                   href={`tel:${PHONE_DISPLAY}`}
                   data-mcp-action="call-salon"
-                  data-mcp-description="Call Hair by William at 915-920-7823 to book. Open Friday–Saturday 10 AM–6 PM. No login required."
+                  data-mcp-description="Call Hair by William at 915-920-7823 to book. Open Friday-Saturday 10 AM-6 PM. No login required."
                   data-mcp-params='{"phone":"+1-915-920-7823"}'
                 >
                   {PHONE_DISPLAY}
@@ -189,7 +188,7 @@ export default function ContactForm() {
               target="_blank"
               rel="noopener noreferrer"
               data-mcp-action="open-whatsapp"
-              data-mcp-description="Open WhatsApp chat with Hair by William (915-920-7823) to book an appointment. Guest-friendly — no website account."
+              data-mcp-description="Open WhatsApp chat with Hair by William (915-920-7823) to book an appointment. Guest-friendly, no website account."
               data-mcp-params='{"phone":"+1-915-920-7823","channel":"whatsapp"}'
             >
               WhatsApp William
@@ -218,7 +217,7 @@ export default function ContactForm() {
             data-mcp-params='{"required":["name","phone","service"],"optional":["message"],"channels":["whatsapp","sms"]}'
           >
             <h3 id="contact-form-title" className="sr-only">
-              Appointment request form — book extensions, cuts, color, or Brazilian Blowout
+              Appointment request form: book extensions, cuts, color, or Brazilian Blowout
             </h3>
             <p id={formHintId} className="contact-form__hint">
               All hair textures and lengths welcome. Required fields are marked with an asterisk.
@@ -337,7 +336,7 @@ export default function ContactForm() {
                 data-mcp-params='{"channel":"whatsapp","requires":["name","phone"]}'
               >
                 <MessageCircle size={18} strokeWidth={1.75} aria-hidden="true" />
-                Book via WhatsApp
+                WhatsApp
               </button>
               <button
                 type="button"
@@ -349,13 +348,13 @@ export default function ContactForm() {
                 data-mcp-params='{"channel":"sms","requires":["name","phone"]}'
               >
                 <Phone size={16} strokeWidth={1.75} aria-hidden="true" />
-                Book via Text
+                Text
               </button>
             </div>
 
             <p className="contact-form__note" role="status" aria-live="polite">
               {isValid
-                ? "Ready to send — choose WhatsApp or Text above."
+                ? "Ready to send. Choose WhatsApp or Text above."
                 : "Complete your name and phone to continue."}
             </p>
 

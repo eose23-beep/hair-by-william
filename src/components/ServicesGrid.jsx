@@ -4,18 +4,16 @@ const services = [
   {
     id: "extensions",
     bookSlug: "extensions",
-    label: "01",
     title: "Hair Extensions",
     description:
-      "Custom hair extensions for seamless length and volume — tape-in, weft, I-tip, and beaded bond installations blended to your texture.",
+      "Custom hair extensions for length and volume: tape-in, weft, I-tip, and beaded bond installations blended to your texture.",
     image: "/portfolio/extensions_after.jpg",
     imageAlt:
-      "Seamless custom hair extensions with natural length and blended volume by Hair by William",
+      "Custom hair extensions with natural length and blended volume by Hair by William",
   },
   {
     id: "brazilian-blowout",
     bookSlug: "blowout",
-    label: "02",
     title: "Brazilian Blowout",
     description:
       "Professional Brazilian Blowout smoothing for lasting shine, softness, and frizz control that still moves like you.",
@@ -25,20 +23,18 @@ const services = [
   {
     id: "precision-cuts",
     bookSlug: "cuts",
-    label: "03",
     title: "Precision Cuts",
     description:
-      "Precision haircuts shaped to your face, texture, and lifestyle — clean lines with an editorial finish.",
+      "Precision haircuts shaped to your face, texture, and lifestyle. Clean lines with an editorial finish.",
     image: "/portfolio/work-03.png",
     imageAlt: "Precision cut with polished silhouette and editorial finish",
   },
   {
     id: "color-correction",
     bookSlug: "color",
-    label: "04",
     title: "Color Correction",
     description:
-      "Dimensional color and color correction for uneven tone, brassiness, or past color — healthy hair, refined results.",
+      "Dimensional color and color correction for uneven tone, brassiness, or past color. Healthy hair, refined results.",
     image: "/portfolio/work-05.png",
     imageAlt: "Color correction with balanced tone and healthy, refined results",
   },
@@ -46,7 +42,7 @@ const services = [
 
 function ServiceCard({ service, index }) {
   const cardRef = useRef(null);
-  const bookHref = `?service=${service.bookSlug}#contact`;
+  const bookHref = `/?service=${service.bookSlug}#contact`;
 
   const onMove = useCallback((event) => {
     const el = cardRef.current;
@@ -103,7 +99,6 @@ function ServiceCard({ service, index }) {
           </div>
         ) : null}
         <div className="service-card__content">
-          <p className="service-card__label">{service.label}</p>
           <div className="service-card__body">
             <h3 id={`${service.id}-title`} className="service-card__title">
               {service.title}
@@ -117,7 +112,7 @@ function ServiceCard({ service, index }) {
             data-mcp-description={`Book a ${service.title} appointment with Hair by William in El Paso via WhatsApp or text. No account required.`}
             data-mcp-params={`{"service":"${service.bookSlug}","destination":"#contact"}`}
           >
-            Book {service.title.split(" ")[0]}
+            Book
           </a>
         </div>
       </div>
@@ -129,10 +124,9 @@ export default function ServicesGrid() {
   return (
     <section id="services" className="shell section services-section">
       <header className="services-section__header motion-block">
-        <p className="lookbook-tag">Signature Services</p>
         <h2 className="section-heading">Hair Services</h2>
         <p className="lead services-section__copy">
-          Tailored for your texture, length, and goals — custom extensions, Brazilian Blowout,
+          Tailored for your texture, length, and goals: custom extensions, Brazilian Blowout,
           precision cuts, and color correction in El Paso.
         </p>
         <nav className="services-section__jump" aria-label="Jump to a service">

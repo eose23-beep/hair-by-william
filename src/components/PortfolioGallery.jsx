@@ -1,29 +1,29 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { A11y, Autoplay, EffectCoverflow, Keyboard } from "swiper/modules";
+import { A11y, EffectCoverflow, Keyboard } from "swiper/modules";
 import { portfolioSlides } from "../data/portfolio";
 import AmbientVideo from "./AmbientVideo";
 
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 
-/** φ-tuned lookbook motion — Fib-adjacent delay, ease-out luxury curve */
-const AUTOPLAY_MS = 4500;
-const SLIDE_SPEED_MS = 720;
+/** φ-tuned lookbook motion — custom autoplay (not Swiper Autoplay) for reliable advance */
+const AUTOPLAY_MS = 4800;
+const SLIDE_SPEED_MS = 820;
 
-/** Soft coverflow — readable side peeks, not razor-thin 3D */
-const COVERFLOW_DESKTOP = {
-  rotate: 8,
-  stretch: 12,
-  depth: 72,
-  modifier: 1,
+/** Constrained 3D coverflow — readable rotateY without stage blowout */
+const COVERFLOW_3D = {
+  rotate: 38,
+  stretch: -44,
+  depth: 220,
+  modifier: 1.02,
   slideShadows: false,
 };
 
-const COVERFLOW_MOBILE = {
+const COVERFLOW_FLAT = {
   rotate: 0,
   stretch: 0,
-  depth: 28,
+  depth: 0,
   modifier: 1,
   slideShadows: false,
 };
@@ -104,16 +104,28 @@ function slideAriaLabel(slide, index, total) {
   return `${kind} slide ${index + 1} of ${total}: ${slide.title}. ${slide.alt}`;
 }
 
-/** Prefer sibling .webp when media agent has upscaled stills. */
-function webpSibling(src) {
-  if (!src || typeof src !== "string") return null;
-  if (/\.webp$/i.test(src)) return src;
-  return src.replace(/\.(png|jpe?g)$/i, ".webp");
+/** Prefer sibling .webp only when a known companion exists in /public/portfolio. */
+const WEBP_IDS = new Set([
+  "work-01",
+  "work-02",
+  "work-05",
+  "work-07",
+  "extensions-before",
+  "extensions-after",
+]);
+
+function webpSibling(slide) {
+  if (!slide?.src || typeof slide.src !== "string") return null;
+  if (!WEBP_IDS.has(slide.id)) return null;
+  if (/\.webp$/i.test(slide.src)) return slide.src;
+  return slide.src.replace(/\.(png|jpe?g)$/i, ".webp");
 }
 
 /** Resolve #clip-01 / #portfolio-clip-01 / #portfolio?clip=01 style hashes to a slide index. */
 function slideIndexFromHash(hash = typeof window !== "undefined" ? window.location.hash : "") {
-  const raw = String(hash || "").replace(/^#/, "").trim();
+  const raw = String(hash || "")
+    .replace(/^#/, "")
+    .trim();
   if (!raw || raw === "portfolio") return null;
 
   const queryMatch = raw.match(/^portfolio\?(?:.*&)?clip=([0-9a-z-]+)/i);
@@ -135,23 +147,27 @@ function slideIndexFromHash(hash = typeof window !== "undefined" ? window.locati
   return null;
 }
 
-function syncAutoplay(swiper, shouldRun) {
-  if (!swiper?.autoplay) return;
-  if (shouldRun) {
-    if (!swiper.autoplay.running) swiper.autoplay.start();
-  } else if (swiper.autoplay.running) {
-    swiper.autoplay.stop();
-  }
+/** Remeasure after layout — grid min-content can inflate before first paint. */
+function recenterSwiper(instance, targetIndex) {
+  if (!instance || instance.destroyed) return;
+  instance.updateSize();
+  instance.updateSlides();
+  instance.updateProgress();
+  instance.updateSlidesClasses();
+  const idx =
+    typeof targetIndex === "number" ? targetIndex : (instance.activeIndex ?? 0);
+  instance.slideTo(idx, 0);
 }
 
 export default function PortfolioGallery() {
   const hashIndex = slideIndexFromHash();
   const [active, setActive] = useState(() => hashIndex ?? 0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const [stageInView, setStageInView] = useState(true);
+  const [stageInView, setStageInView] = useState(false);
   const [hoverPaused, setHoverPaused] = useState(false);
   const [focusPaused, setFocusPaused] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [autoplayTick, setAutoplayTick] = useState(0);
   const stageRef = useRef(null);
   const swiperRef = useRef(null);
   const lightboxCloseRef = useRef(null);
@@ -180,39 +196,54 @@ export default function PortfolioGallery() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setStageInView(entry.isIntersecting && entry.intersectionRatio > 0.2);
+        setStageInView(entry.isIntersecting && entry.intersectionRatio >= 0.18);
       },
-      { threshold: [0, 0.2, 0.45] },
+      { threshold: [0, 0.18, 0.35, 0.55], rootMargin: "0px 0px -8% 0px" },
     );
     observer.observe(stage);
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    syncAutoplay(swiperRef.current, autoplayEnabled);
-  }, [autoplayEnabled]);
-
-  const goTo = useCallback((next) => {
-    const index = wrapIndex(next, count);
-    const swiper = swiperRef.current;
-    if (swiper && !swiper.destroyed) {
-      swiper.slideTo(index);
-    } else {
-      setActive(index);
-    }
-  }, [count]);
+  const goTo = useCallback(
+    (next) => {
+      const index = wrapIndex(next, count);
+      const swiper = swiperRef.current;
+      if (swiper && !swiper.destroyed) {
+        swiper.slideTo(index, SLIDE_SPEED_MS);
+      } else {
+        setActive(index);
+      }
+    },
+    [count],
+  );
 
   const goPrev = useCallback(() => {
     const swiper = swiperRef.current;
-    if (swiper && !swiper.destroyed) swiper.slidePrev();
+    if (swiper && !swiper.destroyed) swiper.slidePrev(SLIDE_SPEED_MS);
     else setActive((prev) => wrapIndex(prev - 1, count));
   }, [count]);
 
   const goNext = useCallback(() => {
     const swiper = swiperRef.current;
-    if (swiper && !swiper.destroyed) swiper.slideNext();
+    if (swiper && !swiper.destroyed) swiper.slideNext(SLIDE_SPEED_MS);
     else setActive((prev) => wrapIndex(prev + 1, count));
   }, [count]);
+
+  /** Reliable custom autoplay — resets pace on each slide; pauses when gated off */
+  useEffect(() => {
+    if (!autoplayEnabled) return undefined;
+
+    const timer = window.setInterval(() => {
+      const swiper = swiperRef.current;
+      if (!swiper || swiper.destroyed) return;
+      if (swiper.animating) return;
+      swiper.slideNext(SLIDE_SPEED_MS);
+    }, AUTOPLAY_MS);
+
+    setAutoplayTick((n) => n + 1);
+
+    return () => window.clearInterval(timer);
+  }, [autoplayEnabled, active]);
 
   useEffect(() => {
     const applyHashSlide = () => {
@@ -220,8 +251,22 @@ export default function PortfolioGallery() {
       if (index == null) return;
       setActive(index);
       const swiper = swiperRef.current;
-      if (!swiper || swiper.destroyed) return;
-      swiper.slideTo(index, 0);
+      if (swiper && !swiper.destroyed) {
+        swiper.slideTo(index, 0);
+      }
+      /* Ensure lookbook is in view for #clip-* deep-links (App hash handler also scrolls) */
+      const portfolio = document.getElementById("portfolio");
+      if (portfolio) {
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const rect = portfolio.getBoundingClientRect();
+        const inView = rect.top < window.innerHeight * 0.72 && rect.bottom > 80;
+        if (!inView) {
+          portfolio.scrollIntoView({
+            behavior: reduce ? "auto" : "smooth",
+            block: "start",
+          });
+        }
+      }
     };
 
     applyHashSlide();
@@ -291,7 +336,9 @@ export default function PortfolioGallery() {
   }, [lightboxOpen, closeLightbox, goPrev, goNext]);
 
   const onSlideActivate = (swiper) => {
-    setActive(typeof swiper.realIndex === "number" ? swiper.realIndex : swiper.activeIndex);
+    const next =
+      typeof swiper.realIndex === "number" ? swiper.realIndex : swiper.activeIndex;
+    setActive(next);
   };
 
   const handleSlideClick = (index) => {
@@ -315,12 +362,11 @@ export default function PortfolioGallery() {
             ))}
         </div>
         <header className="portfolio-gallery__intro motion-block">
-          <p className="lookbook-tag portfolio-gallery__kicker">Portfolio</p>
           <span className="portfolio-gallery__hairline" aria-hidden="true" />
           <h2 className="section-heading portfolio-gallery__heading">Salon Lookbook</h2>
           <p className="portfolio-gallery__copy">
-            Chair finishes across texture, length, and tone — extensions, precision cuts,
-            and dimensional color.
+            From extension reveal to classic blowout: texture, length, and tone, finished in the
+            chair.
           </p>
         </header>
 
@@ -330,47 +376,33 @@ export default function PortfolioGallery() {
 
         <div
           ref={stageRef}
-          className={`coverflow portfolio-gallery__stage${autoplayEnabled ? "" : " is-paused"}`}
+          className={`coverflow lookbook portfolio-gallery__stage lookbook--3d${
+            autoplayEnabled ? " is-autoplaying" : " is-paused"
+          }${reduceMotion ? " lookbook--flat" : ""}`}
           role="region"
           aria-roledescription="carousel"
           aria-label="Salon portfolio carousel"
           aria-describedby={liveRegionId}
-          onPointerEnter={() => setHoverPaused(true)}
-          onPointerLeave={() => setHoverPaused(false)}
         >
-          <div className="coverflow__stage">
+          <div
+            className="coverflow__stage lookbook__stage"
+            onPointerEnter={() => setHoverPaused(true)}
+            onPointerLeave={() => setHoverPaused(false)}
+          >
+            <span className="lookbook__rim" aria-hidden="true" />
             <Swiper
-              className="coverflow__swiper"
-              modules={[EffectCoverflow, Autoplay, Keyboard, A11y]}
+              className="coverflow__swiper lookbook__swiper"
+              modules={[EffectCoverflow, Keyboard, A11y]}
               effect="coverflow"
+              coverflowEffect={reduceMotion ? COVERFLOW_FLAT : COVERFLOW_3D}
               grabCursor
               centeredSlides
               slidesPerView="auto"
-              /* loop + slidesPerView:auto needs more slides than we ship — rewind wraps instead */
+              spaceBetween={0}
               rewind
-              observer
-              observeParents
-              speed={SLIDE_SPEED_MS}
+              speed={reduceMotion ? 0 : SLIDE_SPEED_MS}
               watchSlidesProgress
               initialSlide={hashIndex ?? 0}
-              coverflowEffect={COVERFLOW_DESKTOP}
-              breakpoints={{
-                0: {
-                  coverflowEffect: COVERFLOW_MOBILE,
-                },
-                768: {
-                  coverflowEffect: COVERFLOW_DESKTOP,
-                },
-              }}
-              autoplay={
-                reduceMotion
-                  ? false
-                  : {
-                      delay: AUTOPLAY_MS,
-                      disableOnInteraction: false,
-                      pauseOnMouseEnter: true,
-                    }
-              }
               keyboard={{
                 enabled: true,
                 onlyInViewport: true,
@@ -382,14 +414,27 @@ export default function PortfolioGallery() {
               }}
               onSwiper={(instance) => {
                 swiperRef.current = instance;
-                setActive(instance.activeIndex);
-                syncAutoplay(instance, autoplayEnabled);
+                const start =
+                  typeof instance.realIndex === "number"
+                    ? instance.realIndex
+                    : instance.activeIndex;
+                setActive(start);
+                const target = hashIndex ?? start ?? 0;
+                requestAnimationFrame(() => {
+                  recenterSwiper(instance, target);
+                  requestAnimationFrame(() => recenterSwiper(instance, target));
+                });
+                window.setTimeout(() => recenterSwiper(instance, target), 80);
+                window.setTimeout(() => recenterSwiper(instance, target), 240);
               }}
               onDestroy={() => {
                 swiperRef.current = null;
               }}
               onSlideChange={onSlideActivate}
               onRealIndexChange={onSlideActivate}
+              onResize={(instance) => {
+                recenterSwiper(instance, instance.activeIndex);
+              }}
               onSliderFirstMove={() => {
                 dragGuardRef.current = true;
               }}
@@ -404,31 +449,35 @@ export default function PortfolioGallery() {
             >
               {portfolioSlides.map((slide, index) => {
                 const isCenter = index === active;
+                const webp = webpSibling(slide);
                 return (
-                  <SwiperSlide key={slide.id} className="coverflow__slide">
+                  <SwiperSlide key={slide.id} className="coverflow__slide lookbook__slide">
                     <button
                       type="button"
                       className={`coverflow__card${isCenter ? " is-active" : ""}${
-                        slide.type === "video" ? " coverflow__card--video" : ""
-                      }${isCenter && slide.type === "video" ? " is-playing" : ""}`}
+                        slide.type === "video" ? " coverflow__card--video" : " coverflow__card--still"
+                      }${isCenter && slide.type === "video" ? " is-playing" : ""}${
+                        index === 0 ? " coverflow__card--hook" : ""
+                      }`}
                       onClick={() => handleSlideClick(index)}
                       aria-label={slideAriaLabel(slide, index, count)}
                       aria-current={isCenter ? "true" : undefined}
                       tabIndex={isCenter ? 0 : -1}
                     >
                       <div className="coverflow__frame">
+                        <span className="coverflow__corners" aria-hidden="true" />
                         {slide.type === "video" ? (
                           <AmbientVideo
                             className="coverflow__media"
                             src={slide.src}
                             poster={slide.poster}
                             ariaLabel={slide.alt}
-                            preload={isCenter ? "metadata" : "none"}
+                            preload={Math.abs(index - active) <= 1 ? "metadata" : "none"}
                             active={isCenter && stageInView && !lightboxOpen}
                           />
-                        ) : (
+                        ) : webp ? (
                           <picture className="coverflow__picture">
-                            <source srcSet={webpSibling(slide.src)} type="image/webp" />
+                            <source srcSet={webp} type="image/webp" />
                             <img
                               className="coverflow__media"
                               src={slide.src}
@@ -440,14 +489,29 @@ export default function PortfolioGallery() {
                                 const img = event.currentTarget;
                                 if (img.dataset.fallbackApplied === "1") return;
                                 img.dataset.fallbackApplied = "1";
-                                img.src = "/portfolio/work-01.png";
+                                img.removeAttribute("srcset");
+                                img.src = slide.src;
                               }}
                             />
                           </picture>
+                        ) : (
+                          <img
+                            className="coverflow__media"
+                            src={slide.src}
+                            alt={slide.alt}
+                            loading={Math.abs(index - active) < 2 ? "eager" : "lazy"}
+                            decoding="async"
+                            draggable={false}
+                          />
                         )}
                         <span className="coverflow__caption">
                           <span className="coverflow__title">{slide.title}</span>
                           <span className="coverflow__subtitle">{slide.caption}</span>
+                          {isCenter ? (
+                            <span className="coverflow__cta" aria-hidden="true">
+                              Tap to enlarge
+                            </span>
+                          ) : null}
                         </span>
                       </div>
                     </button>
@@ -504,6 +568,14 @@ export default function PortfolioGallery() {
                 aria-hidden="true"
                 style={{ "--film-progress": `${progress}%` }}
               />
+              {autoplayEnabled ? (
+                <div
+                  key={`autoplay-progress-${autoplayTick}-${active}`}
+                  className="coverflow__autoplay-bar"
+                  aria-hidden="true"
+                  style={{ "--autoplay-ms": `${AUTOPLAY_MS}ms` }}
+                />
+              ) : null}
               {portfolioSlides.map((slide, index) => (
                 <button
                   key={slide.id}
@@ -518,6 +590,18 @@ export default function PortfolioGallery() {
                 />
               ))}
             </div>
+
+            <p className="coverflow__book-line">
+              <a className="coverflow__book-link" href="#contact">
+                Book
+              </a>
+              <span className="coverflow__book-sep" aria-hidden="true">
+                ·
+              </span>
+              <a className="coverflow__book-link coverflow__book-link--ghost" href="tel:915-920-7823">
+                Call
+              </a>
+            </p>
           </div>
         </div>
       </section>
@@ -553,15 +637,27 @@ export default function PortfolioGallery() {
                   active={lightboxOpen}
                 />
               ) : (
-                <picture>
-                  <source srcSet={webpSibling(activeSlide.src)} type="image/webp" />
-                  <img
-                    className="lightbox__image"
-                    src={activeSlide.src}
-                    alt={activeSlide.alt}
-                    loading="eager"
-                  />
-                </picture>
+                (() => {
+                  const webp = webpSibling(activeSlide);
+                  return webp ? (
+                    <picture>
+                      <source srcSet={webp} type="image/webp" />
+                      <img
+                        className="lightbox__image"
+                        src={activeSlide.src}
+                        alt={activeSlide.alt}
+                        loading="eager"
+                      />
+                    </picture>
+                  ) : (
+                    <img
+                      className="lightbox__image"
+                      src={activeSlide.src}
+                      alt={activeSlide.alt}
+                      loading="eager"
+                    />
+                  );
+                })()
               )}
               <figcaption className="lightbox__caption">
                 <span id={lightboxTitleId} className="lightbox__title">
@@ -570,6 +666,9 @@ export default function PortfolioGallery() {
                 <span id={lightboxCaptionId} className="lightbox__subtitle">
                   {activeSlide.caption}
                 </span>
+                <a className="lightbox__book" href="#contact" onClick={closeLightbox}>
+                  Book
+                </a>
               </figcaption>
               <div className="lightbox__nav">
                 <button

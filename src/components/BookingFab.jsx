@@ -8,7 +8,7 @@ export default function BookingFab() {
       className="booking-fab"
       aria-label={`Call Hair by William at ${PHONE_LABEL} to book`}
       data-mcp-action="call-salon"
-      data-mcp-description="Call Hair by William at 915-920-7823 to book an appointment. Guest-friendly — no account required."
+      data-mcp-description="Call Hair by William at 915-920-7823 to book an appointment. Guest-friendly, no account required."
       data-mcp-params='{"phone":"+1-915-920-7823"}'
     >
       <span className="booking-fab__pulse" aria-hidden="true" />
@@ -16,7 +16,7 @@ export default function BookingFab() {
         ☎
       </span>
       <span className="booking-fab__copy">
-        <span className="booking-fab__kicker">Call now</span>
+        <span className="booking-fab__kicker">Call</span>
         <span className="booking-fab__number">{PHONE_LABEL}</span>
       </span>
     </a>

@@ -150,10 +150,10 @@ export default function AgentHarnessDrawer() {
             <div className="harness-terminal">
               <p className="harness-terminal__line">
                 <span className="harness-terminal__prompt">william@studio</span>
-                <span>session bind → {activeSession?.title ?? "—"}</span>
+                <span>session bind → {activeSession?.title ?? "-"}</span>
               </p>
               <p className="harness-terminal__line harness-terminal__muted">
-                Model route: {activeAgent?.model ?? "—"} // context: salon workflow
+                Model route: {activeAgent?.model ?? "-"} // context: salon workflow
               </p>
               <p className="harness-terminal__line">
                 Awaiting command. Color consults, extension specs, and booking notes route here.

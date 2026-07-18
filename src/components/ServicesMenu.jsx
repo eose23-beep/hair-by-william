@@ -2,7 +2,7 @@ const services = [
   {
     index: 'I',
     name: 'Custom Hair Extensions',
-    description: 'Seamless blending, volume, and length',
+    description: "Blending, volume, and length",
   },
   {
     index: 'II',
