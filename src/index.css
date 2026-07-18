@@ -557,16 +557,82 @@ a {
 }
 
 @media (max-width: 767px) {
-  .salon-atmosphere__filaments {
-    opacity: calc(var(--atmosphere-ribbon-opacity) * 0.72);
+  /* Mobile GPU relief — desktop atmosphere stays full fidelity */
+  .salon-atmosphere {
+    /* Avoid expensive paint isolation thrash on weak GPUs */
+    contain: strict;
   }
 
+  .salon-atmosphere__veil {
+    filter: blur(16px);
+    opacity: 0.85;
+  }
+
+  .salon-atmosphere__filaments {
+    inset: -8% -10%;
+    width: 120%;
+    height: 116%;
+    opacity: calc(var(--atmosphere-ribbon-opacity) * 0.62);
+  }
+
+  .salon-atmosphere__ribbon {
+    will-change: auto;
+  }
+
+  /* Drop heaviest layers: one brush + lock-c + shimmer cause flicker */
+  .salon-atmosphere__ribbon--brush-b,
   .salon-atmosphere__ribbon--lock-c {
-    opacity: 0.65;
+    animation: none !important;
+    opacity: 0.35;
+    transform: none !important;
+  }
+
+  .salon-atmosphere__ribbon--brush-a,
+  .salon-atmosphere__ribbon--lock-a,
+  .salon-atmosphere__ribbon--lock-b {
+    animation-duration: 28s;
+    animation-timing-function: ease-in-out;
+  }
+
+  .salon-atmosphere__bloom {
+    filter: blur(48px);
+    will-change: auto;
+    animation-duration: 36s;
+  }
+
+  .salon-atmosphere__bloom--c {
+    display: none;
   }
 
   .salon-atmosphere__shimmer {
-    opacity: calc(var(--atmosphere-shimmer-opacity) * 0.7);
+    display: none;
+  }
+
+  .salon-atmosphere__grain {
+    opacity: 0.012;
+  }
+
+  /* Lookbook: less 3D paint + softer chrome on small screens */
+  .coverflow__stage::before,
+  .coverflow__stage::after,
+  .lookbook__rim {
+    opacity: 0.45;
+  }
+
+  .coverflow__frame::after {
+    mix-blend-mode: normal;
+    opacity: 0.35;
+  }
+
+  .coverflow__swiper,
+  .lookbook__swiper {
+    padding: 20px 0 28px;
+  }
+
+  .coverflow__slide.swiper-slide,
+  .lookbook__slide.swiper-slide {
+    width: min(280px, 72vw);
+    max-width: min(280px, 72vw);
   }
 }
 

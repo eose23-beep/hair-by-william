@@ -20,6 +20,15 @@ const COVERFLOW_3D = {
   slideShadows: false,
 };
 
+/** Gentler coverflow for phones — less GPU thrash while keeping depth */
+const COVERFLOW_MOBILE = {
+  rotate: 16,
+  stretch: -18,
+  depth: 96,
+  modifier: 1,
+  slideShadows: false,
+};
+
 const COVERFLOW_FLAT = {
   rotate: 0,
   stretch: 0,
@@ -167,6 +176,7 @@ export default function PortfolioGallery() {
   const [hoverPaused, setHoverPaused] = useState(false);
   const [focusPaused, setFocusPaused] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [narrowMobile, setNarrowMobile] = useState(false);
   const [autoplayTick, setAutoplayTick] = useState(0);
   const stageRef = useRef(null);
   const swiperRef = useRef(null);
@@ -189,6 +199,20 @@ export default function PortfolioGallery() {
     mq.addEventListener?.("change", sync);
     return () => mq.removeEventListener?.("change", sync);
   }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setNarrowMobile(mq.matches);
+    sync();
+    mq.addEventListener?.("change", sync);
+    return () => mq.removeEventListener?.("change", sync);
+  }, []);
+
+  const coverflowEffect = reduceMotion
+    ? COVERFLOW_FLAT
+    : narrowMobile
+      ? COVERFLOW_MOBILE
+      : COVERFLOW_3D;
 
   useEffect(() => {
     const stage = stageRef.current;
@@ -394,13 +418,13 @@ export default function PortfolioGallery() {
               className="coverflow__swiper lookbook__swiper"
               modules={[EffectCoverflow, Keyboard, A11y]}
               effect="coverflow"
-              coverflowEffect={reduceMotion ? COVERFLOW_FLAT : COVERFLOW_3D}
+              coverflowEffect={coverflowEffect}
               grabCursor
               centeredSlides
               slidesPerView="auto"
               spaceBetween={0}
               rewind
-              speed={reduceMotion ? 0 : SLIDE_SPEED_MS}
+              speed={reduceMotion ? 0 : narrowMobile ? 560 : SLIDE_SPEED_MS}
               watchSlidesProgress
               initialSlide={hashIndex ?? 0}
               keyboard={{
