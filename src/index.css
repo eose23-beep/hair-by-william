@@ -4877,25 +4877,28 @@ a {
   }
 }
 
-/* AI hair try-on — editorial spike (parchment + ink + gold) */
+/* AI hair try-on — tight mobile-first, 4 service chips + freeform prompt */
 .hair-tryon {
-  scroll-margin-top: 88px;
+  scroll-margin-top: 96px;
 }
 
 .hair-tryon__layout {
   display: grid;
-  gap: var(--space-8);
+  gap: var(--space-5);
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
 }
 
 .hair-tryon__intro {
   display: grid;
-  gap: var(--space-3);
-  max-width: 42ch;
+  gap: var(--space-2);
+  max-width: 40ch;
 }
 
 .hair-tryon__copy {
   margin: 0;
-  max-width: 40ch;
+  max-width: 38ch;
 }
 
 .hair-tryon__meta {
@@ -4908,34 +4911,41 @@ a {
 
 .hair-tryon__stage {
   display: grid;
-  gap: var(--space-8);
+  gap: var(--space-5);
+  width: 100%;
+  min-width: 0;
 }
 
 .hair-tryon__controls {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-4);
   align-content: start;
+  min-width: 0;
 }
 
 .hair-tryon__step {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .hair-tryon__step-label {
   margin: 0;
   font-size: var(--type-kicker);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--champagne);
   font-weight: 600;
 }
 
 .hair-tryon__upload-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
+}
+
+.hair-tryon__upload-actions .secondary-button {
+  width: 100%;
+  justify-content: center;
 }
 
 .hair-tryon__touch {
@@ -4946,7 +4956,7 @@ a {
 .hair-tryon__camera {
   display: grid;
   gap: var(--space-3);
-  padding: var(--space-4);
+  padding: var(--space-3);
   border: var(--rule) solid var(--stroke-mid);
   background: rgba(232, 223, 208, 0.4);
   box-shadow: var(--frame-inset-gold);
@@ -4954,6 +4964,7 @@ a {
 
 .hair-tryon__camera-video {
   width: 100%;
+  max-height: 220px;
   aspect-ratio: 3 / 4;
   object-fit: cover;
   background: #1a1816;
@@ -4968,12 +4979,12 @@ a {
 
 .hair-tryon__prompt {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
 .hair-tryon__textarea {
   width: 100%;
-  min-height: 72px;
+  min-height: 88px;
   padding: var(--space-3) var(--space-4);
   border: var(--rule) solid var(--stroke-mid);
   background: rgba(255, 252, 246, 0.92);
@@ -5004,64 +5015,77 @@ a {
 }
 
 .hair-tryon__styles .hair-tryon__step-label {
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2);
 }
 
 .hair-tryon__chips {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
 }
 
 .hair-tryon__chip {
-  display: grid;
-  gap: var(--space-2);
-  min-height: 44px;
-  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 48px;
+  padding: var(--space-3) var(--space-3);
   margin: 0;
-  border: 0;
-  background: transparent;
+  border: var(--rule) solid var(--stroke-mid);
+  background: rgba(255, 252, 246, 0.88);
   color: var(--ink);
   cursor: pointer;
   text-align: left;
   font-family: var(--font-body);
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  transition: color var(--transition-fast);
-}
-
-.hair-tryon__chip img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  border: var(--rule) solid var(--stroke-mid);
   box-shadow: var(--frame-inset-gold);
   transition:
-    border-color var(--transition-normal),
-    box-shadow var(--transition-normal);
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
-.hair-tryon__chip:hover img,
-.hair-tryon__chip.is-active img {
+.hair-tryon__chip-mark {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: var(--rule) solid var(--gold-rule);
+  background: rgba(10, 9, 8, 0.92);
+  color: var(--champagne);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.hair-tryon__chip-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+}
+
+.hair-tryon__chip:hover,
+.hair-tryon__chip.is-active {
   border-color: var(--gold-frame);
+  background: rgba(255, 252, 246, 0.98);
   box-shadow: var(--frame-glow-hover);
 }
 
-.hair-tryon__chip.is-active {
-  color: var(--champagne);
+.hair-tryon__chip.is-active .hair-tryon__chip-mark {
+  background: var(--ink);
+  color: #f5ecd4;
 }
 
 .hair-tryon__chip:focus-visible {
   outline: 2px solid var(--champagne);
-  outline-offset: 4px;
+  outline-offset: 3px;
 }
 
-/* Primary CTA sits after photo + style — always above optional refine */
 .hair-tryon__generate {
   display: grid;
-  gap: var(--space-3);
-  padding-block: var(--space-2);
+  gap: var(--space-2);
+  padding-block: var(--space-3);
   border-top: var(--rule) solid rgba(166, 139, 75, 0.35);
   border-bottom: var(--rule) solid rgba(166, 139, 75, 0.35);
 }
@@ -5122,21 +5146,33 @@ a {
 
 .hair-tryon__frames {
   display: grid;
-  gap: var(--space-4);
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
 }
 
 .hair-tryon__frame {
   margin: 0;
   display: grid;
-  gap: 0;
+  gap: var(--space-2);
   min-width: 0;
+}
+
+.hair-tryon__frame-cap {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
 }
 
 .hair-tryon__frame img,
 .hair-tryon__empty,
 .hair-tryon__skeleton {
   width: 100%;
+  max-height: 220px;
   aspect-ratio: 3 / 4;
   object-fit: cover;
   border: var(--rule) solid var(--stroke-mid);
@@ -5146,8 +5182,8 @@ a {
 .hair-tryon__empty {
   display: grid;
   place-content: center;
-  gap: var(--space-2);
-  padding: var(--space-6);
+  gap: 4px;
+  padding: var(--space-4);
   text-align: center;
   background:
     linear-gradient(160deg, rgba(255, 252, 246, 0.95), rgba(232, 223, 208, 0.72));
@@ -5160,17 +5196,17 @@ a {
 
 .hair-tryon__empty-title {
   font-family: var(--font-body);
-  font-size: clamp(13px, 1.1vw, 15px);
+  font-size: 12px;
   font-weight: 650;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink);
 }
 
 .hair-tryon__empty-copy {
-  font-size: var(--type-caption);
-  letter-spacing: 0.08em;
-  line-height: 1.4;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  line-height: 1.35;
   color: var(--text-dim);
 }
 
@@ -5200,11 +5236,13 @@ a {
 .hair-tryon__skeleton-label {
   position: relative;
   z-index: 1;
-  font-size: var(--type-caption);
+  font-size: 11px;
   font-weight: 650;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink);
+  padding: var(--space-2);
+  text-align: center;
 }
 
 @keyframes hair-tryon-shimmer {
@@ -5214,63 +5252,52 @@ a {
 }
 
 @media (min-width: 768px) {
-  .hair-tryon__frames {
-    grid-template-columns: var(--phi-minor) var(--phi-major);
-    gap: var(--gap-phi);
+  .hair-tryon__layout {
+    gap: var(--space-6);
+  }
+
+  .hair-tryon__stage {
+    gap: var(--space-6);
+  }
+
+  .hair-tryon__controls {
+    gap: var(--space-5);
+  }
+
+  .hair-tryon__chips {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .hair-tryon__frame img,
+  .hair-tryon__empty,
+  .hair-tryon__skeleton {
+    max-height: 360px;
+  }
+
+  .hair-tryon__camera-video {
+    max-height: 320px;
   }
 }
 
 @media (min-width: 1024px) {
   .hair-tryon__stage {
-    grid-template-columns: minmax(260px, 0.382fr) minmax(320px, 0.618fr);
-    column-gap: var(--gap-phi);
+    grid-template-columns: minmax(300px, 0.42fr) minmax(360px, 0.58fr);
+    column-gap: var(--space-8);
     align-items: start;
   }
 
-  /* Sticky only the generate strip so CTA stays visible without clipping tall controls */
-  .hair-tryon__generate {
-    position: sticky;
-    top: 80px;
-    z-index: 2;
-    background:
-      linear-gradient(
-        180deg,
-        rgba(245, 240, 230, 0.96) 0%,
-        rgba(245, 240, 230, 0.92) 100%
-      );
-    padding: var(--space-4);
-    margin-inline: calc(var(--space-2) * -1);
-    box-shadow: 0 8px 24px rgba(10, 9, 8, 0.06);
-  }
-}
-
-@media (max-width: 767px) {
-  /* Keep controls (incl. Visualize Style) above frames so the CTA is never below the fold */
-  .hair-tryon__stage {
-    gap: var(--space-6);
-  }
-
-  .hair-tryon__generate {
-    position: sticky;
-    bottom: 12px;
-    z-index: 3;
-    padding: var(--space-3);
-    background: linear-gradient(
-      180deg,
-      rgba(245, 240, 230, 0) 0%,
-      rgba(245, 240, 230, 0.96) 28%,
-      rgba(245, 240, 230, 0.98) 100%
-    );
-  }
-
-  .hair-tryon__upload-actions {
-    display: grid;
+  .hair-tryon__chips {
     grid-template-columns: 1fr 1fr;
   }
 
-  .hair-tryon__upload-actions .secondary-button {
-    width: 100%;
-    justify-content: center;
+  .hair-tryon__frames {
+    gap: var(--space-4);
+  }
+
+  .hair-tryon__frame img,
+  .hair-tryon__empty,
+  .hair-tryon__skeleton {
+    max-height: none;
   }
 }
 

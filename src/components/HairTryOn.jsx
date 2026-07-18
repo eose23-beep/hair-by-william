@@ -1,5 +1,4 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { portfolioSlides } from "../data/portfolio";
 
 const FREE_TRIES = 3;
 const WINDOW_MS = 24 * 60 * 60 * 1000;
@@ -7,61 +6,39 @@ const STORAGE_KEY = "hbw-hair-edit-timestamps";
 const MAX_EDGE = 1024;
 const JPEG_QUALITY = 0.86;
 
-/** Lookbook-backed presets mapped to William's real services (no generic cuts). */
-function slideThumb(id, fallback) {
-  const slide = portfolioSlides.find((s) => s.id === id);
-  if (!slide) return fallback;
-  return slide.poster || slide.src || fallback;
-}
-
+/** Four service presets only. Text chips seed the prompt; user can edit freely. */
 const STYLE_PRESETS = [
   {
-    id: "extension-length",
-    label: "Hair Extensions",
+    id: "extensions",
+    label: "Extensions",
     service: "extensions",
+    mark: "EX",
     prompt:
       "Add custom hair extensions for natural mid-back length and blended volume, seamless join at the roots, keeping the face, skin tone, and lighting unchanged.",
-    thumb: slideThumb("extensions-after", "/portfolio/extensions_after.jpg"),
   },
   {
-    id: "honey-waves",
-    label: "Honey Balayage",
-    service: "color",
+    id: "cuts",
+    label: "Cuts",
+    service: "cuts",
+    mark: "CU",
     prompt:
-      "Apply a honey balayage with soft dimensional glow and loose waves, salon bounce through the ends, keeping facial features and lighting unchanged.",
-    thumb: slideThumb("clip-04", "/portfolio/clip-04-poster.jpg"),
+      "Shape a precision haircut with clean lines and an editorial finish suited to this face shape, keeping facial features and lighting unchanged.",
   },
   {
-    id: "gloss-blowout",
+    id: "color",
+    label: "Color",
+    service: "color",
+    mark: "CO",
+    prompt:
+      "Apply dimensional color with balanced tone and soft lived-in depth from roots to ends, no harsh lines, preserving the face and lighting.",
+  },
+  {
+    id: "blowout",
     label: "Brazilian Blowout",
     service: "blowout",
+    mark: "BB",
     prompt:
-      "Restyle into a high-shine Brazilian Blowout finish: sleek, smooth length with soft movement and frizz-controlled gloss, preserving the face and skin tone.",
-    thumb: "/portfolio/blowout_after.jpg",
-  },
-  {
-    id: "soft-waves",
-    label: "Soft Waves",
-    service: "cuts",
-    prompt:
-      "Shape a precision cut with soft glossy waves, blended highlight dimension, and light movement through the ends; keep the face and lighting the same.",
-    thumb: slideThumb("work-02", "/portfolio/work-02.png"),
-  },
-  {
-    id: "dimensional-color",
-    label: "Color Correction",
-    service: "color",
-    prompt:
-      "Apply lived-in dimensional color with balanced tone and soft depth from roots to ends; no harsh lines; preserve facial features and lighting.",
-    thumb: slideThumb("work-05", "/portfolio/work-05.png"),
-  },
-  {
-    id: "layered-volume",
-    label: "Precision Cut",
-    service: "cuts",
-    prompt:
-      "Restyle into a layered salon blowout with warm dimensional color, soft volume through the crown, and polished ends; keep the face unchanged.",
-    thumb: slideThumb("work-01", "/portfolio/work-01.png"),
+      "Restyle into a Brazilian Blowout finish: sleek smooth length with soft movement and frizz-controlled gloss, preserving the face and skin tone.",
   },
 ];
 
@@ -138,9 +115,9 @@ export default function HairTryOn() {
 
   const remaining = Math.max(0, FREE_TRIES - timestamps.length);
   const capped = remaining <= 0;
-  const selected =
-    STYLE_PRESETS.find((s) => s.id === presetId) || STYLE_PRESETS[0];
-  const canGenerate = Boolean(preview) && !capped && status !== "loading";
+  const selected = STYLE_PRESETS.find((s) => s.id === presetId);
+  const canGenerate =
+    Boolean(preview) && Boolean(prompt.trim()) && !capped && status !== "loading";
   const loading = status === "loading";
 
   useEffect(() => {
@@ -231,6 +208,12 @@ export default function HairTryOn() {
     setPrompt(preset.prompt);
   };
 
+  const onPromptChange = (value) => {
+    setPrompt(value);
+    const match = STYLE_PRESETS.find((s) => s.prompt === value.trim());
+    setPresetId(match ? match.id : "custom");
+  };
+
   const onVisualize = async () => {
     const fresh = readTimestamps();
     if (fresh.length >= FREE_TRIES) {
@@ -249,7 +232,7 @@ export default function HairTryOn() {
     }
     const trimmed = prompt.trim();
     if (!trimmed) {
-      setError("Describe the style you want, or pick a preset.");
+      setError("Describe the style you want, or pick a service preset.");
       setStatus("error");
       return;
     }
@@ -287,6 +270,13 @@ export default function HairTryOn() {
     }
   };
 
+  const bookHref = selected?.service
+    ? `/?service=${selected.service}#contact`
+    : "#contact";
+
+  const hintLabel =
+    presetId === "custom" || !selected ? "custom prompt" : selected.label;
+
   return (
     <section
       id="try-on"
@@ -299,8 +289,8 @@ export default function HairTryOn() {
             Try a look
           </h2>
           <p className="lead hair-tryon__copy">
-            Preview extensions, color, cuts, and blowouts from William&apos;s
-            lookbook, then book the chair finish.
+            Pick a service William offers, or write your own prompt. Preview
+            first, then book the chair finish.
           </p>
           <p className="hair-tryon__meta" aria-live="polite">
             {capped
@@ -353,7 +343,11 @@ export default function HairTryOn() {
                   muted
                 />
                 <div className="hair-tryon__camera-actions">
-                  <button type="button" className="cta-button hair-tryon__touch" onClick={captureFrame}>
+                  <button
+                    type="button"
+                    className="cta-button hair-tryon__touch"
+                    onClick={captureFrame}
+                  >
                     Capture
                   </button>
                   <button
@@ -368,7 +362,7 @@ export default function HairTryOn() {
             ) : null}
 
             <fieldset className="hair-tryon__styles">
-              <legend className="hair-tryon__step-label">Style</legend>
+              <legend className="hair-tryon__step-label">Service</legend>
               <div className="hair-tryon__chips" role="list">
                 {STYLE_PRESETS.map((style) => {
                   const active = style.id === presetId;
@@ -381,19 +375,30 @@ export default function HairTryOn() {
                       aria-pressed={active}
                       onClick={() => onSelectPreset(style)}
                     >
-                      <img
-                        src={style.thumb}
-                        alt=""
-                        width={72}
-                        height={72}
-                        loading="lazy"
-                      />
-                      <span>{style.label}</span>
+                      <span className="hair-tryon__chip-mark" aria-hidden="true">
+                        {style.mark}
+                      </span>
+                      <span className="hair-tryon__chip-label">{style.label}</span>
                     </button>
                   );
                 })}
               </div>
             </fieldset>
+
+            <div className="hair-tryon__prompt">
+              <label className="hair-tryon__step-label" htmlFor={promptId}>
+                Describe your look
+              </label>
+              <textarea
+                id={promptId}
+                className="hair-tryon__textarea"
+                rows={3}
+                maxLength={500}
+                value={prompt}
+                onChange={(e) => onPromptChange(e.target.value)}
+                placeholder="e.g. Soft honey balayage with curtain bangs, keep my face the same"
+              />
+            </div>
 
             <div className="hair-tryon__generate">
               <button
@@ -411,35 +416,18 @@ export default function HairTryOn() {
                   ? "Add a photo first, then visualize."
                   : capped
                     ? "Daily free previews used. Book to continue in chair."
-                    : `Ready: ${selected.label} from William's lookbook.`}
+                    : !prompt.trim()
+                      ? "Add a prompt or pick a service."
+                      : `Ready: ${hintLabel}.`}
               </p>
               {(capped || status === "done") && (
                 <a
                   className="secondary-button hair-tryon__touch hair-tryon__book"
-                  href={
-                    selected.service
-                      ? `/?service=${selected.service}#contact`
-                      : "#contact"
-                  }
+                  href={bookHref}
                 >
                   Book this look
                 </a>
               )}
-            </div>
-
-            <div className="hair-tryon__prompt">
-              <label className="hair-tryon__step-label" htmlFor={promptId}>
-                Refine (optional)
-              </label>
-              <textarea
-                id={promptId}
-                className="hair-tryon__textarea"
-                rows={2}
-                maxLength={500}
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="e.g. Longer extensions with soft honey ends"
-              />
             </div>
 
             {error ? (
@@ -457,7 +445,7 @@ export default function HairTryOn() {
 
           <div className="hair-tryon__frames" aria-live="polite">
             <figure className="hair-tryon__frame">
-              <figcaption className="sr-only">Source photo</figcaption>
+              <figcaption className="hair-tryon__frame-cap">Your photo</figcaption>
               {preview ? (
                 <img
                   src={preview}
@@ -475,7 +463,7 @@ export default function HairTryOn() {
               )}
             </figure>
             <figure className="hair-tryon__frame">
-              <figcaption className="sr-only">Style preview</figcaption>
+              <figcaption className="hair-tryon__frame-cap">Preview</figcaption>
               {loading ? (
                 <div
                   className="hair-tryon__skeleton"
@@ -488,12 +476,15 @@ export default function HairTryOn() {
               ) : resultUrl ? (
                 <img
                   src={resultUrl}
-                  alt={`AI preview of ${selected.label}`}
+                  alt={`AI preview: ${hintLabel}`}
                   width={480}
                   height={640}
                 />
               ) : (
-                <div className="hair-tryon__empty hair-tryon__empty--result" aria-hidden="true">
+                <div
+                  className="hair-tryon__empty hair-tryon__empty--result"
+                  aria-hidden="true"
+                >
                   <span className="hair-tryon__empty-title">Result</span>
                   <span className="hair-tryon__empty-copy">
                     Appears after you visualize
