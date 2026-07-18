@@ -33,4 +33,7 @@ Allow: /
 User-agent: Bytespider
 Disallow: /
 
+# Discovery files for AI engines (not blocked)
+# /llms.txt  /llms-full.txt  /mcp-actions.json  /privacy.html
+
 Sitemap: https://william-site-snowy.vercel.app/sitemap.xml

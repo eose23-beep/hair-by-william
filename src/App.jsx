@@ -278,7 +278,8 @@ export default function App() {
                 <dl className="booking-hours" aria-label="Salon hours">
                   <dt>Hours</dt>
                   <dd>Friday–Saturday 10 AM–6 PM</dd>
-                  <dd className="booking-hours__note">Call or text to book</dd>
+                  <dd className="booking-hours__closed">Closed Sunday–Thursday</dd>
+                  <dd className="booking-hours__note">Call or text 915-920-7823 to book</dd>
                 </dl>
                 <div className="booking-actions">
                   <a
@@ -338,6 +339,7 @@ export default function App() {
                   </a>
                 </p>
                 <p className="footer-hours">Friday–Saturday 10 AM–6 PM</p>
+                <p className="footer-hours">Closed Sunday–Thursday</p>
               </div>
               <div className="site-footer__col">
                 <p className="site-footer__label">Explore</p>
@@ -376,6 +378,9 @@ export default function App() {
                 </ul>
               </div>
             </div>
+            <p className="site-footer__legal">
+              <a href="/privacy.html">Privacy</a>
+            </p>
           </div>
         </footer>
 

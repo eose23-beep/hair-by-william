@@ -22,14 +22,15 @@ export default function MapSection() {
         </h2>
         <p className="lead map-section__copy">
           Hair by William — Suite 13C inside LV Hair Salon on North Mesa. Open Friday–Saturday
-          10 AM–6 PM; call or text to book. Location, directions, and phone below.
+          10 AM–6 PM; closed Sunday–Thursday. Call or text to book. When you arrive, look for LV
+          Hair Salon and ask for Suite 13C.
         </p>
       </header>
 
       <div className="map-section__meta">
         <address className="map-section__address">
           <span className="map-section__address-line">{SALON_ADDRESS_SHORT}</span>
-          <span className="map-section__address-line">79912 · LV Hair Salon</span>
+          <span className="map-section__address-line">79912 · LV Hair Salon · Suite 13C</span>
         </address>
         <div className="map-section__actions">
           <a

@@ -113,6 +113,17 @@
         "required": [],
         "optional": []
       }
+    },
+    {
+      "id": "view-privacy",
+      "name": "View Privacy Notice",
+      "description": "Read how Hair by William handles analytics and booking contact data.",
+      "method": "declarative",
+      "endpoint": "/privacy.html",
+      "parameters": {
+        "required": [],
+        "optional": []
+      }
     }
   ]
 }

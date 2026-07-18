@@ -82,7 +82,9 @@ export default function ContactForm() {
             </div>
             <div>
               <dt>Hours</dt>
-              <dd>Friday–Saturday 10 AM–6 PM · call or text to book</dd>
+              <dd>
+                Friday–Saturday 10 AM–6 PM · closed Sunday–Thursday · call or text to book
+              </dd>
             </div>
             <div>
               <dt>Direct</dt>
