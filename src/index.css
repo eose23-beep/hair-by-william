@@ -2332,9 +2332,11 @@ a {
   }
 }
 
+/* One composition: dark book card + map — hours / NAP once, visit below */
 .booking-panel {
-  display: block;
-  padding: clamp(16px, 3vw, 32px) 0 0;
+  display: grid;
+  gap: clamp(16px, 2.5vw, 24px);
+  padding: clamp(16px, 3vw, 32px) 0 clamp(16px, 3vw, 28px);
   border-radius: 0;
   border-top: 1px solid var(--stroke-mid);
   background: transparent !important;
@@ -2344,7 +2346,6 @@ a {
   scroll-margin-top: 88px;
 }
 
-/* One composition: dark booking card — hours + CTAs + craft clip together */
 .booking-panel__card {
   display: grid;
   gap: var(--space-6);
@@ -2428,6 +2429,38 @@ a {
   color: rgba(212, 175, 55, 0.55);
 }
 
+.booking-hours__row--studio {
+  align-items: flex-start;
+}
+
+.booking-hours__address {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  font-style: normal;
+}
+
+.booking-hours__address a {
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(212, 175, 55, 0.45);
+  transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+}
+
+.booking-hours__address a:hover {
+  color: var(--champagne-bright);
+  text-decoration-color: var(--champagne-bright);
+}
+
+.booking-hours__city {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.62);
+  font-weight: 500;
+}
+
 .booking-hours__note {
   font-size: 13px;
   letter-spacing: 0.06em;
@@ -2446,6 +2479,61 @@ a {
 .booking-hours__phone:hover {
   color: var(--champagne-bright);
   text-decoration-color: var(--champagne-bright);
+}
+
+/* Map nest — #visit target under the booking card */
+.booking-panel__map {
+  width: 100%;
+  min-width: 0;
+  scroll-margin-top: 88px;
+}
+
+.booking-panel__map-frame {
+  position: relative;
+  width: 100%;
+  padding: var(--rule-matte);
+  border: var(--rule) solid var(--gold-rule);
+  background:
+    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(255, 220, 96, 0.14) 0%, transparent 58%),
+    linear-gradient(148deg, rgba(232, 223, 208, 0.96) 0%, rgba(203, 184, 154, 0.9) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    var(--frame-inset-gold),
+    var(--shadow-md);
+  overflow: hidden;
+}
+
+.booking-panel__map-embed {
+  display: block;
+  width: 100%;
+  height: clamp(200px, 36vw, 340px);
+  min-height: 200px;
+  border: 0;
+  background: var(--cream-deep);
+  filter: saturate(0.92) contrast(1.02);
+}
+
+.booking-panel__map-fallback {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--stroke);
+  background: rgba(255, 255, 255, 0.88);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: 600;
+}
+
+.booking-panel__map-fallback a {
+  color: var(--ink);
+  border-bottom: var(--rule) solid var(--gold-rule);
+  transition: color 0.4s var(--ease-luxury), border-color 0.4s var(--ease-luxury);
+}
+
+.booking-panel__map-fallback a:hover {
+  color: var(--champagne);
+  border-color: var(--champagne-bright);
 }
 
 .booking-panel .booking-actions {
@@ -2589,6 +2677,10 @@ a {
 @media (min-width: 1024px) {
   .booking-panel__clip-frame {
     min-height: 380px;
+  }
+
+  .booking-panel__map-embed {
+    height: clamp(260px, 28vw, 380px);
   }
 }
 
@@ -3342,169 +3434,15 @@ a {
   outline: none;
 }
 
-/* Map ? Visit the Studio */
-.map-section {
-  display: grid;
-  gap: clamp(12px, 2.5vw, 20px);
-  padding-top: clamp(24px, 3.5vw, 40px);
-  padding-bottom: clamp(16px, 3vw, 28px);
-  scroll-margin-top: 88px;
-}
-
-.map-section__header {
-  display: grid;
-  gap: var(--space-2);
-  max-width: none;
-  width: 100%;
-}
-
-.map-section__heading {
-  max-width: 14ch;
-}
-
-.map-section__copy {
-  max-width: 48ch;
-  margin: 0;
-}
-
-.map-section__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--space-4) var(--space-8);
-}
-
-.map-section__address {
-  display: grid;
-  gap: 4px;
-  margin: 0;
-  font-style: normal;
-}
-
-.map-section__address-line {
-  display: block;
-  font-size: clamp(15px, 2vw, 17px);
-  letter-spacing: 0.06em;
-  color: var(--ink);
-  font-weight: 600;
-}
-
-.map-section__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.map-section__phone {
-  font-size: clamp(15px, 1.25vw, 18px);
-  font-weight: 750;
-  letter-spacing: 0.1em;
-  color: var(--ink);
-  border-bottom: var(--rule) solid var(--gold-rule);
-  padding-bottom: 2px;
-  transition: color 0.4s var(--ease-luxury), border-color 0.4s var(--ease-luxury);
-}
-
-.map-section__phone:hover {
-  color: var(--champagne);
-  border-color: var(--champagne-bright);
-}
-
-.map-section__directions {
-  min-height: 44px;
-}
-
-.map-section__frame {
-  position: relative;
-  width: 100%;
-  padding: var(--rule-matte);
-  border: var(--rule) solid var(--gold-rule);
-  background:
-    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(255, 220, 96, 0.14) 0%, transparent 58%),
-    linear-gradient(148deg, rgba(232, 223, 208, 0.96) 0%, rgba(203, 184, 154, 0.9) 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    var(--frame-inset-gold),
-    var(--shadow-md);
-  overflow: hidden;
-}
-
-.map-section__embed {
-  display: block;
-  width: 100%;
-  height: clamp(200px, 36vw, 340px);
-  min-height: 200px;
-  border: 0;
-  background: var(--cream-deep);
-  filter: saturate(0.92) contrast(1.02);
-}
-
-.map-section__fallback {
-  margin: 0;
-  padding: var(--space-3) var(--space-4);
-  border-top: 1px solid var(--stroke);
-  background: rgba(255, 255, 255, 0.88);
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-align: center;
-  font-weight: 600;
-}
-
-.map-section__fallback a {
-  color: var(--ink);
-  border-bottom: var(--rule) solid var(--gold-rule);
-  transition: color 0.4s var(--ease-luxury), border-color 0.4s var(--ease-luxury);
-}
-
-.map-section__fallback a:hover {
-  color: var(--champagne);
-  border-color: var(--champagne-bright);
-}
-
 @media (max-width: 768px) {
-  .map-section {
-    width: 100%;
-    max-width: 100%;
-    padding-inline: 0;
-    gap: var(--space-4);
-  }
-
-  .map-section__header,
-  .map-section__meta {
-    width: 100%;
-    max-width: var(--shell-width);
-    margin-inline: auto;
-    padding-inline: 0;
-    box-sizing: border-box;
-  }
-
-  .map-section__meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-4);
-  }
-
-  .map-section__actions {
-    width: 100%;
-    padding-right: 64px; /* clear BookingFab */
-  }
-
-  .map-section__directions {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .map-section__frame {
+  .booking-panel__map-frame {
     width: 100%;
     border-left: none;
     border-right: none;
     padding: 2px 0 0;
   }
 
-  .map-section__embed {
+  .booking-panel__map-embed {
     height: clamp(220px, 58vw, 320px);
   }
 

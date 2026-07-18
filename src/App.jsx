@@ -5,7 +5,7 @@ import GoldWaveField from "./components/GoldWaveField";
 import ServicesGrid from "./components/ServicesGrid";
 import PortfolioGallery from "./components/PortfolioGallery";
 import ContactForm from "./components/ContactForm";
-import MapSection from "./components/MapSection";
+import MapSection, { DIRECTIONS_URL } from "./components/MapSection";
 import BookingFab from "./components/BookingFab";
 import AmbientVideo from "./components/AmbientVideo";
 import { bookingAmbientClip, heroWorkClips } from "./data/portfolio";
@@ -14,6 +14,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const PHONE_HREF = "tel:915-920-7823";
 const PHONE_LABEL = "915-920-7823";
+const STUDIO_ADDRESS = "5411 N. Mesa, Suite 13C";
+const STUDIO_CITY = "El Paso, TX 79912 · LV Hair Salon";
 
 export default function App() {
   const rootRef = useRef(null);
@@ -249,21 +251,36 @@ export default function App() {
 
           <ServicesGrid />
 
-          <section id="booking" className="shell section reveal booking-panel">
+          <section
+            id="booking"
+            className="shell section reveal booking-panel"
+            aria-labelledby="booking-visit-heading"
+          >
             <div className="booking-panel__card">
               <div className="booking-panel__body">
-                <p className="kicker booking-panel__kicker">Ready When You Are</p>
-                <h2 className="section-heading booking-panel__heading">Book Your Appointment</h2>
+                <p className="kicker booking-panel__kicker">Book · Visit</p>
+                <h2 id="booking-visit-heading" className="section-heading booking-panel__heading">
+                  Your Appointment in El Paso
+                </h2>
                 <p className="lead booking-panel__copy">
-                  Extensions, precision cuts, color correction, and Brazilian Blowout in El Paso —
-                  tailored to your texture, goals, and schedule.
+                  Extensions, precision cuts, color correction, and Brazilian Blowout — Suite 13C
+                  inside LV Hair Salon. Book ahead, then find us on North Mesa.
                 </p>
 
-                <dl className="booking-hours" aria-label="Salon hours">
+                <dl className="booking-hours" aria-label="Salon hours and studio address">
                   <div className="booking-hours__row">
                     <dt>Hours</dt>
                     <dd>Friday–Saturday 10 AM–6 PM</dd>
                     <dd className="booking-hours__closed">Closed Sunday–Thursday</dd>
+                  </div>
+                  <div className="booking-hours__row booking-hours__row--studio">
+                    <dt>Studio</dt>
+                    <dd>
+                      <address className="booking-hours__address">
+                        <a href="#visit">{STUDIO_ADDRESS}</a>
+                        <span className="booking-hours__city">{STUDIO_CITY}</span>
+                      </address>
+                    </dd>
                   </div>
                   <dd className="booking-hours__note">
                     Call or text{" "}
@@ -286,12 +303,14 @@ export default function App() {
                   </a>
                   <a
                     className="secondary-button secondary-button--on-dark"
-                    href="#visit"
-                    data-mcp-action="open-location"
-                    data-mcp-description="Find the Hair by William studio location and directions in El Paso."
-                    data-mcp-params='{"destination":"#visit"}'
+                    href={DIRECTIONS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-mcp-action="get-directions"
+                    data-mcp-description="Open Google Maps directions to Hair by William at 5411 N. Mesa, Suite 13C, El Paso, TX 79912."
+                    data-mcp-params='{"destination":"5411 N. Mesa, Suite 13C, El Paso, TX 79912"}'
                   >
-                    Find the Studio
+                    Get Directions
                   </a>
                 </div>
               </div>
@@ -324,10 +343,10 @@ export default function App() {
                 </figcaption>
               </figure>
             </div>
+
+            <MapSection />
           </section>
         </main>
-
-        <MapSection />
 
         <footer className="site-footer">
           <div className="shell site-footer__inner">
