@@ -315,6 +315,8 @@ export default function App() {
                 </div>
               </div>
 
+              <MapSection />
+
               <figure className="booking-panel__clip">
                 <a
                   className="booking-panel__clip-hit"
@@ -343,8 +345,6 @@ export default function App() {
                 </figcaption>
               </figure>
             </div>
-
-            <MapSection />
           </section>
         </main>
 

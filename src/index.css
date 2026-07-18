@@ -2332,7 +2332,7 @@ a {
   }
 }
 
-/* One composition: dark book card + map — hours / NAP once, visit below */
+/* One composition: dark book card with map + craft clip as one unit */
 .booking-panel {
   display: grid;
   gap: clamp(16px, 2.5vw, 24px);
@@ -2481,43 +2481,50 @@ a {
   text-decoration-color: var(--champagne-bright);
 }
 
-/* Map nest — #visit target under the booking card */
+/* Map nest — #visit target inside the booking card (beside craft clip) */
 .booking-panel__map {
   width: 100%;
   min-width: 0;
+  min-height: 0;
   scroll-margin-top: 88px;
 }
 
 .booking-panel__map-frame {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  height: 100%;
+  min-height: 0;
   padding: var(--rule-matte);
-  border: var(--rule) solid var(--gold-rule);
+  border: var(--rule) solid var(--gold-rule-mid);
   background:
-    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(255, 220, 96, 0.14) 0%, transparent 58%),
-    linear-gradient(148deg, rgba(232, 223, 208, 0.96) 0%, rgba(203, 184, 154, 0.9) 100%);
+    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(255, 220, 96, 0.1) 0%, transparent 58%),
+    linear-gradient(148deg, rgba(18, 16, 12, 0.98) 0%, rgba(28, 24, 18, 0.96) 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 1px 0 rgba(255, 240, 176, 0.1),
     var(--frame-inset-gold),
-    var(--shadow-md);
+    0 12px 28px rgba(0, 0, 0, 0.28);
   overflow: hidden;
 }
 
 .booking-panel__map-embed {
   display: block;
   width: 100%;
-  height: clamp(200px, 36vw, 340px);
+  flex: 1 1 auto;
+  height: clamp(200px, 52vw, 280px);
   min-height: 200px;
   border: 0;
-  background: var(--cream-deep);
-  filter: saturate(0.92) contrast(1.02);
+  background: #0a0908;
+  filter: saturate(0.88) contrast(1.04) brightness(0.96);
 }
 
 .booking-panel__map-fallback {
   margin: 0;
+  flex: 0 0 auto;
   padding: var(--space-3) var(--space-4);
-  border-top: 1px solid var(--stroke);
-  background: rgba(255, 255, 255, 0.88);
+  border-top: 1px solid rgba(212, 175, 55, 0.28);
+  background: rgba(10, 9, 8, 0.92);
   font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2526,13 +2533,13 @@ a {
 }
 
 .booking-panel__map-fallback a {
-  color: var(--ink);
-  border-bottom: var(--rule) solid var(--gold-rule);
+  color: #fff8e7;
+  border-bottom: var(--rule) solid rgba(212, 175, 55, 0.55);
   transition: color 0.4s var(--ease-luxury), border-color 0.4s var(--ease-luxury);
 }
 
 .booking-panel__map-fallback a:hover {
-  color: var(--champagne);
+  color: var(--champagne-bright);
   border-color: var(--champagne-bright);
 }
 
@@ -2562,9 +2569,11 @@ a {
 
 .booking-panel__clip {
   display: grid;
+  grid-template-rows: 1fr auto;
   gap: 12px;
   margin: 0;
   min-width: 0;
+  min-height: 0;
 }
 
 .booking-panel__clip-hit {
@@ -2645,13 +2654,30 @@ a {
 @media (min-width: 768px) {
   .booking-panel__card {
     grid-template-columns: minmax(0, var(--phi-major)) minmax(240px, var(--phi-minor));
+    grid-template-rows: auto minmax(200px, 1fr);
     column-gap: var(--gap-phi);
+    row-gap: var(--space-5);
     align-items: stretch;
     padding: clamp(28px, 3.5vw, 48px);
   }
 
   .booking-panel__body {
+    grid-column: 1;
+    grid-row: 1;
     gap: var(--space-5);
+  }
+
+  .booking-panel__map {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: stretch;
+  }
+
+  .booking-panel__clip {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-content: stretch;
+    height: 100%;
   }
 
   .booking-panel .booking-actions {
@@ -2664,13 +2690,20 @@ a {
     min-width: 0;
   }
 
-  .booking-panel__clip {
-    align-content: start;
+  .booking-panel__clip-hit {
+    flex: 1 1 auto;
+    min-height: 0;
   }
 
   .booking-panel__clip-frame {
-    aspect-ratio: 3 / 4;
+    aspect-ratio: auto;
+    height: 100%;
     min-height: 320px;
+  }
+
+  .booking-panel__map-embed {
+    height: 100%;
+    min-height: 200px;
   }
 }
 
@@ -2680,7 +2713,7 @@ a {
   }
 
   .booking-panel__map-embed {
-    height: clamp(260px, 28vw, 380px);
+    min-height: 240px;
   }
 }
 
@@ -2893,6 +2926,18 @@ a {
   text-transform: uppercase;
   color: var(--ink);
   font-weight: 700;
+}
+
+.contact-field--service-focus select {
+  border-color: var(--gold-frame);
+  background: #ffffff;
+  box-shadow:
+    0 0 0 1px var(--gold-frame),
+    0 0 20px rgba(232, 197, 71, 0.28);
+  transition:
+    border-color 0.45s var(--ease-luxury),
+    box-shadow 0.45s var(--ease-luxury),
+    background 0.45s var(--ease-luxury);
 }
 
 .contact-field span {
@@ -3434,16 +3479,14 @@ a {
   outline: none;
 }
 
-@media (max-width: 768px) {
-  .booking-panel__map-frame {
-    width: 100%;
-    border-left: none;
-    border-right: none;
-    padding: 2px 0 0;
+@media (max-width: 767px) {
+  /* Mobile stack: copy/CTAs → map → craft clip */
+  .booking-panel__card {
+    grid-template-columns: 1fr;
   }
 
   .booking-panel__map-embed {
-    height: clamp(220px, 58vw, 320px);
+    height: clamp(220px, 58vw, 300px);
   }
 
   .site-footer__grid {

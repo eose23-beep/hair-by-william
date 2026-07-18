@@ -3,6 +3,7 @@ import { useCallback, useRef } from "react";
 const services = [
   {
     id: "extensions",
+    bookSlug: "extensions",
     label: "01",
     title: "Hair Extensions",
     description:
@@ -13,6 +14,7 @@ const services = [
   },
   {
     id: "brazilian-blowout",
+    bookSlug: "blowout",
     label: "02",
     title: "Brazilian Blowout",
     description:
@@ -22,6 +24,7 @@ const services = [
   },
   {
     id: "precision-cuts",
+    bookSlug: "cuts",
     label: "03",
     title: "Precision Cuts",
     description:
@@ -31,6 +34,7 @@ const services = [
   },
   {
     id: "color-correction",
+    bookSlug: "color",
     label: "04",
     title: "Color Correction",
     description:
@@ -42,6 +46,7 @@ const services = [
 
 function ServiceCard({ service, index }) {
   const cardRef = useRef(null);
+  const bookHref = `?service=${service.bookSlug}#contact`;
 
   const onMove = useCallback((event) => {
     const el = cardRef.current;
@@ -101,10 +106,10 @@ function ServiceCard({ service, index }) {
           </div>
           <a
             className="service-card__cta"
-            href="#contact"
+            href={bookHref}
             data-mcp-action="book-appointment"
             data-mcp-description={`Book a ${service.title} appointment with Hair by William in El Paso via WhatsApp or text. No account required.`}
-            data-mcp-params='{"service":"preferred","destination":"#contact"}'
+            data-mcp-params={`{"service":"${service.bookSlug}","destination":"#contact"}`}
           >
             Book {service.title.split(" ")[0]}
           </a>

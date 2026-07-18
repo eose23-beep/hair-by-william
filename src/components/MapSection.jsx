@@ -6,7 +6,7 @@ const MAPS_SEARCH_URL = `https://www.google.com/maps/search/?api=1&query=${MAP_Q
 const MAP_EMBED_URL = `https://maps.google.com/maps?q=${MAP_QUERY}&z=16&hl=en&output=embed`;
 
 /**
- * Studio map embed — lives inside the combined booking / visit section.
+ * Studio map embed — nested in the booking card beside the craft clip.
  * Anchor target: #visit (outer section uses #booking).
  */
 export default function MapSection() {

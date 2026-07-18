@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { MessageCircle, Phone } from "lucide-react";
 
 const PHONE_E164 = "19159207823";
@@ -12,6 +12,36 @@ const SERVICE_OPTIONS = [
   "Color Correction",
   "Not sure yet — consultation",
 ];
+
+/** Slugs from service card Book links (?service=…#contact or #booking-…). */
+const SERVICE_SLUG_MAP = {
+  extensions: "Extensions",
+  blowout: "Brazilian Blowout",
+  "brazilian-blowout": "Brazilian Blowout",
+  cuts: "Precision Cuts",
+  "precision-cuts": "Precision Cuts",
+  color: "Color Correction",
+  "color-correction": "Color Correction",
+  consultation: "Not sure yet — consultation",
+};
+
+function resolveServiceSlug(raw) {
+  if (!raw) return null;
+  const slug = String(raw).trim().toLowerCase();
+  return SERVICE_SLUG_MAP[slug] ?? null;
+}
+
+function resolveServiceFromLocation() {
+  const params = new URLSearchParams(window.location.search);
+  const fromQuery = resolveServiceSlug(params.get("service"));
+  if (fromQuery) return fromQuery;
+
+  const hash = window.location.hash.replace(/^#/, "");
+  const hashMatch = hash.match(/^(?:booking|contact)-([a-z0-9-]+)$/i);
+  if (hashMatch) return resolveServiceSlug(hashMatch[1]);
+
+  return null;
+}
 
 function buildMessage({ name, phone, service, message }) {
   return [
@@ -32,14 +62,65 @@ export default function ContactForm() {
   const [service, setService] = useState(SERVICE_OPTIONS[0]);
   const [message, setMessage] = useState("");
   const [touched, setTouched] = useState({ name: false, phone: false });
+  const [serviceHighlighted, setServiceHighlighted] = useState(false);
 
   const formHintId = useId();
   const nameHintId = useId();
   const phoneHintId = useId();
+  const serviceSelectRef = useRef(null);
+  const highlightTimerRef = useRef(null);
 
   const nameValid = name.trim().length > 1;
   const phoneValid = phone.trim().length >= 7;
   const isValid = nameValid && phoneValid;
+
+  useEffect(() => {
+    const applyService = (resolved) => {
+      if (!resolved) return;
+      setService(resolved);
+      setServiceHighlighted(true);
+      if (highlightTimerRef.current) window.clearTimeout(highlightTimerRef.current);
+      highlightTimerRef.current = window.setTimeout(() => {
+        setServiceHighlighted(false);
+        highlightTimerRef.current = null;
+      }, 2400);
+    };
+
+    const applyFromUrl = () => {
+      applyService(resolveServiceFromLocation());
+    };
+
+    const onDocumentClick = (event) => {
+      const anchor = event.target.closest("a[href]");
+      if (!anchor) return;
+      try {
+        const url = new URL(anchor.getAttribute("href"), window.location.href);
+        if (url.origin !== window.location.origin) return;
+        const fromQuery = resolveServiceSlug(url.searchParams.get("service"));
+        if (fromQuery) {
+          applyService(fromQuery);
+          return;
+        }
+        const hash = url.hash.replace(/^#/, "");
+        const hashMatch = hash.match(/^(?:booking|contact)-([a-z0-9-]+)$/i);
+        if (hashMatch) applyService(resolveServiceSlug(hashMatch[1]));
+      } catch {
+        /* ignore malformed hrefs */
+      }
+    };
+
+    applyFromUrl();
+    window.addEventListener("hashchange", applyFromUrl);
+    window.addEventListener("popstate", applyFromUrl);
+    document.addEventListener("click", onDocumentClick);
+
+    return () => {
+      window.removeEventListener("hashchange", applyFromUrl);
+      window.removeEventListener("popstate", applyFromUrl);
+      document.removeEventListener("click", onDocumentClick);
+      if (highlightTimerRef.current) window.clearTimeout(highlightTimerRef.current);
+    };
+  }, []);
 
   const markTouched = (field) => {
     setTouched((current) => ({ ...current, [field]: true }));
@@ -210,12 +291,18 @@ export default function ContactForm() {
               </div>
             </fieldset>
 
-            <label className="contact-field">
+            <label
+              className={`contact-field${serviceHighlighted ? " contact-field--service-focus" : ""}`}
+            >
               <span>What are you interested in?</span>
               <select
+                ref={serviceSelectRef}
                 name="service"
                 value={service}
-                onChange={(event) => setService(event.target.value)}
+                onChange={(event) => {
+                  setService(event.target.value);
+                  setServiceHighlighted(false);
+                }}
                 data-mcp-param="service"
                 data-mcp-description="Preferred service: Extensions, Brazilian Blowout, Precision Cuts, Color Correction, or consultation"
               >
