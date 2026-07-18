@@ -1,0 +1,321 @@
+{
+  "desktop": {
+    "name": "desktop-1280",
+    "width": 1280,
+    "height": 800,
+    "shotA": "C:\\Users\\SysMigrator\\william-site\\.verify-tmp\\desktop-1280-t0.png",
+    "shotB": "C:\\Users\\SysMigrator\\william-site\\.verify-tmp\\desktop-1280-t3.png",
+    "contentShot": "C:\\Users\\SysMigrator\\william-site\\.verify-tmp\\desktop-1280-scrolled.png",
+    "filesDiffer": true,
+    "transformChanged": false,
+    "motionVisible": true,
+    "animPlaying": true,
+    "anim1": {
+      "hasField": true,
+      "fieldDisplay": "block",
+      "fieldOpacity": "1",
+      "layerCount": 0,
+      "pathCount": 14,
+      "styles": [
+        {
+          "i": 0,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        },
+        {
+          "i": 1,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        },
+        {
+          "i": 2,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        },
+        {
+          "i": 3,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        },
+        {
+          "i": 4,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        },
+        {
+          "i": 5,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        }
+      ],
+      "allAnimated": [
+        {
+          "tag": "g",
+          "className": "gold-ribbon gold-ribbon--top",
+          "animationName": "ribbon-drift-top",
+          "animationDuration": "24s",
+          "animationPlayState": "running",
+          "transform": "matrix(0.999997, 0.00229181, -0.00229181, 0.999997, 7.26884, -2.8295)"
+        },
+        {
+          "tag": "g",
+          "className": "gold-ribbon gold-ribbon--bottom",
+          "animationName": "ribbon-drift-bottom",
+          "animationDuration": "29s",
+          "animationPlayState": "running",
+          "transform": "matrix(0.999999, -0.00124404, 0.00124404, 0.999999, -3.21591, 3.54716)"
+        },
+        {
+          "tag": "SPAN",
+          "className": "booking-fab__pulse",
+          "animationName": "booking-pulse",
+          "animationDuration": "2.8s",
+          "animationPlayState": "running",
+          "transform": "matrix(1.01884, 0, 0, 1.01884, 0, 0)"
+        }
+      ],
+      "title": "Hair by William | Luxury Hair Salon — Extensions, Color & Blowouts",
+      "h1": "Hair ByWilliam",
+      "readableTextSample": "SKIP TO CONTENT\n\nHAIR BY WILLIAM\n\nPORTFOLIO\nMENU\n915-920-7823\nBOOK\n\nLUXURY SALON · EL PASO\n\nHAIR BY\nWilliam\n\nPrecision cuts, custom extensions, color correction, and smoothing — twenty-seven years of refined artistry in El Paso.\n\nBOOK APPOINTMENT\nVIEW PORTFOLIO\n\nPORTFOLIO\n\nRecent Work\n\nRecent chair work across textures, lengths, and tones — extensions, smoothing, color, and precision cuts.\n\nSlide ",
+      "portfolioOrCarousel": true
+    },
+    "anim2": [
+      {
+        "i": 0,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      },
+      {
+        "i": 1,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      },
+      {
+        "i": 2,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      },
+      {
+        "i": 3,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      },
+      {
+        "i": 4,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      },
+      {
+        "i": 5,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      }
+    ],
+    "content": {
+      "hasBrand": true,
+      "hasPortfolioCue": true,
+      "imgCount": 10,
+      "brokenImgs": 0,
+      "buttons": [
+        "Skip to content",
+        "Portfolio",
+        "Menu",
+        "915-920-7823",
+        "Book",
+        "Book Appointment",
+        "View Portfolio",
+        "Book · WhatsApp or Text"
+      ]
+    }
+  },
+  "mobile": {
+    "name": "mobile-390",
+    "width": 390,
+    "height": 844,
+    "shotA": "C:\\Users\\SysMigrator\\william-site\\.verify-tmp\\mobile-390-t0.png",
+    "shotB": "C:\\Users\\SysMigrator\\william-site\\.verify-tmp\\mobile-390-t3.png",
+    "contentShot": "C:\\Users\\SysMigrator\\william-site\\.verify-tmp\\mobile-390-scrolled.png",
+    "filesDiffer": true,
+    "transformChanged": false,
+    "motionVisible": true,
+    "animPlaying": true,
+    "anim1": {
+      "hasField": true,
+      "fieldDisplay": "block",
+      "fieldOpacity": "1",
+      "layerCount": 0,
+      "pathCount": 14,
+      "styles": [
+        {
+          "i": 0,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        },
+        {
+          "i": 1,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        },
+        {
+          "i": 2,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        },
+        {
+          "i": 3,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        },
+        {
+          "i": 4,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        },
+        {
+          "i": 5,
+          "tag": "path",
+          "className": {},
+          "animationName": "none",
+          "animationDuration": "0s",
+          "animationPlayState": "running",
+          "transform": "none"
+        }
+      ],
+      "allAnimated": [
+        {
+          "tag": "g",
+          "className": "gold-ribbon gold-ribbon--top",
+          "animationName": "ribbon-drift-top",
+          "animationDuration": "28s",
+          "animationPlayState": "running",
+          "transform": "matrix(0.999998, -0.00178018, 0.00178018, 0.999998, -4.97984, 2.41993)"
+        },
+        {
+          "tag": "g",
+          "className": "gold-ribbon gold-ribbon--bottom",
+          "animationName": "ribbon-drift-bottom",
+          "animationDuration": "29s",
+          "animationPlayState": "running",
+          "transform": "none"
+        },
+        {
+          "tag": "SPAN",
+          "className": "booking-fab__pulse",
+          "animationName": "booking-pulse",
+          "animationDuration": "2.8s",
+          "animationPlayState": "running",
+          "transform": "matrix(1.05624, 0, 0, 1.05624, 0, 0)"
+        }
+      ],
+      "title": "Hair by William | Luxury Hair Salon — Extensions, Color & Blowouts",
+      "h1": "Hair ByWilliam",
+      "readableTextSample": "SKIP TO CONTENT\n\nHAIR BY WILLIAM\n\n915-920-7823\nBOOK\n\nLUXURY SALON · EL PASO\n\nHAIR BY\nWilliam\n\nPrecision cuts, custom extensions, color correction, and smoothing — twenty-seven years of refined artistry in El Paso.\n\nBOOK APPOINTMENT\nVIEW PORTFOLIO\nBOOK · WHATSAPP OR TEXT\n\nPORTFOLIO\n\nRecent Work\n\nRecent chair work across textures, lengths, and tones — extensions, smoothing, color, and precision cuts",
+      "portfolioOrCarousel": true
+    },
+    "anim2": [
+      {
+        "i": 0,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      },
+      {
+        "i": 1,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      },
+      {
+        "i": 2,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      },
+      {
+        "i": 3,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      },
+      {
+        "i": 4,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      },
+      {
+        "i": 5,
+        "transform": "none",
+        "animationPlayState": "running",
+        "animationName": "none"
+      }
+    ],
+    "content": {
+      "hasBrand": true,
+      "hasPortfolioCue": true,
+      "imgCount": 6,
+      "brokenImgs": 0,
+      "buttons": [
+        "Skip to content",
+        "Portfolio",
+        "Menu",
+        "915-920-7823",
+        "Book",
+        "Book Appointment",
+        "View Portfolio",
+        "Book · WhatsApp or Text"
+      ]
+    }
+  },
+  "url": "http://localhost:5173/"
+}

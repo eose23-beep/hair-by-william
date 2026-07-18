@@ -1,0 +1,248 @@
+[
+  {
+    "label": "desktop-1440",
+    "diagnostics": {
+      "reduceMotion": false,
+      "fieldExists": true,
+      "svgExists": true,
+      "pathCount": 11,
+      "ribbonCount": 3,
+      "field": {
+        "opacity": "1",
+        "zIndex": "0",
+        "display": "block",
+        "visibility": "visible",
+        "width": "1440px",
+        "height": "900px",
+        "backgroundColor": "rgb(255, 248, 235)",
+        "position": "fixed"
+      },
+      "inkOpacity": "0.84",
+      "ribbonStyles": [
+        {
+          "className": "gold-ribbon gold-ribbon--top",
+          "opacity": "1",
+          "animationName": "ribbon-drift-top",
+          "animationPlayState": "running",
+          "animationDuration": "3.8s",
+          "transform": "matrix(1.02571, 0.022298, -0.022298, 1.02571, 71.8452, -25.9484)",
+          "display": "inline",
+          "visibility": "visible"
+        },
+        {
+          "className": "gold-ribbon gold-ribbon--mid",
+          "opacity": "1",
+          "animationName": "ribbon-drift-mid",
+          "animationPlayState": "running",
+          "animationDuration": "4.6s",
+          "transform": "matrix(0.982789, -0.0163607, 0.0163607, 0.982789, -55.2236, 22.782)",
+          "display": "inline",
+          "visibility": "visible"
+        },
+        {
+          "className": "gold-ribbon gold-ribbon--bottom",
+          "opacity": "1",
+          "animationName": "ribbon-drift-bottom",
+          "animationPlayState": "running",
+          "animationDuration": "4.2s",
+          "transform": "matrix(0.978414, -0.0190798, 0.0190798, 0.978414, -71.6344, 28.8346)",
+          "display": "inline",
+          "visibility": "visible"
+        }
+      ],
+      "pathSample": [
+        {
+          "stroke": "url(#gold-glow)",
+          "strokeWidth": "64",
+          "fill": "none",
+          "bbox": {
+            "x": 420,
+            "y": 66.84658813476562,
+            "w": 1060,
+            "h": 55.03253173828125
+          }
+        },
+        {
+          "stroke": "url(#gold-ribbon)",
+          "strokeWidth": "26",
+          "fill": "none",
+          "bbox": {
+            "x": 420,
+            "y": 66.84658813476562,
+            "w": 1060,
+            "h": 55.03253173828125
+          }
+        },
+        {
+          "stroke": "#fffdf0",
+          "strokeWidth": "4",
+          "fill": "none",
+          "bbox": {
+            "x": 432,
+            "y": 60.20030975341797,
+            "w": 1056,
+            "h": 53.393516540527344
+          }
+        },
+        {
+          "stroke": "#fff3ad",
+          "strokeWidth": "6",
+          "fill": "none",
+          "bbox": {
+            "x": 420,
+            "y": 66.84658813476562,
+            "w": 1060,
+            "h": 55.03253173828125
+          }
+        }
+      ],
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "rootBg": "rgb(255, 255, 255)"
+    },
+    "gold0": {
+      "total": 1296000,
+      "goldish": 58582,
+      "nonWhite": 1246125,
+      "goldRatio": 0.04520216049382716,
+      "nonWhiteRatio": 0.9615162037037037
+    },
+    "gold1": {
+      "total": 1296000,
+      "goldish": 68112,
+      "nonWhite": 1246173,
+      "goldRatio": 0.05255555555555556,
+      "nonWhiteRatio": 0.9615532407407408
+    },
+    "diff": {
+      "changed": 180249,
+      "ratio": 0.1390810185185185
+    },
+    "shots": {
+      "t0": "C:\\Users\\SysMigrator\\william-site\\tmp\\ribbon-verify\\desktop-1440-t0.png",
+      "t2s": "C:\\Users\\SysMigrator\\william-site\\tmp\\ribbon-verify\\desktop-1440-t2s.png"
+    }
+  },
+  {
+    "label": "mobile-390",
+    "diagnostics": {
+      "reduceMotion": false,
+      "fieldExists": true,
+      "svgExists": true,
+      "pathCount": 11,
+      "ribbonCount": 3,
+      "field": {
+        "opacity": "1",
+        "zIndex": "0",
+        "display": "block",
+        "visibility": "visible",
+        "width": "390px",
+        "height": "844px",
+        "backgroundColor": "rgb(255, 248, 235)",
+        "position": "fixed"
+      },
+      "inkOpacity": "0.78",
+      "ribbonStyles": [
+        {
+          "className": "gold-ribbon gold-ribbon--top",
+          "opacity": "1",
+          "animationName": "ribbon-drift-top",
+          "animationPlayState": "running",
+          "animationDuration": "3.4s",
+          "transform": "matrix(1.02075, 0.017605, -0.017605, 1.02075, 56.711, -20.9037)",
+          "display": "inline",
+          "visibility": "visible"
+        },
+        {
+          "className": "gold-ribbon gold-ribbon--mid",
+          "opacity": "1",
+          "animationName": "ribbon-drift-mid",
+          "animationPlayState": "running",
+          "animationDuration": "4s",
+          "transform": "matrix(0.987538, -0.0123971, 0.0123971, 0.987538, -41.1537, 17.623)",
+          "display": "inline",
+          "visibility": "visible"
+        },
+        {
+          "className": "gold-ribbon gold-ribbon--bottom",
+          "opacity": "1",
+          "animationName": "ribbon-drift-bottom",
+          "animationPlayState": "running",
+          "animationDuration": "3.6s",
+          "transform": "matrix(0.983163, -0.0150699, 0.0150699, 0.983163, -56.5819, 23.1391)",
+          "display": "block",
+          "visibility": "visible"
+        }
+      ],
+      "pathSample": [
+        {
+          "stroke": "url(#gold-glow)",
+          "strokeWidth": "64",
+          "fill": "none",
+          "bbox": {
+            "x": 420,
+            "y": 66.84658813476562,
+            "w": 1060,
+            "h": 55.03253173828125
+          }
+        },
+        {
+          "stroke": "url(#gold-ribbon)",
+          "strokeWidth": "26",
+          "fill": "none",
+          "bbox": {
+            "x": 420,
+            "y": 66.84658813476562,
+            "w": 1060,
+            "h": 55.03253173828125
+          }
+        },
+        {
+          "stroke": "#fffdf0",
+          "strokeWidth": "4",
+          "fill": "none",
+          "bbox": {
+            "x": 432,
+            "y": 60.20030975341797,
+            "w": 1056,
+            "h": 53.393516540527344
+          }
+        },
+        {
+          "stroke": "#fff3ad",
+          "strokeWidth": "6",
+          "fill": "none",
+          "bbox": {
+            "x": 420,
+            "y": 66.84658813476562,
+            "w": 1060,
+            "h": 55.03253173828125
+          }
+        }
+      ],
+      "bodyBg": "rgba(0, 0, 0, 0)",
+      "rootBg": "rgb(255, 255, 255)"
+    },
+    "gold0": {
+      "total": 329160,
+      "goldish": 13713,
+      "nonWhite": 296495,
+      "goldRatio": 0.041660590594239884,
+      "nonWhiteRatio": 0.9007625470895613
+    },
+    "gold1": {
+      "total": 329160,
+      "goldish": 13275,
+      "nonWhite": 296495,
+      "goldRatio": 0.040329930732774334,
+      "nonWhiteRatio": 0.9007625470895613
+    },
+    "diff": {
+      "changed": 5811,
+      "ratio": 0.017654028436018956
+    },
+    "shots": {
+      "t0": "C:\\Users\\SysMigrator\\william-site\\tmp\\ribbon-verify\\mobile-390-t0.png",
+      "t2s": "C:\\Users\\SysMigrator\\william-site\\tmp\\ribbon-verify\\mobile-390-t2s.png"
+    }
+  }
+]

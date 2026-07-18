@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "desktop": {
+    "motionChanged": true,
+    "transformA": "matrix(0.955485, -0.0325893, 0.0325893, 0.955485, -125.085, 43.0693)",
+    "transformB": "matrix(0.965163, -0.0257835, 0.0257835, 0.965163, -98.5783, 34.6048)",
+    "overflowX": false,
+    "title": "William",
+    "shots": [
+      "C:\\Users\\SysMigrator\\william-site\\scripts\\output\\playwright\\desktop-1440-t0.png",
+      "C:\\Users\\SysMigrator\\william-site\\scripts\\output\\playwright\\desktop-1440-t1.5s.png"
+    ]
+  },
+  "mobile": {
+    "motionChanged": true,
+    "transformA": "matrix(0.955437, -0.0326229, 0.0326229, 0.955437, -125.218, 43.1116)",
+    "transformB": "matrix(0.954519, -0.0332594, 0.0332594, 0.954519, -127.725, 43.9123)",
+    "overflowX": false,
+    "title": "William",
+    "shots": [
+      "C:\\Users\\SysMigrator\\william-site\\scripts\\output\\playwright\\mobile-390-t0.png",
+      "C:\\Users\\SysMigrator\\william-site\\scripts\\output\\playwright\\mobile-390-t1.5s.png"
+    ]
+  }
+}

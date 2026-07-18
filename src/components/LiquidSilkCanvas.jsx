@@ -1,41 +1,90 @@
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Component, Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import ObsidianFluidMesh from "./ObsidianFluidMesh";
+
+/** Catches WebGL/R3F mount failures so the salon UI never white-screens. */
+class SilkErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch() {
+    this.props.onFail?.();
+  }
+
+  render() {
+    if (this.state.failed) return this.props.fallback ?? null;
+    return this.props.children;
+  }
+}
 
 const MAX_RIPPLES = 5;
 const MOBILE_BREAKPOINT = 768;
 
-function useShouldUseStaticFallback() {
-  const [useStatic, setUseStatic] = useState(() => {
-    if (typeof window === "undefined") return true;
+/** low | medium | high — drives mesh segments, shader cost, and light count */
+function resolvePerformanceTier() {
+  if (typeof window === "undefined") return "medium";
+
+  const narrow = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
+  const cores = navigator.hardwareConcurrency ?? 4;
+  const memory = navigator.deviceMemory ?? 4;
+
+  if (cores <= 2 || memory <= 2) return "low";
+  if (narrow || coarse || cores <= 4 || memory <= 4) return "medium";
+  return "high";
+}
+
+const TIER_CONFIG = {
+  low: { segments: 40, quality: 0.55, maxDpr: 1, lights: "minimal" },
+  medium: { segments: 56, quality: 0.72, maxDpr: 1, lights: "standard" },
+  high: { segments: 80, quality: 0.88, maxDpr: 1.25, lights: "full" },
+};
+
+function usePerformanceProfile() {
+  const [profile, setProfile] = useState(() => {
+    if (typeof window === "undefined") {
+      return { useStatic: true, tier: "medium", ...TIER_CONFIG.medium };
+    }
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const saveData = Boolean(navigator.connection?.saveData);
-    const narrow = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`).matches;
-    return reduceMotion || saveData || narrow;
+    const tier = resolvePerformanceTier();
+    const useStatic = reduceMotion || saveData || tier === "low";
+    return { useStatic, tier, ...TIER_CONFIG[tier] };
   });
 
   useEffect(() => {
     const reduceMq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const narrowMq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+    const resizeMq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
+    const coarseMq = window.matchMedia("(pointer: coarse)");
 
     const evaluate = () => {
       const saveData = Boolean(navigator.connection?.saveData);
-      setUseStatic(reduceMq.matches || saveData || narrowMq.matches);
+      const tier = resolvePerformanceTier();
+      const useStatic = reduceMq.matches || saveData || tier === "low";
+      setProfile({ useStatic, tier, ...TIER_CONFIG[tier] });
     };
 
     evaluate();
     reduceMq.addEventListener("change", evaluate);
-    narrowMq.addEventListener("change", evaluate);
+    resizeMq.addEventListener("change", evaluate);
+    coarseMq.addEventListener("change", evaluate);
     navigator.connection?.addEventListener?.("change", evaluate);
 
     return () => {
       reduceMq.removeEventListener("change", evaluate);
-      narrowMq.removeEventListener("change", evaluate);
+      resizeMq.removeEventListener("change", evaluate);
+      coarseMq.removeEventListener("change", evaluate);
       navigator.connection?.removeEventListener?.("change", evaluate);
     };
   }, []);
 
-  return useStatic;
+  return profile;
 }
 
 function useFluidInteraction(enabled) {
@@ -133,19 +182,47 @@ function VisibilityFrameloop({ hostRef, activeRef }) {
   return null;
 }
 
-function FluidScene({ mouseRef, scrollRef, ripplesRef, hostRef, activeRef }) {
+function FluidScene({
+  mouseRef,
+  scrollRef,
+  ripplesRef,
+  hostRef,
+  activeRef,
+  segments,
+  quality,
+  lightTier,
+}) {
+  const showAccentLights = lightTier === "full" || lightTier === "standard";
+
   return (
     <>
       <VisibilityFrameloop hostRef={hostRef} activeRef={activeRef} />
-      <color attach="background" args={["#faf8f4"]} />
-      <fog attach="fog" args={["#f8f5ef", 10, 22]} />
-      <ambientLight intensity={0.62} color="#fffaf2" />
-      <directionalLight position={[2.0, 1.4, 2.8]} intensity={0.38} color="#ffe8a0" />
-      <pointLight position={[-1.4, 0.4, 2.0]} intensity={0.48} color="#f5b820" />
-      <pointLight position={[1.6, -0.2, 1.8]} intensity={0.36} color="#ffd040" />
-      <pointLight position={[0.2, 0.9, 1.6]} intensity={0.28} color="#ffcc22" />
-      <pointLight position={[-0.8, -0.6, 2.2]} intensity={0.22} color="#e8a818" />
-      <ObsidianFluidMesh mouseRef={mouseRef} scrollRef={scrollRef} ripplesRef={ripplesRef} />
+      <color attach="background" args={["#ffffff"]} />
+      <fog attach="fog" args={["#fefefe", 9, 22]} />
+      <hemisphereLight args={["#ffffff", "#f7f7f2", 0.4]} />
+      <ambientLight intensity={0.48} color="#ffffff" />
+      <directionalLight
+        position={[2.4, 2.0, 3.2]}
+        intensity={0.36}
+        color="#ffffff"
+        castShadow={false}
+      />
+      <directionalLight position={[-1.2, 0.6, 2.0]} intensity={0.11} color="#fffef8" />
+      <pointLight position={[-1.4, 0.4, 2.0]} intensity={0.36} color="#FFE600" />
+      <pointLight position={[1.6, -0.2, 1.8]} intensity={0.28} color="#FFEE00" />
+      {showAccentLights ? (
+        <>
+          <pointLight position={[0.2, 0.9, 1.6]} intensity={0.2} color="#FFE600" />
+          <pointLight position={[-0.8, -0.6, 2.2]} intensity={0.14} color="#FFEE00" />
+        </>
+      ) : null}
+      <ObsidianFluidMesh
+        mouseRef={mouseRef}
+        scrollRef={scrollRef}
+        ripplesRef={ripplesRef}
+        segments={segments}
+        quality={quality}
+      />
     </>
   );
 }
@@ -161,28 +238,23 @@ function StaticFallback() {
 export default function LiquidSilkCanvas() {
   const hostRef = useRef(null);
   const activeRef = useRef(true);
-  const useStatic = useShouldUseStaticFallback();
+  const { useStatic, segments, quality, maxDpr, lights } = usePerformanceProfile();
   const { mouseRef, scrollRef, ripplesRef } = useFluidInteraction(!useStatic);
   const [webglFailed, setWebglFailed] = useState(false);
-  const [dpr, setDpr] = useState([1, 1.25]);
+  const [dpr, setDpr] = useState([1, 1]);
 
   useEffect(() => {
     if (useStatic) return undefined;
 
     const evaluateDpr = () => {
-      const narrow = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
-      const coarse = window.matchMedia("(pointer: coarse)").matches;
-      if (narrow || coarse) {
-        setDpr([1, 1]);
-      } else {
-        setDpr([1, Math.min(window.devicePixelRatio || 1, 1.5)]);
-      }
+      const cap = Math.min(window.devicePixelRatio || 1, maxDpr);
+      setDpr([1, cap]);
     };
 
     evaluateDpr();
     window.addEventListener("resize", evaluateDpr, { passive: true });
     return () => window.removeEventListener("resize", evaluateDpr);
-  }, [useStatic]);
+  }, [useStatic, maxDpr]);
 
   if (useStatic || webglFailed) {
     return <StaticFallback />;
@@ -190,32 +262,46 @@ export default function LiquidSilkCanvas() {
 
   return (
     <div ref={hostRef} className="fluid-canvas" aria-hidden="true">
-      <Canvas
-        dpr={dpr}
-        camera={{ position: [0, 0.08, 2.68], fov: 38, near: 0.1, far: 20 }}
-        gl={{
-          antialias: true,
-          alpha: false,
-          powerPreference: "high-performance",
-          stencil: false,
-        }}
-        frameloop="demand"
-        onCreated={({ gl }) => {
-          const lose = () => setWebglFailed(true);
-          gl.domElement.addEventListener("webglcontextlost", lose, { once: true });
-        }}
-        onError={() => setWebglFailed(true)}
+      <SilkErrorBoundary
+        fallback={<div className="fluid-canvas__fallback" />}
+        onFail={() => setWebglFailed(true)}
       >
-        <Suspense fallback={null}>
-          <FluidScene
-            mouseRef={mouseRef}
-            scrollRef={scrollRef}
-            ripplesRef={ripplesRef}
-            hostRef={hostRef}
-            activeRef={activeRef}
-          />
-        </Suspense>
-      </Canvas>
+        <Canvas
+          dpr={dpr}
+          camera={{ position: [0, 0.02, 2.42], fov: 34, near: 0.1, far: 18 }}
+          gl={{
+            antialias: maxDpr > 1,
+            alpha: false,
+            powerPreference: "high-performance",
+            stencil: false,
+            depth: true,
+            failIfMajorPerformanceCaveat: false,
+          }}
+          frameloop="demand"
+          performance={{ min: 0.5 }}
+          onCreated={({ gl }) => {
+            const lose = (event) => {
+              event.preventDefault();
+              setWebglFailed(true);
+            };
+            gl.domElement.addEventListener("webglcontextlost", lose, { once: true });
+          }}
+          onError={() => setWebglFailed(true)}
+        >
+          <Suspense fallback={null}>
+            <FluidScene
+              mouseRef={mouseRef}
+              scrollRef={scrollRef}
+              ripplesRef={ripplesRef}
+              hostRef={hostRef}
+              activeRef={activeRef}
+              segments={segments}
+              quality={quality}
+              lightTier={lights}
+            />
+          </Suspense>
+        </Canvas>
+      </SilkErrorBoundary>
     </div>
   );
 }

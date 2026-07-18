@@ -1,0 +1,34 @@
+[
+  {
+    "viewport": "desk1440",
+    "overflowX": false,
+    "heroH": 702,
+    "split": true,
+    "broken": 0,
+    "errors": []
+  },
+  {
+    "viewport": "desk1280",
+    "overflowX": false,
+    "heroH": 624,
+    "split": true,
+    "broken": 0,
+    "errors": []
+  },
+  {
+    "viewport": "tab1024",
+    "overflowX": false,
+    "heroH": 620,
+    "split": true,
+    "broken": 0,
+    "errors": []
+  },
+  {
+    "viewport": "mob390",
+    "overflowX": false,
+    "heroH": 700,
+    "split": false,
+    "broken": 1,
+    "errors": []
+  }
+]

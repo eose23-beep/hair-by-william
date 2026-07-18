@@ -1,0 +1,42 @@
+[
+  {
+    "viewport": "desk1440",
+    "overflowX": false,
+    "cols": "1440px",
+    "heroH": 738,
+    "mediaLeft": 0,
+    "contentW": 1240,
+    "imgOk": true,
+    "errors": []
+  },
+  {
+    "viewport": "desk1280",
+    "overflowX": false,
+    "cols": "1280px",
+    "heroH": 656,
+    "mediaLeft": 0,
+    "contentW": 1160,
+    "imgOk": true,
+    "errors": []
+  },
+  {
+    "viewport": "tab1024",
+    "overflowX": false,
+    "cols": "1024px",
+    "heroH": 640,
+    "mediaLeft": 0,
+    "contentW": 932,
+    "imgOk": true,
+    "errors": []
+  },
+  {
+    "viewport": "mob390",
+    "overflowX": false,
+    "cols": "390px",
+    "heroH": 700,
+    "mediaLeft": 0,
+    "contentW": 355,
+    "imgOk": true,
+    "errors": []
+  }
+]

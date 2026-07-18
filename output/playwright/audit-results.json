@@ -1,0 +1,218 @@
+{
+  "desktop-1440x900": {
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "layout": {
+      "viewportWidth": 1440,
+      "documentScrollWidth": 1440,
+      "horizontalOverflow": false,
+      "header": {
+        "left": 100,
+        "right": 1340,
+        "top": 0,
+        "bottom": 66,
+        "width": 1240,
+        "height": 66,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "lineHeight": "26.4px",
+        "visible": true
+      },
+      "brand": {
+        "left": 129,
+        "right": 850.5,
+        "top": 20.9,
+        "bottom": 45.1,
+        "width": 721.5,
+        "height": 24.1,
+        "fontSize": "21px",
+        "fontWeight": "700",
+        "lineHeight": "24.15px",
+        "visible": true
+      },
+      "phone": {
+        "left": 1072.7,
+        "right": 1211.1,
+        "top": 11,
+        "bottom": 55,
+        "width": 138.4,
+        "height": 44,
+        "fontSize": "16.56px",
+        "fontWeight": "750",
+        "lineHeight": "19.872px",
+        "visible": true
+      },
+      "book": {
+        "left": 1235.1,
+        "right": 1311,
+        "top": 11,
+        "bottom": 55,
+        "width": 75.9,
+        "height": 44,
+        "fontSize": "11.808px",
+        "fontWeight": "700",
+        "lineHeight": "19.4832px",
+        "visible": true
+      },
+      "brandText": "Hair by William",
+      "phoneText": "915-920-7823",
+      "phoneHref": "tel:915-920-7823",
+      "headerCollision": {
+        "brandPhone": false,
+        "phoneBook": false
+      },
+      "brokenImages": [],
+      "clippedText": [
+        "P.sr-only",
+        "H3.sr-only"
+      ]
+    },
+    "motionStart": {
+      "animationName": "ribbon-drift-top",
+      "animationDuration": "8s",
+      "transform": "matrix(1.01456, 0.0136767, -0.0136767, 1.01456, 46.8319, -18.1419)",
+      "translateX": 46.83,
+      "translateY": -18.14,
+      "shimmerAnimation": "ribbon-shimmer",
+      "shimmerDuration": "5.2s",
+      "shimmerDashOffset": "-663.311px",
+      "fieldOpacity": "0.68"
+    },
+    "motionEnd": {
+      "animationName": "ribbon-drift-top",
+      "animationDuration": "8s",
+      "transform": "matrix(1.01786, 0.0168779, -0.0168779, 1.01786, 57.9986, -21.9995)",
+      "translateX": 58,
+      "translateY": -22,
+      "shimmerAnimation": "ribbon-shimmer",
+      "shimmerDuration": "5.2s",
+      "shimmerDashOffset": "-598.84px",
+      "fieldOpacity": "0.68"
+    },
+    "motionDelta": {
+      "translateX": 11.17,
+      "translateY": -3.86,
+      "shimmerDashOffsetChanged": true
+    },
+    "carousel": {
+      "counterBefore": "01 / 06",
+      "counterAfter": "02 / 06"
+    },
+    "bookingButtonsEnabled": true,
+    "consoleErrors": [],
+    "pageErrors": []
+  },
+  "mobile-390x844": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "layout": {
+      "viewportWidth": 390,
+      "documentScrollWidth": 390,
+      "horizontalOverflow": false,
+      "header": {
+        "left": 17.5,
+        "right": 372.4,
+        "top": 0,
+        "bottom": 114,
+        "width": 354.9,
+        "height": 114,
+        "fontSize": "15px",
+        "fontWeight": "400",
+        "lineHeight": "24.75px",
+        "visible": true
+      },
+      "brand": {
+        "left": 30.5,
+        "right": 272.4,
+        "top": 23.6,
+        "bottom": 42.3,
+        "width": 241.9,
+        "height": 18.7,
+        "fontSize": "15.6px",
+        "fontWeight": "750",
+        "lineHeight": "18.72px",
+        "visible": true
+      },
+      "phone": {
+        "left": 30.5,
+        "right": 147.7,
+        "top": 59,
+        "bottom": 103,
+        "width": 117.1,
+        "height": 44,
+        "fontSize": "14.43px",
+        "fontWeight": "750",
+        "lineHeight": "17.316px",
+        "visible": true
+      },
+      "book": {
+        "left": 284.4,
+        "right": 359.4,
+        "top": 11,
+        "bottom": 55,
+        "width": 75,
+        "height": 44,
+        "fontSize": "11px",
+        "fontWeight": "700",
+        "lineHeight": "18.15px",
+        "visible": true
+      },
+      "brandText": "Hair by William",
+      "phoneText": "915-920-7823",
+      "phoneHref": "tel:915-920-7823",
+      "headerCollision": {
+        "brandPhone": false,
+        "phoneBook": false
+      },
+      "brokenImages": [],
+      "clippedText": [
+        "P.sr-only",
+        "H3.sr-only"
+      ]
+    },
+    "motionStart": {
+      "animationName": "ribbon-drift-top",
+      "animationDuration": "7.2s",
+      "transform": "matrix(1.01504, 0.0141463, -0.0141463, 1.01504, 48.4745, -18.7094)",
+      "translateX": 48.47,
+      "translateY": -18.71,
+      "shimmerAnimation": "ribbon-shimmer",
+      "shimmerDuration": "5.2s",
+      "shimmerDashOffset": "-632.783px",
+      "fieldOpacity": "0.52"
+    },
+    "motionEnd": {
+      "animationName": "ribbon-drift-top",
+      "animationDuration": "7.2s",
+      "transform": "matrix(1.01786, 0.0168765, -0.0168765, 1.01786, 57.9936, -21.9978)",
+      "translateX": 57.99,
+      "translateY": -22,
+      "shimmerAnimation": "ribbon-shimmer",
+      "shimmerDuration": "5.2s",
+      "shimmerDashOffset": "-89.2674px",
+      "fieldOpacity": "0.52"
+    },
+    "motionDelta": {
+      "translateX": 9.52,
+      "translateY": -3.29,
+      "shimmerDashOffsetChanged": true
+    },
+    "carousel": {
+      "counterBefore": "01 / 06",
+      "counterAfter": "02 / 06"
+    },
+    "bookingButtonsEnabled": true,
+    "consoleErrors": [],
+    "pageErrors": []
+  },
+  "reducedMotion": {
+    "mediaMatches": true,
+    "ribbonAnimation": "none",
+    "shimmerAnimation": "none",
+    "transform": "none"
+  }
+}
