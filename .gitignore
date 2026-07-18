@@ -25,6 +25,7 @@ dist-ssr
 
 .vercel
 .env*
+!.env.example
 
 # Local media backups + encode scratch (do not ship)
 public/portfolio/_originals/

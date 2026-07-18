@@ -4875,3 +4875,312 @@ a {
     transform: none !important;
   }
 }
+
+/* AI hair try-on — editorial spike (parchment + ink + gold) */
+.hair-tryon {
+  scroll-margin-top: 88px;
+}
+
+.hair-tryon__layout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.hair-tryon__intro {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 42ch;
+}
+
+.hair-tryon__copy {
+  margin: 0;
+  max-width: 40ch;
+}
+
+.hair-tryon__meta {
+  margin: 0;
+  font-size: var(--type-caption);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.hair-tryon__stage {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.hair-tryon__controls {
+  display: grid;
+  gap: var(--space-6);
+  align-content: start;
+}
+
+.hair-tryon__upload {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.hair-tryon__upload-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.hair-tryon__camera {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: var(--rule) solid var(--stroke-mid);
+  background: rgba(232, 223, 208, 0.4);
+  box-shadow: var(--frame-inset-gold);
+}
+
+.hair-tryon__camera-video {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: #1a1816;
+  transform: scaleX(-1);
+}
+
+.hair-tryon__camera-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.hair-tryon__prompt {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.hair-tryon__textarea {
+  width: 100%;
+  min-height: 88px;
+  padding: var(--space-3) var(--space-4);
+  border: var(--rule) solid var(--stroke-mid);
+  background: rgba(245, 240, 230, 0.72);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--type-body);
+  line-height: 1.5;
+  resize: vertical;
+  box-shadow: var(--frame-inset-gold);
+  transition: border-color var(--transition-normal);
+}
+
+.hair-tryon__textarea:focus {
+  outline: 2px solid var(--champagne);
+  outline-offset: 2px;
+  border-color: var(--gold-frame);
+}
+
+.hair-tryon__textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.hair-tryon__upload-label {
+  margin: 0;
+  font-size: var(--type-kicker);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--champagne);
+  font-weight: 600;
+}
+
+.hair-tryon__styles {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.hair-tryon__legend {
+  margin: 0 0 var(--space-3);
+  padding: 0;
+  font-size: var(--type-kicker);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.hair-tryon__chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: var(--space-3);
+}
+
+.hair-tryon__chip {
+  display: grid;
+  gap: var(--space-2);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  transition: color var(--transition-fast);
+}
+
+.hair-tryon__chip img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: var(--rule) solid var(--stroke-mid);
+  box-shadow: var(--frame-inset-gold);
+  transition:
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+.hair-tryon__chip:hover img,
+.hair-tryon__chip.is-active img {
+  border-color: var(--gold-frame);
+  box-shadow: var(--frame-glow-hover);
+}
+
+.hair-tryon__chip.is-active {
+  color: var(--champagne);
+}
+
+.hair-tryon__chip:focus-visible {
+  outline: 2px solid var(--champagne);
+  outline-offset: 4px;
+}
+
+.hair-tryon__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.hair-tryon__actions .cta-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.hair-tryon__error {
+  margin: 0;
+  color: #7a1f1f;
+  font-size: var(--type-body);
+}
+
+.hair-tryon__privacy {
+  margin: 0;
+  max-width: 52ch;
+  font-size: var(--type-caption);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.hair-tryon__privacy a {
+  color: var(--ink);
+  border-bottom: var(--rule) solid var(--gold-rule);
+}
+
+.hair-tryon__frames {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+.hair-tryon__frame {
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.hair-tryon__frame figcaption {
+  font-size: var(--type-kicker);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.hair-tryon__frame img,
+.hair-tryon__placeholder {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: rgba(232, 223, 208, 0.55);
+  border: var(--rule) solid var(--stroke);
+  box-shadow: var(--frame-inset-gold);
+}
+
+.hair-tryon__placeholder {
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  text-align: center;
+  font-size: var(--type-caption);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.hair-tryon__placeholder--pulse {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  animation: hair-tryon-pulse 1.4s var(--ease-luxury) infinite;
+}
+
+.hair-tryon__spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(166, 139, 75, 0.28);
+  border-top-color: var(--champagne);
+  border-radius: 50%;
+  animation: hair-tryon-spin 0.9s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes hair-tryon-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hair-tryon-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 768px) {
+  .hair-tryon__frames {
+    grid-template-columns: var(--phi-minor) var(--phi-major);
+    gap: var(--gap-phi);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hair-tryon__stage {
+    grid-template-columns: minmax(240px, 0.382fr) minmax(320px, 0.618fr);
+    column-gap: var(--gap-phi);
+    align-items: start;
+  }
+
+  .hair-tryon__controls {
+    position: sticky;
+    top: 72px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hair-tryon__placeholder--pulse,
+  .hair-tryon__spinner {
+    animation: none;
+  }
+}

@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import GoldWaveField from "./components/GoldWaveField";
 import ServicesGrid from "./components/ServicesGrid";
 import PortfolioGallery from "./components/PortfolioGallery";
+import HairTryOn from "./components/HairTryOn";
 import ContactForm from "./components/ContactForm";
 import MapSection, { DIRECTIONS_URL } from "./components/MapSection";
 import BookingFab from "./components/BookingFab";
@@ -104,7 +105,7 @@ export default function App() {
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const motionTargets =
-      ".reveal, .motion-block, .service-card, .site-footer__brand, .site-footer__col, .nav-row > *, .services-section__header > *, .portfolio-gallery__intro > *, .contact-section__intro, .contact-section__form-wrap, .booking-panel__card > *";
+      ".reveal, .motion-block, .service-card, .site-footer__brand, .site-footer__col, .nav-row > *, .services-section__header > *, .portfolio-gallery__intro > *, .hair-tryon__intro > *, .hair-tryon__stage, .contact-section__intro, .contact-section__form-wrap, .booking-panel__card > *";
 
     if (reduceMotion) {
       gsap.set(motionTargets, { clearProps: "opacity,transform" });
@@ -167,6 +168,23 @@ export default function App() {
           clearProps: "opacity,transform",
           scrollTrigger: {
             trigger: "#portfolio",
+            ...revealOnce,
+          },
+        },
+      );
+
+      gsap.fromTo(
+        [".hair-tryon__intro > *", ".hair-tryon__stage"],
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.88,
+          stagger: 0.08,
+          ease: easeOut,
+          clearProps: "opacity,transform",
+          scrollTrigger: {
+            trigger: "#try-on",
             ...revealOnce,
           },
         },
@@ -307,6 +325,9 @@ export default function App() {
             <a className="ghost-link" href="#portfolio">
               Portfolio
             </a>
+            <a className="ghost-link" href="#try-on">
+              Try On
+            </a>
             <a className="ghost-link" href="#services">
               Services
             </a>
@@ -420,6 +441,8 @@ export default function App() {
           </section>
 
           <PortfolioGallery />
+
+          <HairTryOn />
 
           <ContactForm />
 
@@ -571,6 +594,9 @@ export default function App() {
                   </li>
                   <li>
                     <a href="#portfolio">Portfolio</a>
+                  </li>
+                  <li>
+                    <a href="#try-on">Try On</a>
                   </li>
                   <li>
                     <a href="#contact">Book</a>
