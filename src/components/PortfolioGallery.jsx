@@ -85,35 +85,45 @@ function IconPlay({ size = 10 }) {
   );
 }
 
+const AUTO_ADVANCE_MS = 5600;
+
 const DEFAULT_METRICS = {
-  visibleSpan: 1.35,
-  translateSpan: 42,
-  rotateY: 16,
-  translateZ: 28,
-  dragThreshold: 56,
-  dragNorm: 280,
+  visibleSpan: 1.85,
+  translateSpan: 38,
+  rotateY: 22,
+  translateZ: 48,
+  scaleStep: 0.14,
+  blurMax: 7,
+  dimAmount: 0.42,
+  dragThreshold: 48,
+  dragNorm: 260,
 };
 
 function getCarouselMetrics(width) {
-  /* Mobile/tablet: single-focus flat carousel — no side-card overlap into the header */
   if (width <= 767) {
     return {
-      visibleSpan: 0.05,
-      translateSpan: 110,
+      visibleSpan: 0.95,
+      translateSpan: 88,
       rotateY: 0,
       translateZ: 0,
-      dragThreshold: width <= 390 ? 28 : 36,
-      dragNorm: width <= 390 ? 160 : 200,
+      scaleStep: 0.08,
+      blurMax: 4,
+      dimAmount: 0.35,
+      dragThreshold: width <= 390 ? 24 : 32,
+      dragNorm: width <= 390 ? 140 : 180,
     };
   }
   if (width <= 1023) {
     return {
-      visibleSpan: 1.15,
-      translateSpan: 52,
-      rotateY: 18,
-      translateZ: 36,
-      dragThreshold: 48,
-      dragNorm: 240,
+      visibleSpan: 1.55,
+      translateSpan: 46,
+      rotateY: 20,
+      translateZ: 42,
+      scaleStep: 0.13,
+      blurMax: 6,
+      dimAmount: 0.4,
+      dragThreshold: 44,
+      dragNorm: 220,
     };
   }
   return DEFAULT_METRICS;
@@ -126,7 +136,7 @@ function wrapIndex(index, length) {
 function isControlTarget(target) {
   return Boolean(
     target.closest?.(
-      ".coverflow__controls, .coverflow__dots, .coverflow__nav, .coverflow__dot",
+      ".coverflow__controls, .coverflow__filmstrip, .coverflow__nav, .coverflow__tick",
     ),
   );
 }
@@ -134,6 +144,13 @@ function isControlTarget(target) {
 function slideAriaLabel(slide, index, total) {
   const kind = slide.type === "video" ? "Video" : "Image";
   return `${kind} slide ${index + 1} of ${total}: ${slide.title}. ${slide.alt}`;
+}
+
+/** Prefer sibling .webp when media agent has upscaled stills. */
+function webpSibling(src) {
+  if (!src || typeof src !== "string") return null;
+  if (/\.webp$/i.test(src)) return src;
+  return src.replace(/\.(png|jpe?g)$/i, ".webp");
 }
 
 /** Resolve #clip-01 / #portfolio-clip-01 / #portfolio?clip=01 style hashes to a slide index. */
@@ -166,6 +183,8 @@ export default function PortfolioGallery() {
   const [dragOffset, setDragOffset] = useState(0);
   const [metrics, setMetrics] = useState(DEFAULT_METRICS);
   const [stageInView, setStageInView] = useState(true);
+  const [paused, setPaused] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
   const stageRef = useRef(null);
   const lightboxCloseRef = useRef(null);
   const dragRef = useRef({ active: false, startX: 0, startY: 0, lastX: 0, pointerId: null });
@@ -180,6 +199,14 @@ export default function PortfolioGallery() {
     syncMetrics();
     window.addEventListener("resize", syncMetrics, { passive: true });
     return () => window.removeEventListener("resize", syncMetrics);
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduceMotion(mq.matches);
+    sync();
+    mq.addEventListener?.("change", sync);
+    return () => mq.removeEventListener?.("change", sync);
   }, []);
 
   useEffect(() => {
@@ -219,6 +246,18 @@ export default function PortfolioGallery() {
 
   const goPrev = useCallback(() => goTo(active - 1), [active, goTo]);
   const goNext = useCallback(() => goTo(active + 1), [active, goTo]);
+
+  /* Subtle auto-advance — pauses on hover/focus, lightbox, off-screen, reduced motion */
+  useEffect(() => {
+    if (reduceMotion || paused || lightboxOpen || !stageInView || dragOffset !== 0) {
+      return undefined;
+    }
+    const id = window.setInterval(() => {
+      setActive((prev) => wrapIndex(prev + 1, count));
+      setDragOffset(0);
+    }, AUTO_ADVANCE_MS);
+    return () => window.clearInterval(id);
+  }, [reduceMotion, paused, lightboxOpen, stageInView, dragOffset, count]);
 
   const openLightbox = (index) => {
     setActive(index);
@@ -385,7 +424,9 @@ export default function PortfolioGallery() {
   };
 
   const dragNorm = dragOffset / metrics.dragNorm;
-  const { visibleSpan, translateSpan, rotateY, translateZ } = metrics;
+  const { visibleSpan, translateSpan, rotateY, translateZ, scaleStep, blurMax, dimAmount } =
+    metrics;
+  const progress = ((active + 1) / count) * 100;
 
   return (
     <>
@@ -401,14 +442,15 @@ export default function PortfolioGallery() {
               <span key={slide.id} id={slide.id} />
             ))}
         </div>
-        <div className="portfolio-gallery__header">
-          <p className="lookbook-tag">Portfolio</p>
-          <h2 className="section-heading portfolio-gallery__heading">Salon Portfolio</h2>
+        <header className="portfolio-gallery__intro">
+          <p className="lookbook-tag portfolio-gallery__kicker">Portfolio</p>
+          <span className="portfolio-gallery__hairline" aria-hidden="true" />
+          <h2 className="section-heading portfolio-gallery__heading">Salon Lookbook</h2>
           <p className="portfolio-gallery__copy">
-            Recent chair work across textures, lengths, and tones — hair extensions, precision cuts,
-            dimensional color, blowouts, and short muted clips of the work in motion.
+            Chair finishes across texture, length, and tone — extensions, precision cuts,
+            dimensional color, and muted motion clips.
           </p>
-        </div>
+        </header>
 
         <p id={liveRegionId} className="sr-only" aria-live="polite" aria-atomic="true">
           {activeSlide ? slideAriaLabel(activeSlide, active, count) : ""}
@@ -416,7 +458,7 @@ export default function PortfolioGallery() {
 
         <div
           ref={stageRef}
-          className="coverflow"
+          className={`coverflow portfolio-gallery__stage${paused ? " is-paused" : ""}`}
           tabIndex={0}
           role="region"
           aria-roledescription="carousel"
@@ -428,6 +470,12 @@ export default function PortfolioGallery() {
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerCancel}
           onLostPointerCapture={onPointerCancel}
+          onPointerEnter={() => setPaused(true)}
+          onPointerLeave={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
+          }}
           style={{ touchAction: "pan-y" }}
         >
           <div className="coverflow__stage" aria-live="polite">
@@ -443,13 +491,16 @@ export default function PortfolioGallery() {
               const cardRotateY = offset * -rotateY;
               const cardTranslateX = offset * translateSpan;
               const cardTranslateZ = -abs * translateZ;
-              const scale = 1 - Math.min(abs, 2) * 0.11;
-              const opacity = abs > visibleSpan ? 0 : 1 - abs * 0.26;
-              const zIndex = Math.round(40 - abs * 10);
+              const scale = 1 - Math.min(abs, 2) * scaleStep;
+              const opacity = abs > visibleSpan ? 0 : Math.max(0.28, 1 - abs * 0.32);
+              const zIndex = Math.round(48 - abs * 12);
               const isCenter = Math.abs(offset) < 0.35;
+              const blur = isCenter ? 0 : Math.min(abs, 1.6) * blurMax;
+              const brightness = isCenter ? 1 : 1 - Math.min(abs, 1.5) * dimAmount;
+              const saturate = isCenter ? 1 : 1 - Math.min(abs, 1.5) * 0.28;
               const depthFade = isCenter
                 ? "none"
-                : `brightness(${1 - Math.min(abs, 1.5) * 0.1}) saturate(${1 - Math.min(abs, 1.5) * 0.14})`;
+                : `blur(${blur.toFixed(2)}px) brightness(${brightness.toFixed(3)}) saturate(${saturate.toFixed(3)})`;
 
               return (
                 <button
@@ -457,7 +508,7 @@ export default function PortfolioGallery() {
                   type="button"
                   className={`coverflow__card${isCenter ? " is-active" : ""}${
                     slide.type === "video" ? " coverflow__card--video" : ""
-                  }`}
+                  }${isCenter && slide.type === "video" ? " is-playing" : ""}`}
                   style={{
                     transform: `translate(-50%, -50%) translateX(${cardTranslateX}%) translateZ(${cardTranslateZ}px) rotateY(${cardRotateY}deg) scale(${scale})`,
                     opacity,
@@ -484,25 +535,30 @@ export default function PortfolioGallery() {
                         active={isCenter && stageInView && !lightboxOpen}
                       />
                     ) : (
-                      <img
-                        className="coverflow__media"
-                        src={slide.src}
-                        alt={slide.alt}
-                        loading={abs < 1.5 ? "eager" : "lazy"}
-                        decoding="async"
-                        draggable={false}
-                        onError={(event) => {
-                          const img = event.currentTarget;
-                          if (img.dataset.fallbackApplied === "1") return;
-                          img.dataset.fallbackApplied = "1";
-                          img.src = "/portfolio/work-01.png";
-                        }}
-                      />
+                      <picture className="coverflow__picture">
+                        <source srcSet={webpSibling(slide.src)} type="image/webp" />
+                        <img
+                          className="coverflow__media"
+                          src={slide.src}
+                          alt={slide.alt}
+                          loading={abs < 1.5 ? "eager" : "lazy"}
+                          decoding="async"
+                          draggable={false}
+                          onError={(event) => {
+                            const img = event.currentTarget;
+                            if (img.dataset.fallbackApplied === "1") return;
+                            img.dataset.fallbackApplied = "1";
+                            img.src = "/portfolio/work-01.png";
+                          }}
+                        />
+                      </picture>
                     )}
                     {slide.type === "video" ? (
                       <span className="coverflow__video-tag" aria-hidden="true">
                         <IconPlay />
-                        <span className="coverflow__video-tag-label">Motion</span>
+                        <span className="coverflow__video-tag-label">
+                          {isCenter ? "Playing" : "Motion"}
+                        </span>
                       </span>
                     ) : null}
                     <span className="coverflow__caption">
@@ -515,44 +571,59 @@ export default function PortfolioGallery() {
             })}
           </div>
 
-          <div className="coverflow__controls">
-            <button
-              type="button"
-              className="coverflow__nav"
-              onClick={goPrev}
-              aria-label="Previous work"
-            >
-              <IconChevronLeft />
-            </button>
-            <p className="coverflow__counter" aria-hidden="true">
-              {String(active + 1).padStart(2, "0")}
-              <span> / </span>
-              {String(count).padStart(2, "0")}
-            </p>
-            <button
-              type="button"
-              className="coverflow__nav"
-              onClick={goNext}
-              aria-label="Next work"
-            >
-              <IconChevronRight />
-            </button>
-          </div>
-
-          <div className="coverflow__dots" role="tablist" aria-label="Select slide">
-            {portfolioSlides.map((slide, index) => (
+          <div className="coverflow__rail">
+            <div className="coverflow__controls">
               <button
-                key={slide.id}
                 type="button"
-                role="tab"
-                aria-selected={index === active}
-                aria-label={slideAriaLabel(slide, index, count)}
-                className={`coverflow__dot${index === active ? " is-active" : ""}${
-                  slide.type === "video" ? " coverflow__dot--video" : ""
-                }`}
-                onClick={() => goTo(index)}
+                className="coverflow__nav"
+                onClick={goPrev}
+                aria-label="Previous work"
+              >
+                <IconChevronLeft />
+              </button>
+              <p className="coverflow__counter" aria-hidden="true">
+                <span className="coverflow__counter-current">
+                  {String(active + 1).padStart(2, "0")}
+                </span>
+                <span className="coverflow__counter-sep"> / </span>
+                <span className="coverflow__counter-total">
+                  {String(count).padStart(2, "0")}
+                </span>
+              </p>
+              <button
+                type="button"
+                className="coverflow__nav"
+                onClick={goNext}
+                aria-label="Next work"
+              >
+                <IconChevronRight />
+              </button>
+            </div>
+
+            <div
+              className="coverflow__filmstrip"
+              role="tablist"
+              aria-label="Select lookbook slide"
+            >
+              <div
+                className="coverflow__filmstrip-track"
+                aria-hidden="true"
+                style={{ "--film-progress": `${progress}%` }}
               />
-            ))}
+              {portfolioSlides.map((slide, index) => (
+                <button
+                  key={slide.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={index === active}
+                  aria-label={slideAriaLabel(slide, index, count)}
+                  className={`coverflow__tick${index === active ? " is-active" : ""}${
+                    slide.type === "video" ? " coverflow__tick--video" : ""
+                  }`}
+                  onClick={() => goTo(index)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -588,12 +659,15 @@ export default function PortfolioGallery() {
                   active={lightboxOpen}
                 />
               ) : (
-                <img
-                  className="lightbox__image"
-                  src={activeSlide.src}
-                  alt={activeSlide.alt}
-                  loading="eager"
-                />
+                <picture>
+                  <source srcSet={webpSibling(activeSlide.src)} type="image/webp" />
+                  <img
+                    className="lightbox__image"
+                    src={activeSlide.src}
+                    alt={activeSlide.alt}
+                    loading="eager"
+                  />
+                </picture>
               )}
               <figcaption className="lightbox__caption">
                 <span id={lightboxTitleId} className="lightbox__title">

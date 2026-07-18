@@ -85,15 +85,21 @@ function ServiceCard({ service, index }) {
       <div className="service-card__face">
         {service.image ? (
           <div className="service-card__media">
-            <img
-              className="service-card__image"
-              src={service.image}
-              alt={service.imageAlt || ""}
-              loading="lazy"
-              decoding="async"
-              width={800}
-              height={1000}
-            />
+            <picture>
+              <source
+                srcSet={service.image.replace(/\.(png|jpe?g)$/i, ".webp")}
+                type="image/webp"
+              />
+              <img
+                className="service-card__image"
+                src={service.image}
+                alt={service.imageAlt || ""}
+                loading="lazy"
+                decoding="async"
+                width={800}
+                height={1000}
+              />
+            </picture>
           </div>
         ) : null}
         <div className="service-card__content">

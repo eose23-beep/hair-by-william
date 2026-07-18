@@ -1,0 +1,264 @@
+{
+  "processed": [
+    {
+      "file": "blowout_after.jpg",
+      "beforeBytes": 231105,
+      "afterBytes": 299663,
+      "before": "1200x1600",
+      "after": "1200x1600",
+      "upscaled": false
+    },
+    {
+      "file": "blowout_before.jpg",
+      "beforeBytes": 264030,
+      "afterBytes": 341652,
+      "before": "1200x1600",
+      "after": "1200x1600",
+      "upscaled": false
+    },
+    {
+      "file": "clip-01-poster.jpg",
+      "beforeBytes": 134384,
+      "afterBytes": 326216,
+      "before": "576x1024",
+      "after": "1008x1792",
+      "upscaled": true
+    },
+    {
+      "file": "clip-02-poster.jpg",
+      "beforeBytes": 101286,
+      "afterBytes": 263352,
+      "before": "576x1024",
+      "after": "1008x1792",
+      "upscaled": true
+    },
+    {
+      "file": "clip-03-poster.jpg",
+      "beforeBytes": 72008,
+      "afterBytes": 197631,
+      "before": "576x1024",
+      "after": "1008x1792",
+      "upscaled": true
+    },
+    {
+      "file": "clip-04-poster.jpg",
+      "beforeBytes": 121354,
+      "afterBytes": 299138,
+      "before": "576x1024",
+      "after": "1008x1792",
+      "upscaled": true
+    },
+    {
+      "file": "color_cut.jpg",
+      "beforeBytes": 212040,
+      "afterBytes": 282249,
+      "before": "1200x1600",
+      "after": "1200x1600",
+      "upscaled": false
+    },
+    {
+      "file": "extensions_after-hero.jpg",
+      "beforeBytes": 554116,
+      "afterBytes": 467392,
+      "before": "2160x2160",
+      "after": "2160x2160",
+      "upscaled": false
+    },
+    {
+      "file": "extensions_after-hero.webp",
+      "beforeBytes": 195748,
+      "afterBytes": 187500,
+      "before": "2160x2160",
+      "after": "2160x2160",
+      "upscaled": false
+    },
+    {
+      "file": "extensions_after.jpg",
+      "beforeBytes": 103463,
+      "afterBytes": 343663,
+      "before": "1080x1081",
+      "after": "1890x1892",
+      "upscaled": true
+    },
+    {
+      "file": "extensions_before.jpg",
+      "beforeBytes": 428235,
+      "afterBytes": 546450,
+      "before": "1200x1600",
+      "after": "1200x1600",
+      "upscaled": false
+    },
+    {
+      "file": "work-01.png",
+      "beforeBytes": 181033,
+      "afterBytes": 1033743,
+      "before": "768x1024",
+      "after": "1344x1792",
+      "upscaled": true
+    },
+    {
+      "file": "work-02.png",
+      "beforeBytes": 277304,
+      "afterBytes": 1361618,
+      "before": "768x1024",
+      "after": "1344x1792",
+      "upscaled": true
+    },
+    {
+      "file": "work-03.png",
+      "beforeBytes": 207360,
+      "afterBytes": 1191829,
+      "before": "768x1024",
+      "after": "1344x1792",
+      "upscaled": true
+    },
+    {
+      "file": "work-04.png",
+      "beforeBytes": 255496,
+      "afterBytes": 1154873,
+      "before": "768x1024",
+      "after": "1344x1792",
+      "upscaled": true
+    },
+    {
+      "file": "work-05.png",
+      "beforeBytes": 205100,
+      "afterBytes": 1110767,
+      "before": "768x1024",
+      "after": "1344x1792",
+      "upscaled": true
+    },
+    {
+      "file": "work-06.png",
+      "beforeBytes": 233397,
+      "afterBytes": 1149424,
+      "before": "768x1024",
+      "after": "1344x1792",
+      "upscaled": true
+    },
+    {
+      "file": "work-07.png",
+      "beforeBytes": 223820,
+      "afterBytes": 1194409,
+      "before": "768x1024",
+      "after": "1344x1792",
+      "upscaled": true
+    },
+    {
+      "file": "work-08.png",
+      "beforeBytes": 231522,
+      "afterBytes": 1186028,
+      "before": "768x1024",
+      "after": "1344x1792",
+      "upscaled": true
+    },
+    {
+      "file": "work-09.png",
+      "beforeBytes": 135801,
+      "afterBytes": 818441,
+      "before": "643x1024",
+      "after": "1125x1792",
+      "upscaled": true
+    },
+    {
+      "file": "work-10.png",
+      "beforeBytes": 109192,
+      "afterBytes": 671515,
+      "before": "558x1024",
+      "after": "977x1792",
+      "upscaled": true
+    },
+    {
+      "file": "work-11.png",
+      "beforeBytes": 230440,
+      "afterBytes": 1285935,
+      "before": "768x1024",
+      "after": "1344x1792",
+      "upscaled": true
+    },
+    {
+      "file": "work-12.png",
+      "beforeBytes": 103438,
+      "afterBytes": 639204,
+      "before": "853x1024",
+      "after": "1493x1792",
+      "upscaled": true
+    }
+  ],
+  "webp": [
+    {
+      "file": "blowout_after.webp",
+      "beforeBytes": 0,
+      "afterBytes": 243774
+    },
+    {
+      "file": "blowout_before.webp",
+      "beforeBytes": 0,
+      "afterBytes": 285782
+    },
+    {
+      "file": "color_cut.webp",
+      "beforeBytes": 0,
+      "afterBytes": 193010
+    },
+    {
+      "file": "extensions_after-hero.webp",
+      "beforeBytes": 232376,
+      "afterBytes": 195748
+    },
+    {
+      "file": "extensions_after.webp",
+      "beforeBytes": 0,
+      "afterBytes": 145570
+    },
+    {
+      "file": "extensions_before.webp",
+      "beforeBytes": 0,
+      "afterBytes": 540370
+    },
+    {
+      "file": "work-01.webp",
+      "beforeBytes": 0,
+      "afterBytes": 195838
+    },
+    {
+      "file": "work-02.webp",
+      "beforeBytes": 0,
+      "afterBytes": 409596
+    },
+    {
+      "file": "work-03.webp",
+      "beforeBytes": 0,
+      "afterBytes": 253762
+    },
+    {
+      "file": "work-05.webp",
+      "beforeBytes": 0,
+      "afterBytes": 263618
+    },
+    {
+      "file": "work-07.webp",
+      "beforeBytes": 0,
+      "afterBytes": 281076
+    }
+  ],
+  "skippedMp4": [
+    {
+      "file": "clip-01.mp4",
+      "bytes": 1437239
+    },
+    {
+      "file": "clip-02.mp4",
+      "bytes": 2188764
+    },
+    {
+      "file": "clip-03.mp4",
+      "bytes": 1152940
+    },
+    {
+      "file": "clip-04.mp4",
+      "bytes": 2242703
+    }
+  ],
+  "errors": []
+}
