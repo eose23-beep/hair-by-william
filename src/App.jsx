@@ -52,16 +52,17 @@ export default function App() {
 
       gsap.fromTo(
         gsap.utils.toArray(".service-card"),
-        { opacity: 0, y: 32 },
+        { opacity: 0, y: 36, rotateX: 8 },
         {
           opacity: 1,
           y: 0,
+          rotateX: 0,
           duration: 0.85,
-          stagger: 0.12,
+          stagger: 0.1,
           ease: "power4.out",
           scrollTrigger: {
-            trigger: ".services-grid",
-            start: "top 84%",
+            trigger: ".services-menu-3d",
+            start: "top 86%",
             once: true,
           },
         },
@@ -94,49 +95,61 @@ export default function App() {
       <LiquidSilkCanvas />
 
       <div ref={rootRef} className="site-shell typography-layer">
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
+
         <header className="shell nav-row">
           <p className="brand-mark">Hair by William</p>
           <a className="ghost-link" href="#portfolio">
             Portfolio
           </a>
-          <a className="ghost-link" href="#contact">
-            Book Appointment
+          <a className="ghost-link" href="#services">
+            Menu
           </a>
-          <a className="cta-button cta-small" href={PHONE_HREF}>
+          <a className="nav-phone" href={PHONE_HREF}>
             {PHONE_LABEL}
+          </a>
+          <a className="cta-button cta-small" href="#contact">
+            Book
           </a>
         </header>
 
-        <main className="site-main">
-          <section className="shell hero section">
-            <p className="kicker hero-kicker">Luxury Salon · El Paso</p>
-            <h1 className="hero-title">
-              <span className="hero-title-secondary">Hair By</span>
-              <span className="hero-title-primary">William</span>
-            </h1>
-            <p className="lead hero-copy">
-              Precision cuts, custom extensions, color correction, and smoothing treatments,
-              shaped by twenty-seven years of refined artistry in a calm, high-touch studio.
-            </p>
-            <p className="hero-meta" aria-label="Salon details">
-              <span>5411 N. Mesa, Suite 13C</span>
-              <span>Friday &amp; Saturday</span>
-            </p>
-            <div className="hero-actions">
-              <a className="cta-button" href="#contact">
-                Book Appointment
+        <main id="main-content" className="site-main" tabIndex={-1}>
+          <div className="above-fold">
+            <section className="hero section">
+              <p className="kicker hero-kicker">Luxury Salon · El Paso</p>
+              <h1 className="hero-title">
+                <span className="hero-title-secondary">Hair By</span>
+                <span className="hero-title-primary">William</span>
+              </h1>
+              <p className="lead hero-copy">
+                Precision cuts, custom extensions, color correction, and smoothing treatments —
+                twenty-seven years of refined artistry in a calm, high-touch studio.
+              </p>
+              <p className="hero-meta" aria-label="Salon details">
+                <span>5411 N. Mesa, Suite 13C</span>
+                <span>Friday &amp; Saturday — call for availability</span>
+              </p>
+              <div className="hero-actions">
+                <a className="cta-button" href="#contact">
+                  Book Appointment
+                </a>
+                <a className="secondary-button" href="#portfolio">
+                  View Portfolio
+                </a>
+              </div>
+              <a className="mobile-book-strip" href="#contact">
+                Book · WhatsApp or Text
               </a>
-              <a className="secondary-button" href="#portfolio">
-                View Portfolio
-              </a>
-            </div>
-          </section>
+            </section>
+
+            <ContactForm />
+          </div>
 
           <PortfolioGallery />
 
           <ServicesGrid />
-
-          <ContactForm />
 
           <section id="booking" className="shell section reveal booking-panel">
             <p className="kicker">Visit the Salon</p>
@@ -172,7 +185,9 @@ export default function App() {
             <p>
               <a href={PHONE_HREF}>{PHONE_LABEL}</a>
             </p>
-            <p className="footer-hours">Open Friday &amp; Saturday — Suite 13C, LV Hair Salon</p>
+            <p className="footer-hours">
+              Friday &amp; Saturday — call for availability · Suite 13C, LV Hair Salon
+            </p>
             <p>Extensions</p>
             <p>Cuts</p>
             <p>Color</p>

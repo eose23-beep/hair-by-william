@@ -1,0 +1,29 @@
+# Hair by William
+
+> Luxury hair salon in El Paso, Texas — extensions, color, cuts, and Brazilian Blowouts.
+
+## Salon
+
+- Name: Hair by William
+- Phone: 915-920-7823
+- Address: 5411 N. Mesa, Suite 13C, El Paso, TX 79912
+- Hours: Friday & Saturday — call for availability
+- Website: https://william-site-snowy.vercel.app/
+
+## Services
+
+- Custom hair extensions (I-Tip, Genius Weft, Tape-In, Micro-link)
+- Brazilian Blowouts
+- Dimensional color & color correction
+- Precision cuts
+
+## Booking
+
+1. Call or text 915-920-7823
+2. Or use the booking form on the homepage (WhatsApp or SMS)
+3. Share your name, phone, and preferred service
+
+## Notes
+
+- Appointments by availability on Friday and Saturday only
+- Located inside LV Hair Salon, Suite 13C

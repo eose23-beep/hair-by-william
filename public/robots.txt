@@ -1,0 +1,36 @@
+# Hair by William — crawler access
+# Last updated: 2026-07-10
+
+User-agent: *
+Allow: /
+
+# --- AI search-augmented crawlers (citations) ---
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# --- AI assistants / training (allow for discovery & citations) ---
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Disallow: /
+
+Sitemap: https://william-site-snowy.vercel.app/sitemap.xml
