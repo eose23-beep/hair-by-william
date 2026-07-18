@@ -8,7 +8,7 @@ const services = [
     description:
       "Custom length and volume with seamless blending — tape-in, weft, and beaded bond installations.",
     image: "/portfolio/extensions_after.jpg",
-    imageAlt: "Seamless custom hair extensions with natural length and blended volume",
+    imageAlt: "Seamless custom hair extensions with natural length and blended volume by Hair by William",
   },
   {
     id: "brazilian-blowout",
@@ -106,10 +106,10 @@ export default function ServicesGrid() {
     <section id="services" className="shell section services-section reveal">
       <header className="services-section__header">
         <p className="lookbook-tag">Signature Services</p>
-        <h2 className="section-heading">The Menu</h2>
+        <h2 className="section-heading">Hair Services</h2>
         <p className="lead services-section__copy">
-          Tailored for your texture, length, and goals — extensions, Brazilian Blowout, precision
-          cuts, and color correction.
+          Tailored for your texture, length, and goals — custom extensions, Brazilian Blowout,
+          precision cuts, and color correction in El Paso.
         </p>
       </header>
 

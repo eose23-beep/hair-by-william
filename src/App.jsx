@@ -117,6 +117,9 @@ export default function App() {
             <a className="ghost-link" href="#services">
               Menu
             </a>
+            <a className="ghost-link" href="#visit">
+              Visit
+            </a>
             <a className="nav-phone" href={PHONE_HREF}>
               {PHONE_LABEL}
             </a>
@@ -136,7 +139,7 @@ export default function App() {
                 />
                 <img
                   src="/portfolio/extensions_after-hero.jpg"
-                  alt="Client beauty portrait — long strawberry-blonde waves and soft fringe by Hair by William"
+                  alt="Long strawberry-blonde waves and soft fringe — custom extension finish by Hair by William in El Paso"
                   width={2160}
                   height={2160}
                   fetchPriority="high"
@@ -151,6 +154,10 @@ export default function App() {
                   <span className="hero-title-secondary">Hair by</span>
                   <span className="hero-title-rule" aria-hidden="true" />
                   <span className="hero-title-primary">William</span>
+                  <span className="sr-only">
+                    {" "}
+                    — El Paso hair stylist for extensions, cuts, and color
+                  </span>
                 </h1>
                 <p className="lead hero-copy">
                   Precision cuts, custom extensions, color correction, and smoothing — twenty-seven
@@ -183,8 +190,8 @@ export default function App() {
                 <p className="kicker">Ready When You Are</p>
                 <h2 className="section-heading booking-panel__heading">Book Your Appointment</h2>
                 <p className="lead booking-panel__copy">
-                  Extensions, precision cuts, color correction, and Brazilian Blowout — tailored to
-                  your texture, goals, and schedule.
+                  Extensions, precision cuts, color correction, and Brazilian Blowout in El Paso —
+                  tailored to your texture, goals, and schedule.
                 </p>
                 <figure className="booking-panel__clip">
                   <div className="booking-panel__clip-frame">
@@ -230,7 +237,9 @@ export default function App() {
             <div className="site-footer__brand">
               <p className="kicker">Hair by William</p>
               <p className="site-footer-copy">
-                Twenty-seven years of refined artistry in El Paso — every texture and length welcome.
+                El Paso hair stylist for custom extensions, precision cuts, color correction, and
+                Brazilian Blowouts — twenty-seven years of refined artistry. Every texture and length
+                welcome.
               </p>
             </div>
             <div className="site-footer__grid" aria-label="Salon contact details">
@@ -249,12 +258,20 @@ export default function App() {
                 <p className="footer-hours">Friday &amp; Saturday — call for availability</p>
               </div>
               <div className="site-footer__col">
-                <p className="site-footer__label">Services</p>
+                <p className="site-footer__label">Explore</p>
                 <ul className="site-footer__tags">
-                  <li>Extensions</li>
-                  <li>Precision Cuts</li>
-                  <li>Color Correction</li>
-                  <li>Brazilian Blowout</li>
+                  <li>
+                    <a href="#portfolio">Portfolio</a>
+                  </li>
+                  <li>
+                    <a href="#services">Services</a>
+                  </li>
+                  <li>
+                    <a href="#booking">Booking</a>
+                  </li>
+                  <li>
+                    <a href="#visit">Location</a>
+                  </li>
                 </ul>
               </div>
             </div>

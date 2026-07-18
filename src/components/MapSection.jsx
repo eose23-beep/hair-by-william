@@ -18,18 +18,18 @@ export default function MapSection() {
       <header className="map-section__header">
         <p className="kicker">El Paso Studio</p>
         <h2 id="map-section-heading" className="section-heading map-section__heading">
-          Visit the Studio
+          Visit Us in El Paso
         </h2>
         <p className="lead map-section__copy">
-          Suite 13C inside LV Hair Salon on North Mesa — call ahead for Friday and Saturday
-          availability.
+          Hair by William — Suite 13C inside LV Hair Salon on North Mesa. Call ahead for Friday and
+          Saturday availability.
         </p>
       </header>
 
       <div className="map-section__meta">
         <address className="map-section__address">
           <span className="map-section__address-line">{SALON_ADDRESS_SHORT}</span>
-          <span className="map-section__address-line">79912</span>
+          <span className="map-section__address-line">79912 · LV Hair Salon</span>
         </address>
         <div className="map-section__actions">
           <a className="map-section__phone" href={PHONE_HREF}>

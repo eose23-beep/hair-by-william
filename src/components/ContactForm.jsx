@@ -77,7 +77,7 @@ export default function ContactForm() {
           <dl className="contact-section__studio" aria-label="Studio details">
             <div>
               <dt>Studio</dt>
-              <dd>5411 N. Mesa, Suite 13C · El Paso</dd>
+              <dd>5411 N. Mesa, Suite 13C · El Paso, TX 79912 · LV Hair Salon</dd>
             </div>
             <div>
               <dt>Hours</dt>

@@ -243,10 +243,10 @@ export default function PortfolioGallery() {
       >
         <div className="portfolio-gallery__header">
           <p className="lookbook-tag">Portfolio</p>
-          <h2 className="section-heading portfolio-gallery__heading">Recent Work</h2>
+          <h2 className="section-heading portfolio-gallery__heading">Salon Portfolio</h2>
           <p className="portfolio-gallery__copy">
-            Recent chair work across textures, lengths, and tones — photos and short muted clips of
-            the finish in motion.
+            Recent chair work across textures, lengths, and tones — extensions, color, and finish
+            photos plus short muted clips of the work in motion.
           </p>
         </div>
 
