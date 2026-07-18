@@ -1,6 +1,6 @@
 /**
  * Ambient parchment drift — warm charcoal / parchment / gold-dust atmosphere.
- * Continuous soft field (radial/conic) — no hard horizontal bands or gold ribbons.
+ * Continuous soft radial field — no hard horizontal bands or gold ribbons.
  * Slow GPU-friendly motion (transform + opacity only). Photography stays hero.
  * Intensity: --atmosphere-bloom-opacity, --atmosphere-grain-opacity, --atmosphere-drift-duration
  */

@@ -89,16 +89,16 @@
   --phi-minor: 0.382fr;
   --phi-major: 0.618fr;
   --gap-phi: clamp(20px, 2.8vw, 32px);
-  /* Ambient parchment drift — soft continuous field (no hard bands) */
+  /* Ambient parchment — near-uniform continuous wash (no banded depth stops) */
   --salon-atmosphere-photo: 0;
-  --atmosphere-depth-top: #a89880;
-  --atmosphere-depth-mid: #968574;
-  --atmosphere-depth-base: #867564;
-  --atmosphere-charcoal: rgba(28, 22, 16, 0.12);
-  --atmosphere-bloom-opacity: 0.07;
-  --atmosphere-grain-opacity: 0.028;
-  --atmosphere-drift-duration: 72s;
-  --atmosphere-drift-span: 2.5%;
+  --atmosphere-depth-top: #9a8a76;
+  --atmosphere-depth-mid: #948474;
+  --atmosphere-depth-base: #8e7e6e;
+  --atmosphere-charcoal: rgba(28, 22, 16, 0.08);
+  --atmosphere-bloom-opacity: 0.045;
+  --atmosphere-grain-opacity: 0.022;
+  --atmosphere-drift-duration: 84s;
+  --atmosphere-drift-span: 1.8%;
 }
 
 @media (min-width: 1024px) {
@@ -251,7 +251,7 @@ a {
     #d4c4ae;
 }
 
-/* Ambient parchment drift — continuous field behind shell (no hard bands) */
+/* Ambient parchment — continuous field behind shell (no hard bands) */
 .gold-wave-field,
 .salon-atmosphere {
   position: fixed;
@@ -268,53 +268,42 @@ a {
 .salon-atmosphere__bloom,
 .salon-atmosphere__grain {
   position: absolute;
-  inset: -18%;
+  inset: -24%;
   pointer-events: none;
   will-change: transform, opacity;
 }
 
 .salon-atmosphere__base {
   inset: 0;
-  /* Soft radial/conic wash — no stacked horizontal strips */
-  background:
-    radial-gradient(
-      ellipse 120% 90% at 50% 38%,
-      var(--atmosphere-depth-top) 0%,
-      var(--atmosphere-depth-mid) 48%,
-      var(--atmosphere-depth-base) 100%
-    ),
-    conic-gradient(
-      from 210deg at 48% 42%,
-      var(--atmosphere-depth-mid) 0deg,
-      var(--atmosphere-depth-top) 95deg,
-      var(--atmosphere-depth-base) 195deg,
-      var(--atmosphere-depth-mid) 290deg,
-      var(--atmosphere-depth-mid) 360deg
-    );
-  background-blend-mode: soft-light, normal;
-  filter: blur(0.5px);
+  /* Single soft radial wash — depth stops are nearly identical (no strips) */
+  background: radial-gradient(
+    ellipse 140% 120% at 50% 42%,
+    var(--atmosphere-depth-top) 0%,
+    var(--atmosphere-depth-mid) 55%,
+    var(--atmosphere-depth-base) 100%
+  );
   will-change: auto;
 }
 
 .salon-atmosphere__veil {
-  inset: -8%;
+  inset: -12%;
   background:
     radial-gradient(
-      ellipse 100% 85% at 22% 18%,
-      rgba(232, 220, 196, 0.14) 0%,
-      transparent 72%
+      ellipse 95% 80% at 18% 22%,
+      rgba(236, 226, 206, 0.1) 0%,
+      transparent 68%
     ),
     radial-gradient(
-      ellipse 95% 80% at 82% 72%,
+      ellipse 90% 85% at 86% 78%,
       var(--atmosphere-charcoal) 0%,
-      transparent 74%
+      transparent 70%
     ),
     radial-gradient(
-      ellipse 110% 90% at 50% 50%,
-      rgba(42, 34, 26, 0.06) 0%,
-      transparent 78%
+      ellipse 130% 110% at 50% 50%,
+      transparent 40%,
+      rgba(36, 28, 20, 0.05) 100%
     );
-  filter: blur(28px);
+  filter: blur(48px);
   will-change: auto;
 }
 
@@ -322,38 +311,38 @@ a {
   border-radius: 50%;
   opacity: var(--atmosphere-bloom-opacity);
   mix-blend-mode: soft-light;
-  filter: blur(40px);
+  filter: blur(64px);
   transform: translate3d(0, 0, 0) scale(1);
   animation: parchment-bloom-drift var(--atmosphere-drift-duration)
     var(--ease-luxury) infinite alternate;
 }
 
 .salon-atmosphere__bloom--a {
-  width: min(110vw, 1100px);
-  height: min(110vw, 1100px);
-  top: -22%;
-  left: -18%;
+  width: min(130vw, 1280px);
+  height: min(130vw, 1280px);
+  top: -28%;
+  left: -24%;
   background: radial-gradient(
     circle at 42% 48%,
-    rgba(232, 197, 71, 0.28) 0%,
-    rgba(201, 162, 39, 0.08) 42%,
-    transparent 78%
+    rgba(232, 197, 71, 0.2) 0%,
+    rgba(201, 162, 39, 0.05) 48%,
+    transparent 82%
   );
   animation-duration: calc(var(--atmosphere-drift-duration) * 1.08);
   animation-delay: -8s;
 }
 
 .salon-atmosphere__bloom--b {
-  width: min(100vw, 980px);
-  height: min(100vw, 980px);
-  top: 28%;
-  right: -22%;
+  width: min(120vw, 1160px);
+  height: min(120vw, 1160px);
+  top: 18%;
+  right: -28%;
   left: auto;
   background: radial-gradient(
     circle at 50% 50%,
-    rgba(240, 224, 190, 0.26) 0%,
-    rgba(168, 140, 96, 0.07) 46%,
-    transparent 80%
+    rgba(240, 224, 190, 0.18) 0%,
+    rgba(168, 140, 96, 0.04) 52%,
+    transparent 84%
   );
   opacity: calc(var(--atmosphere-bloom-opacity) * 0.85);
   animation-duration: calc(var(--atmosphere-drift-duration) * 1.28);
@@ -362,16 +351,16 @@ a {
 }
 
 .salon-atmosphere__bloom--c {
-  width: min(95vw, 920px);
-  height: min(95vw, 920px);
-  bottom: -24%;
-  left: 18%;
+  width: min(115vw, 1100px);
+  height: min(115vw, 1100px);
+  bottom: -30%;
+  left: 12%;
   top: auto;
   background: radial-gradient(
     circle at 48% 52%,
-    rgba(212, 175, 55, 0.18) 0%,
-    rgba(90, 72, 48, 0.06) 44%,
-    transparent 78%
+    rgba(212, 175, 55, 0.12) 0%,
+    rgba(90, 72, 48, 0.035) 50%,
+    transparent 82%
   );
   opacity: calc(var(--atmosphere-bloom-opacity) * 0.7);
   animation-duration: calc(var(--atmosphere-drift-duration) * 0.92);
@@ -384,7 +373,7 @@ a {
   mix-blend-mode: multiply;
   will-change: auto;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
-  background-size: 220px 220px;
+  background-size: 240px 240px;
 }
 
 @keyframes parchment-bloom-drift {
@@ -397,7 +386,7 @@ a {
         calc(var(--atmosphere-drift-span) * -0.45),
         0
       )
-      scale(1.02);
+      scale(1.015);
   }
   100% {
     transform: translate3d(
@@ -405,7 +394,7 @@ a {
         calc(var(--atmosphere-drift-span) * 0.65),
         0
       )
-      scale(0.99);
+      scale(0.995);
   }
 }
 
@@ -413,23 +402,21 @@ a {
   .salon-atmosphere__bloom {
     animation: none !important;
     transform: translate3d(0, 0, 0) scale(1);
-    opacity: calc(var(--atmosphere-bloom-opacity) * 0.65);
-    filter: blur(48px);
+    opacity: calc(var(--atmosphere-bloom-opacity) * 0.55);
+    filter: blur(72px);
   }
 
   .salon-atmosphere__base {
-    filter: none;
-    background:
-      radial-gradient(
-        ellipse 130% 100% at 48% 40%,
-        var(--atmosphere-depth-top) 0%,
-        var(--atmosphere-depth-mid) 52%,
-        var(--atmosphere-depth-base) 100%
-      );
+    background: radial-gradient(
+      ellipse 150% 130% at 48% 40%,
+      var(--atmosphere-depth-top) 0%,
+      var(--atmosphere-depth-mid) 58%,
+      var(--atmosphere-depth-base) 100%
+    );
   }
 
   .salon-atmosphere__veil {
-    filter: blur(36px);
+    filter: blur(56px);
   }
 }
 
