@@ -662,7 +662,7 @@ a {
   /* Crop IG 1/2 chrome (top-right); keep face in clear zone above left copy */
   object-position: 58% 32%;
   transform: scale(1.12);
-  filter: saturate(1.22) contrast(1.14) brightness(1.05);
+  filter: saturate(1.34) contrast(1.18) brightness(1.08);
 }
 
 .hero-stage__overlay {
@@ -670,17 +670,18 @@ a {
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  /* Slight black veil — left copy readable, photo stays vivid (not milky) */
   background:
     linear-gradient(
       105deg,
-      rgba(5, 4, 3, 0.96) 0%,
-      rgba(5, 4, 3, 0.9) 18%,
-      rgba(5, 4, 3, 0.7) 34%,
-      rgba(5, 4, 3, 0.32) 52%,
-      rgba(5, 4, 3, 0.1) 72%,
-      rgba(5, 4, 3, 0.2) 100%
+      rgba(5, 4, 3, 0.88) 0%,
+      rgba(5, 4, 3, 0.72) 18%,
+      rgba(5, 4, 3, 0.48) 34%,
+      rgba(5, 4, 3, 0.18) 52%,
+      rgba(5, 4, 3, 0.04) 72%,
+      rgba(5, 4, 3, 0.12) 100%
     ),
-    linear-gradient(180deg, rgba(5, 4, 3, 0.4) 0%, transparent 28%, rgba(5, 4, 3, 0.55) 100%);
+    linear-gradient(180deg, rgba(5, 4, 3, 0.28) 0%, transparent 30%, rgba(5, 4, 3, 0.48) 100%);
 }
 
 .hero-stage__content {
@@ -812,14 +813,14 @@ a {
     background:
       linear-gradient(
         100deg,
-        rgba(5, 4, 3, 0.98) 0%,
-        rgba(5, 4, 3, 0.94) 20%,
-        rgba(5, 4, 3, 0.72) 38%,
-        rgba(5, 4, 3, 0.32) 56%,
-        rgba(5, 4, 3, 0.14) 72%,
-        rgba(5, 4, 3, 0.28) 100%
+        rgba(5, 4, 3, 0.9) 0%,
+        rgba(5, 4, 3, 0.78) 20%,
+        rgba(5, 4, 3, 0.52) 38%,
+        rgba(5, 4, 3, 0.2) 56%,
+        rgba(5, 4, 3, 0.06) 72%,
+        rgba(5, 4, 3, 0.16) 100%
       ),
-      linear-gradient(180deg, rgba(5, 4, 3, 0.4) 0%, transparent 34%, rgba(5, 4, 3, 0.55) 100%);
+      linear-gradient(180deg, rgba(5, 4, 3, 0.28) 0%, transparent 36%, rgba(5, 4, 3, 0.48) 100%);
   }
 
   .hero-stage__copy {
@@ -864,12 +865,13 @@ a {
 
   .hero-stage__overlay {
     background:
-      linear-gradient(180deg, rgba(5, 4, 3, 0.55) 0%, rgba(5, 4, 3, 0.32) 34%, rgba(5, 4, 3, 0.94) 100%),
-      linear-gradient(90deg, rgba(5, 4, 3, 0.82) 0%, rgba(5, 4, 3, 0.25) 68%);
+      linear-gradient(180deg, rgba(5, 4, 3, 0.38) 0%, rgba(5, 4, 3, 0.2) 34%, rgba(5, 4, 3, 0.88) 100%),
+      linear-gradient(90deg, rgba(5, 4, 3, 0.72) 0%, rgba(5, 4, 3, 0.16) 62%, rgba(5, 4, 3, 0.08) 100%);
   }
 
   .hero-stage__media img {
-    object-position: 58% 12%;
+    /* Face left-center; right edge reserved for film strip */
+    object-position: 42% 12%;
   }
 }
 
@@ -881,8 +883,8 @@ a {
   }
 
   .hero-stage__media img {
-    /* ~390: keep face above bottom copy; slight right bias for hair volume */
-    object-position: 54% 8%;
+    /* Face left-center clear of right-edge clips; above bottom copy */
+    object-position: 38% 8%;
   }
 
   .hero-stage__copy {
@@ -1037,42 +1039,36 @@ a {
 }
 
 @media (max-width: 1023px) {
+  /* Top-right / right-edge stack — face + hair stay primary left-center */
   .hero-film {
-    left: 0;
-    right: 0;
-    top: 0;
+    left: auto;
+    right: clamp(10px, 2.4vw, 18px);
+    top: clamp(12px, 2.2vw, 20px);
     bottom: auto;
-    align-items: stretch;
-    padding: 12px var(--container-pad) 16px;
-    background: linear-gradient(
-      180deg,
-      rgba(5, 4, 3, 0.88) 0%,
-      rgba(5, 4, 3, 0.72) 55%,
-      transparent 100%
-    );
+    align-items: flex-end;
+    max-width: min(28vw, 108px);
+    padding: 0;
+    background: none;
   }
 
   .hero-film__label {
-    padding-inline: 2px;
+    padding-inline: 0;
+    text-align: right;
+    font-size: 9px;
+    letter-spacing: 0.18em;
   }
 
   .hero-film__strip {
-    width: 100%;
+    flex-direction: column;
+    width: auto;
     gap: 8px;
-    overflow-x: auto;
-    overflow-y: visible;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-    padding-block: 4px;
-  }
-
-  .hero-film__strip::-webkit-scrollbar {
-    display: none;
+    overflow: visible;
+    padding-block: 0;
   }
 
   .hero-film__link {
-    width: 80px;
-    opacity: 0.9;
+    width: 72px;
+    opacity: 0.92;
   }
 
   /* Tap / press: slightly larger — hover may be unavailable */
@@ -1082,8 +1078,42 @@ a {
 }
 
 @media (max-width: 768px) {
+  .hero-film {
+    right: 8px;
+    top: 12px;
+    max-width: 76px;
+  }
+
   .hero-film__link {
-    width: 72px;
+    width: 64px;
+  }
+
+  .hero-film__strip {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 390px) {
+  .hero-film {
+    right: 6px;
+    top: 10px;
+    max-width: 64px;
+  }
+
+  .hero-film__label {
+    font-size: 8px;
+  }
+
+  .hero-film__link {
+    width: 56px;
+  }
+
+  .hero-film__strip {
+    gap: 5px;
+  }
+
+  .hero-stage__media img {
+    object-position: 34% 6%;
   }
 }
 
@@ -2536,7 +2566,8 @@ a {
   height: 100%;
 }
 
-.service-card__image {
+.service-card__image,
+.service-card__video {
   display: block;
   width: 100%;
   height: 100%;
@@ -2546,7 +2577,8 @@ a {
   transition: transform 0.7s var(--ease-luxury), filter 0.7s var(--ease-luxury);
 }
 
-.service-card:hover .service-card__image {
+.service-card:hover .service-card__image,
+.service-card:hover .service-card__video {
   transform: scale(1.055);
   filter: saturate(1.14) contrast(1.08) brightness(1.04);
 }
