@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import GoldWaveField from "./components/GoldWaveField";
 import ServicesGrid from "./components/ServicesGrid";
 import PortfolioGallery from "./components/PortfolioGallery";
@@ -386,6 +387,7 @@ export default function App() {
 
         <BookingFab />
       </div>
+      <SpeedInsights />
     </>
   );
 }
