@@ -89,8 +89,16 @@
   --phi-minor: 0.382fr;
   --phi-major: 0.618fr;
   --gap-phi: clamp(20px, 2.8vw, 32px);
-  /* Quiet parchment base — photography carries the visual wow */
+  /* Ambient parchment drift — tune intensity here */
   --salon-atmosphere-photo: 0;
+  --atmosphere-depth-top: #b8a68c;
+  --atmosphere-depth-mid: #9e8b72;
+  --atmosphere-depth-base: #7a6854;
+  --atmosphere-charcoal: rgba(28, 22, 16, 0.22);
+  --atmosphere-bloom-opacity: 0.12;
+  --atmosphere-grain-opacity: 0.045;
+  --atmosphere-drift-duration: 52s;
+  --atmosphere-drift-span: 6%;
 }
 
 @media (min-width: 1024px) {
@@ -243,7 +251,7 @@ a {
     #d4c4ae;
 }
 
-/* Modern salon base — warm taupe-beige parchment, no busy decoration */
+/* Ambient parchment drift — behind shell, never fights hero photography */
 .gold-wave-field,
 .salon-atmosphere {
   position: fixed;
@@ -251,8 +259,149 @@ a {
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  contain: strict;
+  background: var(--atmosphere-depth-mid);
+}
+
+.salon-atmosphere__base,
+.salon-atmosphere__veil,
+.salon-atmosphere__bloom,
+.salon-atmosphere__grain {
+  position: absolute;
+  inset: -12%;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.salon-atmosphere__base {
+  inset: 0;
   background:
-    linear-gradient(180deg, #ddd0bc 0%, #d4c4ae 48%, #cbb89a 100%);
+    linear-gradient(
+      165deg,
+      var(--atmosphere-depth-top) 0%,
+      var(--atmosphere-depth-mid) 42%,
+      var(--atmosphere-depth-base) 100%
+    );
+  will-change: auto;
+}
+
+.salon-atmosphere__veil {
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 90% 70% at 18% 12%,
+      rgba(232, 220, 196, 0.28) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 80% 60% at 88% 78%,
+      var(--atmosphere-charcoal) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 70% 50% at 52% 48%,
+      rgba(42, 34, 26, 0.14) 0%,
+      transparent 70%
+    );
+  will-change: auto;
+}
+
+.salon-atmosphere__bloom {
+  border-radius: 50%;
+  opacity: var(--atmosphere-bloom-opacity);
+  mix-blend-mode: soft-light;
+  transform: translate3d(0, 0, 0) scale(1);
+  animation: parchment-bloom-drift var(--atmosphere-drift-duration)
+    var(--ease-luxury) infinite alternate;
+}
+
+.salon-atmosphere__bloom--a {
+  width: min(88vw, 900px);
+  height: min(88vw, 900px);
+  top: -14%;
+  left: -12%;
+  background: radial-gradient(
+    circle at 42% 48%,
+    rgba(232, 197, 71, 0.55) 0%,
+    rgba(201, 162, 39, 0.18) 32%,
+    transparent 68%
+  );
+  animation-duration: calc(var(--atmosphere-drift-duration) * 1.08);
+  animation-delay: -8s;
+}
+
+.salon-atmosphere__bloom--b {
+  width: min(80vw, 820px);
+  height: min(80vw, 820px);
+  top: 32%;
+  right: -16%;
+  left: auto;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(240, 224, 190, 0.5) 0%,
+    rgba(168, 140, 96, 0.16) 36%,
+    transparent 70%
+  );
+  opacity: calc(var(--atmosphere-bloom-opacity) * 0.85);
+  animation-duration: calc(var(--atmosphere-drift-duration) * 1.28);
+  animation-delay: -22s;
+  animation-direction: alternate-reverse;
+}
+
+.salon-atmosphere__bloom--c {
+  width: min(72vw, 740px);
+  height: min(72vw, 740px);
+  bottom: -18%;
+  left: 22%;
+  top: auto;
+  background: radial-gradient(
+    circle at 48% 52%,
+    rgba(212, 175, 55, 0.4) 0%,
+    rgba(90, 72, 48, 0.14) 34%,
+    transparent 66%
+  );
+  opacity: calc(var(--atmosphere-bloom-opacity) * 0.7);
+  animation-duration: calc(var(--atmosphere-drift-duration) * 0.92);
+  animation-delay: -36s;
+}
+
+.salon-atmosphere__grain {
+  inset: 0;
+  opacity: var(--atmosphere-grain-opacity);
+  mix-blend-mode: multiply;
+  will-change: auto;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+@keyframes parchment-bloom-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(
+        calc(var(--atmosphere-drift-span) * 0.7),
+        calc(var(--atmosphere-drift-span) * -0.45),
+        0
+      )
+      scale(1.04);
+  }
+  100% {
+    transform: translate3d(
+        calc(var(--atmosphere-drift-span) * -0.55),
+        calc(var(--atmosphere-drift-span) * 0.65),
+        0
+      )
+      scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .salon-atmosphere__bloom {
+    animation: none !important;
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: calc(var(--atmosphere-bloom-opacity) * 0.75);
+  }
 }
 
 .typography-layer {
