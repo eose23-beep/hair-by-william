@@ -56,21 +56,33 @@
       content="Long strawberry-blonde waves and soft fringe - Hair by William, El Paso"
     />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://william-site-snowy.vercel.app/sitemap.xml" />
-    <!-- Critical path: enough paint rules for LCP before async app CSS -->
+    <!-- Critical path: LCP shell mirrors .hero-stage geometry → low CLS when React attaches -->
     <style>
       html,
       body {
         margin: 0;
-        background: #0a0908;
-        color: #f5efe6;
+        background: #ebe4d4;
+        color: #2e2b28;
       }
       #lcp-shell {
-        position: fixed;
-        inset: 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+        /* Approximate header row until app CSS applies */
+        top: 64px;
+        height: clamp(560px, 78dvh, 780px);
+        max-height: 820px;
         z-index: 0;
         overflow: hidden;
         pointer-events: none;
         background: #0a0908;
+      }
+      #lcp-shell.is-seated {
+        position: absolute;
+        inset: 0;
+        top: 0;
+        height: 100%;
+        max-height: none;
       }
       #lcp-shell picture,
       #lcp-shell img {
@@ -85,18 +97,19 @@
         z-index: 1;
         min-height: 100dvh;
       }
-      #root[data-hydrated="true"] ~ #lcp-shell,
-      body.is-hydrated #lcp-shell {
-        display: none;
+      @media (min-width: 1024px) {
+        #lcp-shell {
+          top: 72px;
+        }
       }
     </style>
-    <!-- LCP: prefer 720w on mobile (Moto G lab width); desk uses landscape crop -->
+    <!-- LCP: mobile lab phones ≈400–430 CSS px → prefer 720w (DPR2) -->
     <link
       rel="preload"
       as="image"
       type="image/webp"
       href="/portfolio/extensions_after-hero-720.webp"
-      imagesrcset="/portfolio/extensions_after-hero-540.webp 540w, /portfolio/extensions_after-hero-720.webp 720w, /portfolio/extensions_after-hero-960.webp 960w, /portfolio/extensions_after-hero-1280.webp 1280w"
+      imagesrcset="/portfolio/extensions_after-hero-540.webp 540w, /portfolio/extensions_after-hero-720.webp 720w"
       imagesizes="100vw"
       media="(max-width: 1023px)"
       fetchpriority="high"
@@ -111,7 +124,6 @@
       media="(min-width: 1024px)"
       fetchpriority="high"
     />
-    <!-- One body font preload only — display fonts stay optional in fonts.css -->
     <link
       rel="preload"
       as="font"
@@ -368,7 +380,7 @@
     </script>
   </head>
   <body>
-    <!-- Pre-React LCP candidate: paints from preload without waiting on JS/CSS -->
+    <!-- Pre-React LCP candidate: same DOM node is seated into .hero-stage__media -->
     <div id="lcp-shell" aria-hidden="true">
       <picture>
         <source
@@ -378,16 +390,18 @@
           sizes="100vw"
         />
         <source
+          media="(max-width: 1023px)"
           type="image/webp"
-          srcset="/portfolio/extensions_after-hero-540.webp 540w, /portfolio/extensions_after-hero-720.webp 720w, /portfolio/extensions_after-hero-960.webp 960w, /portfolio/extensions_after-hero-1280.webp 1280w"
+          srcset="/portfolio/extensions_after-hero-540.webp 540w, /portfolio/extensions_after-hero-720.webp 720w"
           sizes="100vw"
         />
         <img
+          class="hero-stage__photo"
           src="/portfolio/extensions_after-hero-720.webp"
-          alt=""
+          alt="Long strawberry-blonde waves and soft fringe, custom extension finish by Hair by William in El Paso"
           width="720"
           height="900"
-          decoding="sync"
+          decoding="async"
           fetchpriority="high"
         />
       </picture>

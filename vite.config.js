@@ -48,14 +48,17 @@ function editHairDevApi() {
   }
 }
 
-/** Load app CSS async so LCP hero (inline + preload) is not blocked ~1s by index.css. */
-function asyncCssLinks() {
+/**
+ * Keep main app CSS render-blocking (stable LCP layout).
+ * Only async the lazy-loaded Swiper CSS chunk when present.
+ */
+function asyncSwiperCssOnly() {
   return {
-    name: 'async-css-links',
+    name: 'async-swiper-css-only',
     enforce: 'post',
     transformIndexHtml(html) {
       return html.replace(
-        /<link([^>]*\s)rel="stylesheet"([^>]*?)href="([^"]+\.css)"([^>]*)>/g,
+        /<link([^>]*\s)rel="stylesheet"([^>]*?)href="([^"]*swiper[^"]*\.css)"([^>]*)>/g,
         (_m, pre, mid, href, post) =>
           `<link${pre}rel="preload" as="style" href="${href}"${mid}${post} onload="this.onload=null;this.rel='stylesheet'">` +
           `<noscript><link rel="stylesheet" href="${href}"></noscript>`,
@@ -65,7 +68,7 @@ function asyncCssLinks() {
 }
 
 export default defineConfig({
-  plugins: [react(), editHairDevApi(), asyncCssLinks()],
+  plugins: [react(), editHairDevApi(), asyncSwiperCssOnly()],
   root: resolve(__dirname, '.'),
   build: {
     cssCodeSplit: true,

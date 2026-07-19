@@ -1,12 +1,13 @@
-import { lazy, Suspense, useEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef } from "react";
 import AmbientVideo from "./components/AmbientVideo";
-import BookingFab from "./components/BookingFab";
+import MobileCtaBar from "./components/MobileCtaBar";
 import { bookingAmbientClip, heroWorkClips } from "./data/portfolio";
 import { DIRECTIONS_URL, MAPS_SEARCH_URL } from "./data/location";
 
 const PortfolioGallery = lazy(() => import("./components/PortfolioGallery"));
 const HairTryOn = lazy(() => import("./components/HairTryOn"));
 const ContactForm = lazy(() => import("./components/ContactForm"));
+const StyleQuiz = lazy(() => import("./components/StyleQuiz"));
 const MapSection = lazy(() => import("./components/MapSection"));
 const ServicesGrid = lazy(() => import("./components/ServicesGrid"));
 const SalonFaq = lazy(() => import("./components/SalonFaq"));
@@ -17,8 +18,29 @@ const PHONE_LABEL = "915-920-7823";
 const STUDIO_ADDRESS = "5411 N. Mesa, Suite 13C";
 const STUDIO_CITY = "El Paso, TX 79912 · LV Hair Salon";
 
-/** Optional 4–6s muted hair-sway loop. Null = sharp still. Drop file in public/portfolio/ then set path. */
+/**
+ * Optional living-hero video loop (4–6s, muted, WebM preferred).
+ * Null = sharp still photo (default — does not break the hero).
+ *
+ * Drop-in steps:
+ * 1. Export a short hair-sway / chair ambient loop (Runway / Kling / Luma / phone).
+ * 2. Save as public/portfolio/hero-hair-sway.webm (or .mp4).
+ * 3. Set: const HERO_AMBIENT_VIDEO = "/portfolio/hero-hair-sway.webm";
+ * AmbientVideo uses poster + still fallback when reduced-motion is on.
+ */
 const HERO_AMBIENT_VIDEO = null;
+
+/** Seat the HTML LCP shell into the hero media slot — keep the same DOM node as LCP. */
+function useSeatLcpShell(mediaRef) {
+  useLayoutEffect(() => {
+    const media = mediaRef.current;
+    const shell = document.getElementById("lcp-shell");
+    if (!media || !shell || media.contains(shell)) return undefined;
+    shell.classList.add("is-seated");
+    media.prepend(shell);
+    return undefined;
+  }, [mediaRef]);
+}
 
 /** Map in-page hashes to a real scroll target (clips -> lookbook, visit -> booking, contact -> form). */
 function resolveScrollTarget(hash) {
@@ -73,6 +95,8 @@ function scrollToHash(hash, { smooth = false } = {}) {
 
 export default function App() {
   const rootRef = useRef(null);
+  const heroMediaRef = useRef(null);
+  useSeatLcpShell(heroMediaRef);
 
   useEffect(() => {
     let ignoreSpyUntil = 0;
@@ -464,11 +488,11 @@ export default function App() {
 
         <main id="main-content" className="site-main" tabIndex={-1}>
           <section className="hero-stage" aria-label="Hair by William">
-            <div className="hero-stage__media">
+            <div className="hero-stage__media" ref={heroMediaRef}>
               {/*
-                Optional living-hero video: set HERO_AMBIENT_VIDEO to a 4–6s muted loop
-                (e.g. /portfolio/hero-hair-sway.webm) once exported from Runway/Kling/Luma.
-                Still photo path stays the sharp default until that file exists.
+                LCP photo lives in #lcp-shell (index.html) and is seated here so the
+                same <img> DOM node remains the LCP element (avoids React remount delay).
+                Optional living-hero video replaces that path when HERO_AMBIENT_VIDEO is set.
               */}
               {HERO_AMBIENT_VIDEO ? (
                 <AmbientVideo
@@ -479,41 +503,7 @@ export default function App() {
                   preload="metadata"
                   active
                 />
-              ) : (
-                <picture>
-                  <source
-                    media="(min-width: 1024px)"
-                    type="image/webp"
-                    srcSet="/portfolio/extensions_after-hero-desk.webp 1920w, /portfolio/extensions_after-hero-desk-2x.webp 2400w"
-                    sizes="100vw"
-                  />
-                  <source
-                    media="(min-width: 1024px)"
-                    type="image/jpeg"
-                    srcSet="/portfolio/extensions_after-hero-desk.jpg 1920w, /portfolio/extensions_after-hero-desk-2x.jpg 2400w"
-                    sizes="100vw"
-                  />
-                  <source
-                    type="image/webp"
-                    srcSet="/portfolio/extensions_after-hero-540.webp 540w, /portfolio/extensions_after-hero-720.webp 720w, /portfolio/extensions_after-hero-960.webp 960w, /portfolio/extensions_after-hero-1280.webp 1280w"
-                    sizes="100vw"
-                  />
-                  <source
-                    type="image/jpeg"
-                    srcSet="/portfolio/extensions_after-hero-540.jpg 540w, /portfolio/extensions_after-hero-720.jpg 720w, /portfolio/extensions_after-hero-960.jpg 960w, /portfolio/extensions_after-hero.jpg 1600w"
-                    sizes="100vw"
-                  />
-                  <img
-                    className="hero-stage__photo"
-                    src="/portfolio/extensions_after-hero-720.webp"
-                    alt="Long strawberry-blonde waves and soft fringe, custom extension finish by Hair by William in El Paso"
-                    width={720}
-                    height={900}
-                    fetchPriority="high"
-                    decoding="sync"
-                  />
-                </picture>
-              )}
+              ) : null}
             </div>
             {/* Soft gold sidelight / specular lift — sells hair without neon rim */}
             <div className="hero-stage__hair-sheen" aria-hidden="true" />
@@ -532,6 +522,11 @@ export default function App() {
                 <p className="lead hero-copy">
                   Custom extensions, precision cuts, and color in El Paso. Twenty-seven years in the
                   chair.
+                </p>
+                <p className="hero-trust">
+                  <span>Friday–Saturday · 10 AM–6 PM</span>
+                  <span aria-hidden="true">·</span>
+                  <span>El Paso · Suite 13C</span>
                 </p>
                 <div className="hero-actions">
                   <a
@@ -594,6 +589,10 @@ export default function App() {
           </Suspense>
 
           <Suspense fallback={null}>
+            <StyleQuiz />
+          </Suspense>
+
+          <Suspense fallback={null}>
             <HairTryOn />
           </Suspense>
 
@@ -620,15 +619,17 @@ export default function App() {
                   <div className="booking-hours__row">
                     <dt>Hours</dt>
                     <dd>
-                      Friday-Saturday 10 AM-6 PM
-                      <span className="booking-hours__closed">Closed Sunday-Thursday</span>
+                      Friday–Saturday 10 AM–6 PM
+                      <span className="booking-hours__closed">Closed Sunday–Thursday</span>
                     </dd>
                   </div>
                   <div className="booking-hours__row booking-hours__row--studio">
                     <dt>Studio</dt>
                     <dd>
                       <address className="booking-hours__address">
-                        <a href="#booking">{STUDIO_ADDRESS}</a>
+                        <a href={DIRECTIONS_URL} target="_blank" rel="noopener noreferrer">
+                          {STUDIO_ADDRESS}
+                        </a>
                         <span className="booking-hours__city">{STUDIO_CITY}</span>
                       </address>
                     </dd>
@@ -636,11 +637,12 @@ export default function App() {
                   <div className="booking-hours__row">
                     <dt>Book</dt>
                     <dd className="booking-hours__note">
-                      Call or text{" "}
+                      Call, text, or WhatsApp{" "}
                       <a className="booking-hours__phone" href={PHONE_HREF}>
                         {PHONE_LABEL}
-                      </a>{" "}
-                      to book
+                      </a>
+                      {" · "}
+                      next open slot confirmed when you reach out
                     </dd>
                   </div>
                 </dl>
@@ -746,8 +748,8 @@ export default function App() {
                     {PHONE_LABEL}
                   </a>
                 </p>
-                <p className="footer-hours">Friday-Saturday 10 AM-6 PM</p>
-                <p className="footer-hours">Closed Sunday-Thursday</p>
+                <p className="footer-hours">Friday–Saturday 10 AM–6 PM</p>
+                <p className="footer-hours">Closed Sunday–Thursday</p>
               </div>
               <div className="site-footer__col motion-block">
                 <p className="site-footer__label">Explore</p>
@@ -779,7 +781,7 @@ export default function App() {
           </div>
         </footer>
 
-        <BookingFab />
+        <MobileCtaBar />
       </div>
     </>
   );
