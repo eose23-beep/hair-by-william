@@ -5,6 +5,15 @@ const WINDOW_MS = 24 * 60 * 60 * 1000;
 const STORAGE_KEY = "hbw-hair-edit-timestamps";
 const MAX_EDGE = 1024;
 const JPEG_QUALITY = 0.86;
+const MAX_FILE_BYTES = 8 * 1024 * 1024;
+const ACCEPTED_MIME = new Set([
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "image/heic",
+  "image/heif",
+]);
 
 /** Four service presets only. Text chips seed the prompt; user can edit freely. */
 const STYLE_PRESETS = [
@@ -94,13 +103,88 @@ async function compressSelfie(dataUrl) {
   return canvas.toDataURL("image/jpeg", JPEG_QUALITY);
 }
 
+function validateImageFile(file) {
+  if (!file) return "Choose a photo to continue.";
+  const type = String(file.type || "").toLowerCase();
+  const nameOk = /\.(jpe?g|png|webp|heic|heif)$/i.test(file.name || "");
+  if (type && !ACCEPTED_MIME.has(type) && !type.startsWith("image/")) {
+    return "Please choose a photo (JPEG, PNG, or WebP).";
+  }
+  if (!type && !nameOk) {
+    return "Please choose a photo (JPEG, PNG, or WebP).";
+  }
+  if (file.size > MAX_FILE_BYTES) {
+    return "That photo is over 8 MB. Try a smaller image or take a new selfie.";
+  }
+  if (file.size === 0) {
+    return "That file looks empty. Try another photo.";
+  }
+  return "";
+}
+
+function stopStream(stream) {
+  stream?.getTracks?.().forEach((t) => t.stop());
+}
+
+const DOWNLOAD_BASENAME = "hair-by-william-try-on";
+
+function extensionFromMime(mime) {
+  if (mime === "image/jpeg") return "jpg";
+  if (mime === "image/webp") return "webp";
+  return "png";
+}
+
+async function downloadResultImage(sourceUrl) {
+  if (!sourceUrl) return;
+
+  let blob = null;
+  let mime = "image/png";
+
+  try {
+    if (sourceUrl.startsWith("data:")) {
+      const res = await fetch(sourceUrl);
+      blob = await res.blob();
+      mime = blob.type || sourceUrl.slice(5, sourceUrl.indexOf(";")) || mime;
+    } else {
+      const res = await fetch(sourceUrl);
+      if (!res.ok) throw new Error("fetch failed");
+      blob = await res.blob();
+      mime = blob.type || mime;
+    }
+  } catch {
+    window.open(sourceUrl, "_blank", "noopener,noreferrer");
+    return;
+  }
+
+  const filename = `${DOWNLOAD_BASENAME}.${extensionFromMime(mime)}`;
+  const objectUrl = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = objectUrl;
+  anchor.download = filename;
+  anchor.rel = "noopener";
+  anchor.style.display = "none";
+  document.body.appendChild(anchor);
+
+  try {
+    anchor.click();
+  } catch {
+    window.open(objectUrl, "_blank", "noopener,noreferrer");
+  } finally {
+    anchor.remove();
+    // Delay revoke so Safari can finish the download handshake.
+    window.setTimeout(() => URL.revokeObjectURL(objectUrl), 2500);
+  }
+}
+
 export default function HairTryOn() {
   const fileInputId = useId();
   const promptId = useId();
+  const dropZoneId = useId();
   const fileRef = useRef(null);
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const ctaRef = useRef(null);
+  const dropDepthRef = useRef(0);
 
   const [timestamps, setTimestamps] = useState(() =>
     typeof window !== "undefined" ? readTimestamps() : [],
@@ -112,6 +196,11 @@ export default function HairTryOn() {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [cameraPhase, setCameraPhase] = useState("live");
+  const [captureDraft, setCaptureDraft] = useState(null);
+  const [facingMode, setFacingMode] = useState("user");
+  const [cameraBusy, setCameraBusy] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
 
   const remaining = Math.max(0, FREE_TRIES - timestamps.length);
   const capped = remaining <= 0;
@@ -119,13 +208,27 @@ export default function HairTryOn() {
   const canGenerate =
     Boolean(preview) && Boolean(prompt.trim()) && !capped && status !== "loading";
   const loading = status === "loading";
+  const cameraSupported =
+    typeof navigator !== "undefined" &&
+    Boolean(navigator.mediaDevices?.getUserMedia);
 
   useEffect(() => {
     return () => {
-      streamRef.current?.getTracks?.().forEach((t) => t.stop());
+      stopStream(streamRef.current);
       streamRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    if (!cameraOpen || cameraPhase !== "live") return;
+    const video = videoRef.current;
+    const stream = streamRef.current;
+    if (video && stream) {
+      video.srcObject = stream;
+      const play = video.play?.();
+      if (play?.catch) play.catch(() => {});
+    }
+  }, [cameraOpen, cameraPhase, facingMode]);
 
   const applyPhoto = async (dataUrl) => {
     const compressed = await compressSelfie(dataUrl);
@@ -135,11 +238,18 @@ export default function HairTryOn() {
     setStatus("idle");
   };
 
-  const onPickFile = async (event) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setError("Please choose a photo (JPEG, PNG, or WebP).");
+  const clearPhoto = () => {
+    setPreview(null);
+    setResultUrl(null);
+    setError("");
+    setStatus("idle");
+    if (fileRef.current) fileRef.current.value = "";
+  };
+
+  const ingestFile = async (file) => {
+    const validationError = validateImageFile(file);
+    if (validationError) {
+      setError(validationError);
       setStatus("error");
       return;
     }
@@ -149,56 +259,156 @@ export default function HairTryOn() {
     } catch (err) {
       setError(err?.message || "Could not open that photo.");
       setStatus("error");
+    }
+  };
+
+  const onPickFile = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    try {
+      await ingestFile(file);
     } finally {
       event.target.value = "";
     }
   };
 
-  const closeCamera = () => {
-    streamRef.current?.getTracks?.().forEach((t) => t.stop());
-    streamRef.current = null;
-    setCameraOpen(false);
+  const onDrop = async (event) => {
+    event.preventDefault();
+    dropDepthRef.current = 0;
+    setDragActive(false);
+    const file = event.dataTransfer?.files?.[0];
+    if (!file) return;
+    await ingestFile(file);
   };
 
-  const openCamera = async () => {
-    if (!navigator.mediaDevices?.getUserMedia) {
-      fileRef.current?.click();
-      return;
+  const onDragEnter = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    dropDepthRef.current += 1;
+    if (event.dataTransfer?.types?.includes?.("Files")) {
+      setDragActive(true);
     }
+  };
+
+  const onDragLeave = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    dropDepthRef.current = Math.max(0, dropDepthRef.current - 1);
+    if (dropDepthRef.current === 0) setDragActive(false);
+  };
+
+  const onDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = "copy";
+  };
+
+  const releaseCamera = () => {
+    stopStream(streamRef.current);
+    streamRef.current = null;
+    if (videoRef.current) videoRef.current.srcObject = null;
+  };
+
+  const closeCamera = () => {
+    releaseCamera();
+    setCameraOpen(false);
+    setCameraPhase("live");
+    setCaptureDraft(null);
+    setCameraBusy(false);
+  };
+
+  const startCamera = async (nextFacing = facingMode) => {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setError("Camera isn’t available here. Upload a front-facing photo instead.");
+      setStatus("error");
+      fileRef.current?.click();
+      return false;
+    }
+
+    setCameraBusy(true);
+    setError("");
     try {
+      releaseCamera();
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" },
+        video: {
+          facingMode: { ideal: nextFacing },
+          width: { ideal: 1280 },
+          height: { ideal: 960 },
+        },
         audio: false,
       });
       streamRef.current = stream;
+      setFacingMode(nextFacing);
+      setCameraPhase("live");
+      setCaptureDraft(null);
       setCameraOpen(true);
-      requestAnimationFrame(() => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      });
-    } catch {
-      setError("Camera unavailable. You can upload a photo instead.");
+      return true;
+    } catch (err) {
+      const denied =
+        err?.name === "NotAllowedError" || err?.name === "PermissionDeniedError";
+      const missing =
+        err?.name === "NotFoundError" || err?.name === "DevicesNotFoundError";
+      setError(
+        denied
+          ? "Camera access was denied. Upload a selfie instead, or allow camera permission and try again."
+          : missing
+            ? "No camera found. Upload a clear front-facing photo instead."
+            : "Camera unavailable. You can upload a photo instead.",
+      );
       setStatus("error");
-      fileRef.current?.click();
+      setCameraOpen(false);
+      return false;
+    } finally {
+      setCameraBusy(false);
     }
   };
 
-  const captureFrame = async () => {
+  const openCamera = async () => {
+    await startCamera(facingMode);
+  };
+
+  const toggleFacing = async () => {
+    const next = facingMode === "user" ? "environment" : "user";
+    await startCamera(next);
+  };
+
+  const captureFrame = () => {
     const video = videoRef.current;
-    if (!video || !video.videoWidth) return;
+    if (!video || !video.videoWidth) {
+      setError("Camera isn’t ready yet. Hold still a moment, then capture.");
+      setStatus("error");
+      return;
+    }
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    // Mirror front camera so confirmation matches the live preview.
+    if (facingMode === "user") {
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+    }
     ctx.drawImage(video, 0, 0);
     const dataUrl = canvas.toDataURL("image/jpeg", JPEG_QUALITY);
-    closeCamera();
+    releaseCamera();
+    setCaptureDraft(dataUrl);
+    setCameraPhase("confirm");
+    setError("");
+  };
+
+  const retakePhoto = async () => {
+    setCaptureDraft(null);
+    await startCamera(facingMode);
+  };
+
+  const useCapturedPhoto = async () => {
+    if (!captureDraft) return;
     try {
-      await applyPhoto(dataUrl);
+      await applyPhoto(captureDraft);
+      closeCamera();
     } catch (err) {
-      setError(err?.message || "Could not capture selfie.");
+      setError(err?.message || "Could not use that selfie.");
       setStatus("error");
     }
   };
@@ -305,59 +515,219 @@ export default function HairTryOn() {
               <p className="hair-tryon__step-label" id={`${fileInputId}-label`}>
                 Your photo
               </p>
+              <p className="hair-tryon__guide" id={`${dropZoneId}-hint`}>
+                Front-facing portrait, face centered, soft even light.
+              </p>
+
               <input
                 id={fileInputId}
                 ref={fileRef}
                 className="sr-only"
                 type="file"
-                accept="image/*"
-                capture="user"
+                accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif"
                 aria-labelledby={`${fileInputId}-label`}
+                aria-describedby={`${dropZoneId}-hint`}
                 onChange={onPickFile}
               />
-              <div className="hair-tryon__upload-actions">
-                <button
-                  type="button"
-                  className="secondary-button hair-tryon__touch"
-                  onClick={() => fileRef.current?.click()}
+
+              {!cameraOpen ? (
+                <div
+                  id={dropZoneId}
+                  className={[
+                    "hair-tryon__dropzone",
+                    dragActive ? "is-drag" : "",
+                    preview ? "has-preview" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                  onDragEnter={onDragEnter}
+                  onDragLeave={onDragLeave}
+                  onDragOver={onDragOver}
+                  onDrop={onDrop}
                 >
-                  {preview ? "Replace photo" : "Upload photo"}
-                </button>
-                <button
-                  type="button"
-                  className="secondary-button hair-tryon__touch"
-                  onClick={openCamera}
-                >
-                  Take selfie
-                </button>
-              </div>
+                  {preview ? (
+                    <div className="hair-tryon__drop-preview">
+                      <img
+                        src={preview}
+                        alt="Selected selfie ready for styling"
+                        className="hair-tryon__drop-img"
+                        width={320}
+                        height={400}
+                      />
+                      <div className="hair-tryon__drop-meta">
+                        <span className="hair-tryon__drop-title">Photo ready</span>
+                        <span className="hair-tryon__drop-copy">
+                          Replace anytime, or remove to start over.
+                        </span>
+                        <div className="hair-tryon__drop-actions">
+                          <button
+                            type="button"
+                            className="secondary-button hair-tryon__touch"
+                            onClick={() => fileRef.current?.click()}
+                          >
+                            Replace
+                          </button>
+                          <button
+                            type="button"
+                            className="secondary-button hair-tryon__touch"
+                            onClick={clearPhoto}
+                          >
+                            Remove
+                          </button>
+                          {cameraSupported ? (
+                            <button
+                              type="button"
+                              className="secondary-button hair-tryon__touch"
+                              onClick={openCamera}
+                              disabled={cameraBusy}
+                            >
+                              Retake selfie
+                            </button>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      className="hair-tryon__drop-target"
+                      onClick={() => fileRef.current?.click()}
+                      aria-describedby={`${dropZoneId}-hint`}
+                    >
+                      <span className="hair-tryon__drop-icon" aria-hidden="true">
+                        ◇
+                      </span>
+                      <span className="hair-tryon__drop-title">
+                        {dragActive ? "Drop to upload" : "Drop a photo here"}
+                      </span>
+                      <span className="hair-tryon__drop-copy">
+                        or tap to browse — JPEG, PNG, or WebP · up to 8 MB
+                      </span>
+                    </button>
+                  )}
+
+                  {!preview ? (
+                    <div className="hair-tryon__upload-actions">
+                      <button
+                        type="button"
+                        className="secondary-button hair-tryon__touch"
+                        onClick={() => fileRef.current?.click()}
+                      >
+                        Upload photo
+                      </button>
+                      <button
+                        type="button"
+                        className="cta-button hair-tryon__touch hair-tryon__selfie-cta"
+                        onClick={openCamera}
+                        disabled={cameraBusy}
+                      >
+                        {cameraBusy ? "Opening…" : "Take selfie"}
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
 
             {cameraOpen ? (
-              <div className="hair-tryon__camera" role="dialog" aria-label="Camera">
-                <video
-                  ref={videoRef}
-                  className="hair-tryon__camera-video"
-                  autoPlay
-                  playsInline
-                  muted
-                />
-                <div className="hair-tryon__camera-actions">
-                  <button
-                    type="button"
-                    className="cta-button hair-tryon__touch"
-                    onClick={captureFrame}
-                  >
-                    Capture
-                  </button>
-                  <button
-                    type="button"
-                    className="secondary-button hair-tryon__touch"
-                    onClick={closeCamera}
-                  >
-                    Cancel
-                  </button>
+              <div
+                className={`hair-tryon__camera hair-tryon__camera--${cameraPhase}`}
+                role="dialog"
+                aria-modal="true"
+                aria-label={
+                  cameraPhase === "confirm"
+                    ? "Confirm selfie"
+                    : "Selfie camera"
+                }
+              >
+                <div className="hair-tryon__camera-stage">
+                  {cameraPhase === "confirm" && captureDraft ? (
+                    <img
+                      src={captureDraft}
+                      alt="Captured selfie preview"
+                      className="hair-tryon__camera-still"
+                    />
+                  ) : (
+                    <video
+                      ref={videoRef}
+                      className={`hair-tryon__camera-video${
+                        facingMode === "user" ? " is-mirrored" : ""
+                      }`}
+                      autoPlay
+                      playsInline
+                      muted
+                    />
+                  )}
+                  <span className="hair-tryon__camera-badge" aria-hidden="true">
+                    {cameraPhase === "confirm"
+                      ? "Review"
+                      : facingMode === "user"
+                        ? "Front camera"
+                        : "Rear camera"}
+                  </span>
                 </div>
+
+                {cameraPhase === "live" ? (
+                  <div className="hair-tryon__camera-actions">
+                    <button
+                      type="button"
+                      className="cta-button hair-tryon__touch"
+                      onClick={captureFrame}
+                      disabled={cameraBusy}
+                    >
+                      Capture
+                    </button>
+                    <button
+                      type="button"
+                      className="secondary-button hair-tryon__touch"
+                      onClick={toggleFacing}
+                      disabled={cameraBusy}
+                    >
+                      Flip camera
+                    </button>
+                    <button
+                      type="button"
+                      className="secondary-button hair-tryon__touch"
+                      onClick={closeCamera}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <div className="hair-tryon__camera-actions">
+                    <button
+                      type="button"
+                      className="cta-button hair-tryon__touch"
+                      onClick={useCapturedPhoto}
+                    >
+                      Use photo
+                    </button>
+                    <button
+                      type="button"
+                      className="secondary-button hair-tryon__touch"
+                      onClick={retakePhoto}
+                      disabled={cameraBusy}
+                    >
+                      Retake
+                    </button>
+                    <button
+                      type="button"
+                      className="secondary-button hair-tryon__touch"
+                      onClick={() => {
+                        closeCamera();
+                        fileRef.current?.click();
+                      }}
+                    >
+                      Upload instead
+                    </button>
+                  </div>
+                )}
+
+                <p className="hair-tryon__camera-hint">
+                  {cameraPhase === "confirm"
+                    ? "Looks good? Use this photo, or retake for a clearer face view."
+                    : "Center your face. Soft light from the front works best."}
+                </p>
               </div>
             ) : null}
 
@@ -433,6 +803,18 @@ export default function HairTryOn() {
             {error ? (
               <p className="hair-tryon__error" role="alert">
                 {error}
+                {!preview && /camera|upload/i.test(error) ? (
+                  <>
+                    {" "}
+                    <button
+                      type="button"
+                      className="hair-tryon__error-link"
+                      onClick={() => fileRef.current?.click()}
+                    >
+                      Upload a photo
+                    </button>
+                  </>
+                ) : null}
               </p>
             ) : null}
 
@@ -462,7 +844,7 @@ export default function HairTryOn() {
                 </div>
               )}
             </figure>
-            <figure className="hair-tryon__frame">
+            <figure className="hair-tryon__frame hair-tryon__frame--result">
               <figcaption className="hair-tryon__frame-cap">Preview</figcaption>
               {loading ? (
                 <div
@@ -474,12 +856,21 @@ export default function HairTryOn() {
                   <span className="hair-tryon__skeleton-label">Styling your look…</span>
                 </div>
               ) : resultUrl ? (
-                <img
-                  src={resultUrl}
-                  alt={`AI preview: ${hintLabel}`}
-                  width={480}
-                  height={640}
-                />
+                <>
+                  <img
+                    src={resultUrl}
+                    alt={`AI preview: ${hintLabel}`}
+                    width={480}
+                    height={640}
+                  />
+                  <button
+                    type="button"
+                    className="secondary-button hair-tryon__touch hair-tryon__download"
+                    onClick={() => downloadResultImage(resultUrl)}
+                  >
+                    Download
+                  </button>
+                </>
               ) : (
                 <div
                   className="hair-tryon__empty hair-tryon__empty--result"
