@@ -22,6 +22,10 @@
   font-style: normal;
   font-weight: 500;
   font-display: optional;
+  size-adjust: 102%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
   src: url('/fonts/cormorant-garamond-500.woff2') format('woff2');
 }
 
