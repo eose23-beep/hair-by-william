@@ -510,7 +510,7 @@ export default function App() {
                     width={720}
                     height={900}
                     fetchPriority="high"
-                    decoding="async"
+                    decoding="sync"
                   />
                 </picture>
               )}
