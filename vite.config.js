@@ -51,24 +51,36 @@ function editHairDevApi() {
 /**
  * Keep main app CSS render-blocking (stable LCP layout).
  * Only async the lazy-loaded Swiper CSS chunk when present.
+ * Defer the module entry by two animation frames so the HTML LCP shell can paint
+ * before React takes the main thread (cuts LCP render-delay on mobile).
  */
-function asyncSwiperCssOnly() {
+function lcpFirstPaintPlugins() {
   return {
-    name: 'async-swiper-css-only',
+    name: 'lcp-first-paint',
     enforce: 'post',
     transformIndexHtml(html) {
-      return html.replace(
+      let next = html.replace(
         /<link([^>]*\s)rel="stylesheet"([^>]*?)href="([^"]*swiper[^"]*\.css)"([^>]*)>/g,
         (_m, pre, mid, href, post) =>
           `<link${pre}rel="preload" as="style" href="${href}"${mid}${post} onload="this.onload=null;this.rel='stylesheet'">` +
           `<noscript><link rel="stylesheet" href="${href}"></noscript>`,
       )
+      next = next.replace(
+        /<script type="module" crossorigin src="([^"]+)"><\/script>/,
+        (_m, src) =>
+          `<script type="module">` +
+          `const src=${JSON.stringify(src)};` +
+          `const boot=()=>import(src);` +
+          `requestAnimationFrame(()=>requestAnimationFrame(boot));` +
+          `</script>`,
+      )
+      return next
     },
   }
 }
 
 export default defineConfig({
-  plugins: [react(), editHairDevApi(), asyncSwiperCssOnly()],
+  plugins: [react(), editHairDevApi(), lcpFirstPaintPlugins()],
   root: resolve(__dirname, '.'),
   build: {
     cssCodeSplit: true,
