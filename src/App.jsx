@@ -18,6 +18,9 @@ const PHONE_LABEL = "915-920-7823";
 const STUDIO_ADDRESS = "5411 N. Mesa, Suite 13C";
 const STUDIO_CITY = "El Paso, TX 79912 · LV Hair Salon";
 
+/** Optional 4–6s muted hair-sway loop. Null = sharp still. Drop file in public/portfolio/ then set path. */
+const HERO_AMBIENT_VIDEO = null;
+
 /** Map in-page hashes to a real scroll target (clips -> lookbook, visit -> booking, contact -> form). */
 function resolveScrollTarget(hash) {
   const id = String(hash || "")
@@ -449,19 +452,61 @@ export default function App() {
         <main id="main-content" className="site-main" tabIndex={-1}>
           <section className="hero-stage" aria-label="Hair by William">
             <div className="hero-stage__media">
-              <picture>
-                <source
-                  srcSet="/portfolio/extensions_after-hero.webp"
-                  type="image/webp"
+              {/*
+                Optional living-hero video: set HERO_AMBIENT_VIDEO to a 4–6s muted loop
+                (e.g. /portfolio/hero-hair-sway.webm) once exported from Runway/Kling/Luma.
+                Still photo path stays the sharp default until that file exists.
+              */}
+              {HERO_AMBIENT_VIDEO ? (
+                <AmbientVideo
+                  className="hero-stage__photo"
+                  src={HERO_AMBIENT_VIDEO}
+                  poster="/portfolio/extensions_after-hero-desk.jpg"
+                  ariaLabel="Long strawberry-blonde waves and soft fringe, custom extension finish by Hair by William in El Paso"
+                  preload="metadata"
+                  active
                 />
-                <img
-                  src="/portfolio/extensions_after-hero.jpg"
-                  alt="Long strawberry-blonde waves and soft fringe, custom extension finish by Hair by William in El Paso"
-                  width={2160}
-                  height={2160}
-                  fetchPriority="high"
-                />
-              </picture>
+              ) : (
+                <picture>
+                  <source
+                    media="(min-width: 1280px)"
+                    type="image/webp"
+                    srcSet="/portfolio/extensions_after-hero-desk.webp 2880w, /portfolio/extensions_after-hero-desk-2x.webp 3600w"
+                    sizes="100vw"
+                  />
+                  <source
+                    media="(min-width: 1280px)"
+                    type="image/jpeg"
+                    srcSet="/portfolio/extensions_after-hero-desk.jpg 2880w, /portfolio/extensions_after-hero-desk-2x.jpg 3600w"
+                    sizes="100vw"
+                  />
+                  <source
+                    media="(min-width: 1024px)"
+                    type="image/webp"
+                    srcSet="/portfolio/extensions_after-hero-desk.webp 2880w, /portfolio/extensions_after-hero-desk-2x.webp 3600w"
+                    sizes="100vw"
+                  />
+                  <source
+                    media="(min-width: 1024px)"
+                    type="image/jpeg"
+                    srcSet="/portfolio/extensions_after-hero-desk.jpg 2880w, /portfolio/extensions_after-hero-desk-2x.jpg 3600w"
+                    sizes="100vw"
+                  />
+                  <source
+                    type="image/webp"
+                    srcSet="/portfolio/extensions_after-hero.webp"
+                  />
+                  <img
+                    className="hero-stage__photo"
+                    src="/portfolio/extensions_after-hero.jpg"
+                    alt="Long strawberry-blonde waves and soft fringe, custom extension finish by Hair by William in El Paso"
+                    width={2880}
+                    height={1405}
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                </picture>
+              )}
             </div>
             <div className="hero-stage__overlay" aria-hidden="true" />
             <div className="hero-stage__content shell">

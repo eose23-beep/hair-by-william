@@ -1143,7 +1143,9 @@ a {
   display: block;
 }
 
-.hero-stage__media img {
+.hero-stage__media img,
+.hero-stage__media video,
+.hero-stage__photo {
   display: block;
   position: absolute;
   inset: 0;
@@ -1153,8 +1155,10 @@ a {
   object-fit: cover;
   /* Crop IG 1/2 chrome (top-right); keep face in clear zone above left copy */
   object-position: 58% 32%;
-  transform: scale(1.12);
-  filter: saturate(1.34) contrast(1.18) brightness(1.08);
+  /* Light grade only — heavy filters amplify compression and read as pixelation */
+  transform: scale(1.03);
+  filter: saturate(1.12) contrast(1.06) brightness(1.03);
+  transform-origin: 62% 28%;
 }
 
 .hero-stage__overlay {
@@ -1297,8 +1301,14 @@ a {
     align-items: center;
   }
 
-  .hero-stage__media img {
-    object-position: 72% 16%;
+  .hero-stage__media img,
+  .hero-stage__media video,
+  .hero-stage__photo {
+    /* Landscape desk crop is pre-framed — avoid extra zoom that softens pixels */
+    object-position: 62% 38%;
+    transform: scale(1.02);
+    filter: saturate(1.1) contrast(1.04) brightness(1.02);
+    transform-origin: 58% 36%;
   }
 
   .hero-stage__overlay {
@@ -1332,9 +1342,11 @@ a {
 }
 
 @media (min-width: 1280px) {
-  .hero-stage__media img {
+  .hero-stage__media img,
+  .hero-stage__media video,
+  .hero-stage__photo {
     /* ~1440: face + crown in clear right third; long hair still readable */
-    object-position: 74% 14%;
+    object-position: 64% 36%;
   }
 
   .hero-stage__copy {
@@ -1361,7 +1373,9 @@ a {
       linear-gradient(90deg, rgba(5, 4, 3, 0.72) 0%, rgba(5, 4, 3, 0.16) 62%, rgba(5, 4, 3, 0.08) 100%);
   }
 
-  .hero-stage__media img {
+  .hero-stage__media img,
+  .hero-stage__media video,
+  .hero-stage__photo {
     /* Face left-center; right edge reserved for film strip */
     object-position: 42% 12%;
   }
@@ -1379,7 +1393,9 @@ a {
     padding-block: clamp(28px, 5.5vw, 44px) clamp(20px, 4.5vw, 36px);
   }
 
-  .hero-stage__media img {
+  .hero-stage__media img,
+  .hero-stage__media video,
+  .hero-stage__photo {
     /* Face left-center clear of right-edge clips; above bottom copy */
     object-position: 38% 8%;
   }
@@ -1411,8 +1427,27 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-stage__media img {
-    transform: scale(1.04);
+  .hero-stage__media img,
+  .hero-stage__media video,
+  .hero-stage__photo {
+    transform: scale(1.02);
+    animation: none !important;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .hero-stage__media img.hero-stage__photo,
+  .hero-stage__media .hero-stage__photo {
+    animation: hero-living 34s var(--ease-luxury) infinite alternate;
+  }
+}
+
+@keyframes hero-living {
+  from {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.05) translate3d(-0.7%, -0.45%, 0);
   }
 }
 
@@ -1609,7 +1644,9 @@ a {
     gap: 5px;
   }
 
-  .hero-stage__media img {
+  .hero-stage__media img,
+  .hero-stage__media video,
+  .hero-stage__photo {
     object-position: 34% 6%;
   }
 }
