@@ -3850,6 +3850,17 @@ a {
   max-width: 16ch;
   color: #fff8e7;
   text-shadow: none;
+  /* System serif only — webfonts were shifting this block ~0.09 CLS on mobile lab */
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+}
+
+.booking-panel,
+.booking-panel__copy,
+.booking-panel__kicker,
+.booking-hours,
+.booking-panel__clip-title,
+.booking-panel__clip-link {
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .booking-panel__copy {
