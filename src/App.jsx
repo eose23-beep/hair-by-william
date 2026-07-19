@@ -384,15 +384,35 @@ export default function App() {
 
         <header className="site-header">
           <div className="shell nav-row">
-            <p className="brand-mark" aria-label="Hair by William">
-              <span className="brand-mark__glyph" aria-hidden="true">
-                W
-              </span>
+            <a className="brand-mark" href="#main-content" aria-label="Hair by William">
+              <svg
+                className="brand-mark__glyph"
+                viewBox="0 0 40 40"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <circle className="brand-mark__seal" cx="20" cy="20" r="18.6" />
+                <circle className="brand-mark__ring" cx="20" cy="20" r="15.8" />
+                <path
+                  className="brand-mark__strand"
+                  d="M11.2 13.8c3.4-2.8 14.2-2.8 17.6 0"
+                />
+                <path
+                  className="brand-mark__strand brand-mark__strand--soft"
+                  d="M12.6 15.4c2.8-1.9 12-1.9 14.8 0"
+                />
+                <path
+                  className="brand-mark__monogram"
+                  d="M11.6 15.2 14.8 29.6 20 20.4 25.2 29.6 28.4 15.2"
+                />
+                <circle className="brand-mark__jewel" cx="20" cy="32.2" r="0.85" />
+              </svg>
               <span className="brand-mark__lockup">
                 <span className="brand-mark__kicker">Hair by</span>
                 <span className="brand-mark__name">William</span>
               </span>
-            </p>
+            </a>
             <a className="ghost-link" href="#portfolio">
               Portfolio
             </a>

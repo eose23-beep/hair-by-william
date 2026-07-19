@@ -678,8 +678,9 @@ a {
 
   .coverflow__slide.swiper-slide,
   .lookbook__slide.swiper-slide {
-    width: min(260px, 68vw);
-    max-width: min(260px, 68vw);
+    /* φ mid: keep overflow fit, restore editorial card presence */
+    width: min(272px, 70vw);
+    max-width: min(272px, 70vw);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
@@ -816,36 +817,73 @@ a {
   margin: 0;
   min-width: 0;
   color: #fffaf0;
+  text-decoration: none;
   white-space: nowrap;
+  transition: opacity 0.45s var(--ease-luxury);
+}
+
+.brand-mark:hover,
+.brand-mark:focus-visible {
+  opacity: 0.96;
 }
 
 .brand-mark__glyph {
   flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: var(--rule) solid var(--gold-rule);
-  box-shadow:
-    var(--frame-inset-gold),
-    var(--frame-glow-idle);
-  font-family: var(--font-brand);
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  line-height: 1;
+  display: block;
+  width: 40px;
+  height: 40px;
+  overflow: visible;
   color: var(--champagne-bright);
-  background: rgba(10, 9, 8, 0.35);
-  transition: box-shadow 0.55s var(--ease-luxury), border-color 0.45s var(--ease-luxury);
+  filter: drop-shadow(0 0 10px rgba(232, 197, 71, 0.18));
+  transition:
+    color 0.45s var(--ease-luxury),
+    filter 0.55s var(--ease-luxury),
+    transform 0.55s var(--ease-luxury);
+}
+
+.brand-mark__seal {
+  fill: rgba(10, 9, 8, 0.55);
+  stroke: currentColor;
+  stroke-width: 0.9;
+}
+
+.brand-mark__ring {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 0.55;
+  opacity: 0.58;
+}
+
+.brand-mark__strand {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 0.9;
+  stroke-linecap: round;
+}
+
+.brand-mark__strand--soft {
+  stroke-width: 0.45;
+  opacity: 0.55;
+}
+
+.brand-mark__monogram {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.brand-mark__jewel {
+  fill: currentColor;
+  opacity: 0.78;
 }
 
 .brand-mark:hover .brand-mark__glyph,
-.brand-mark:focus-within .brand-mark__glyph {
-  border-color: var(--champagne-bright);
-  box-shadow:
-    var(--frame-inset-gold-strong),
-    var(--frame-glow-hover);
+.brand-mark:focus-visible .brand-mark__glyph {
+  color: var(--champagne-soft);
+  filter: drop-shadow(0 0 14px rgba(232, 197, 71, 0.34));
+  transform: translateY(-1px);
 }
 
 .brand-mark__lockup {
@@ -1306,15 +1344,15 @@ a {
 
 @media (max-width: 1023px) {
   .hero-stage {
-    height: clamp(520px, 78dvh, 680px);
-    min-height: clamp(520px, 78dvh, 680px);
-    max-height: 680px;
+    height: clamp(544px, 81dvh, 700px);
+    min-height: clamp(544px, 81dvh, 700px);
+    max-height: 700px;
     align-items: end;
   }
 
   .hero-stage__content {
     justify-content: flex-end;
-    padding-block: clamp(28px, 6vw, 48px) clamp(24px, 5vw, 36px);
+    padding-block: clamp(32px, 7vw, 52px) clamp(24px, 5.5vw, 40px);
   }
 
   .hero-stage__overlay {
@@ -1331,14 +1369,14 @@ a {
 
 @media (max-width: 768px) {
   .hero-stage {
-    /* Fit one phone screen with sticky nav — avoid oversized empty pit */
-    height: min(100svh - 72px, 78dvh, 620px);
-    min-height: min(100svh - 72px, 68dvh, 520px);
-    max-height: 620px;
+    /* Fit phone frame without crushing brand-first breath */
+    height: min(100svh - 72px, 82dvh, 660px);
+    min-height: min(100svh - 72px, 72dvh, 540px);
+    max-height: 660px;
   }
 
   .hero-stage__content {
-    padding-block: clamp(24px, 5vw, 40px) clamp(20px, 4vw, 32px);
+    padding-block: clamp(28px, 5.5vw, 44px) clamp(20px, 4.5vw, 36px);
   }
 
   .hero-stage__media img {
@@ -2926,17 +2964,17 @@ a {
   }
 
   .coverflow__slide.swiper-slide {
-    width: min(240px, 64vw);
-    max-width: min(240px, 64vw);
+    width: min(256px, 62vw);
+    max-width: min(256px, 62vw);
   }
 
   .coverflow__stage {
-    height: clamp(300px, 78vw, 400px);
+    height: clamp(328px, 84vw, 436px);
     overflow: hidden;
   }
 
   .coverflow__swiper {
-    padding: 12px 0 20px;
+    padding: 16px 0 24px;
   }
 
   .coverflow__caption {
@@ -2968,13 +3006,12 @@ a {
   }
 
   .brand-mark {
-    gap: 8px;
+    gap: 10px;
   }
 
   .brand-mark__glyph {
-    width: 28px;
-    height: 28px;
-    font-size: 12px;
+    width: 32px;
+    height: 32px;
   }
 
   .brand-mark__kicker {
@@ -3015,7 +3052,7 @@ a {
 
 @media (max-width: 375px) {
   :root {
-    --container-pad: 12px;
+    --container-pad: 14px;
   }
 
   .hero-meta {
@@ -3031,19 +3068,19 @@ a {
   }
 
   .hero-stage {
-    height: min(100svh - 68px, 74dvh, 560px);
-    min-height: min(100svh - 68px, 64dvh, 480px);
-    max-height: 560px;
+    height: min(100svh - 68px, 78dvh, 580px);
+    min-height: min(100svh - 68px, 68dvh, 500px);
+    max-height: 580px;
   }
 
   .hair-tryon__frames {
-    gap: var(--space-1);
+    gap: var(--space-2);
   }
 
   .hair-tryon__frame img,
   .hair-tryon__empty,
   .hair-tryon__skeleton {
-    max-height: 152px;
+    max-height: 164px;
   }
 
   .hair-tryon__chip-label {
@@ -3057,13 +3094,12 @@ a {
   }
 
   .brand-mark {
-    gap: 6px;
+    gap: 8px;
   }
 
   .brand-mark__glyph {
-    width: 24px;
-    height: 24px;
-    font-size: 11px;
+    width: 28px;
+    height: 28px;
   }
 
   .brand-mark__kicker {
@@ -3108,23 +3144,23 @@ a {
 
 @media (min-width: 481px) and (max-width: 767px) {
   .coverflow__slide.swiper-slide {
-    width: min(260px, 56vw);
-    max-width: min(260px, 56vw);
+    width: min(280px, 64vw);
+    max-width: min(280px, 64vw);
   }
 
   .coverflow__stage {
-    height: clamp(320px, 54vw, 400px);
+    height: clamp(340px, 60vw, 420px);
   }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .coverflow__slide.swiper-slide {
-    width: min(280px, 42vw);
-    max-width: min(280px, 42vw);
+    width: min(292px, 44vw);
+    max-width: min(292px, 44vw);
   }
 
   .coverflow__stage {
-    height: clamp(360px, 42vw, 440px);
+    height: clamp(372px, 45vw, 460px);
   }
 }
 
@@ -4687,8 +4723,8 @@ a {
 
 @media (max-width: 768px) {
   :root {
-    --container-pad: clamp(12px, 3.4vw, 20px);
-    --gap-phi: clamp(16px, 2.4vw, 24px);
+    --container-pad: clamp(14px, 3.6vw, 20px);
+    --gap-phi: clamp(16px, 2.6vw, 24px);
   }
 
   .site-main {
@@ -4696,18 +4732,18 @@ a {
   }
 
   .section {
-    padding-top: clamp(10px, 2.8vw, 20px);
-    padding-bottom: clamp(10px, 2.8vw, 20px);
+    padding-top: clamp(12px, 3.1vw, 22px);
+    padding-bottom: clamp(12px, 3.1vw, 22px);
   }
 
   .portfolio-gallery-section {
-    gap: clamp(12px, 2vw, 16px);
-    padding-top: clamp(24px, 4vw, 40px);
-    padding-bottom: clamp(24px, 3.5vw, 36px);
+    gap: clamp(14px, 2.4vw, 20px);
+    padding-top: clamp(28px, 4.5vw, 44px);
+    padding-bottom: clamp(28px, 4vw, 40px);
   }
 
   .portfolio-gallery__intro {
-    gap: 8px;
+    gap: 10px;
   }
 
   .coverflow__swiper,
@@ -4716,21 +4752,21 @@ a {
   }
 
   .contact-section {
-    padding-top: 4px;
-    padding-bottom: 12px;
+    padding-top: 8px;
+    padding-bottom: 16px;
   }
 
   .contact-section__layout {
-    gap: var(--space-4);
+    gap: var(--space-5);
   }
 
   .contact-section__intro {
-    padding: var(--space-4);
+    padding: var(--space-5);
   }
 
   .contact-form {
-    padding: 12px;
-    gap: var(--space-2);
+    padding: 16px;
+    gap: var(--space-3);
   }
 
   .nav-row {
@@ -4746,14 +4782,13 @@ a {
 
   .brand-mark {
     grid-area: brand;
-    gap: 8px;
+    gap: 10px;
     min-width: 0;
   }
 
   .brand-mark__glyph {
-    width: 30px;
-    height: 30px;
-    font-size: 12px;
+    width: 34px;
+    height: 34px;
   }
 
   .brand-mark__kicker {
@@ -5317,7 +5352,7 @@ a {
 .hair-tryon__camera-still {
   display: block;
   width: 100%;
-  max-height: 220px;
+  max-height: 240px;
   aspect-ratio: 3 / 4;
   object-fit: cover;
   background: #1a1816;
@@ -5432,7 +5467,7 @@ a {
   gap: var(--space-2);
   min-height: 44px;
   width: 100%;
-  padding: 6px;
+  padding: 8px;
   margin: 0;
   border: var(--rule) solid var(--stroke-mid);
   background: rgba(255, 252, 246, 0.88);
@@ -5625,7 +5660,7 @@ a {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 176px;
+  max-height: 192px;
   aspect-ratio: 3 / 4;
   object-fit: cover;
   border: var(--rule) solid var(--stroke-mid);
@@ -5811,7 +5846,7 @@ a {
   .hair-tryon__frame img,
   .hair-tryon__empty,
   .hair-tryon__skeleton {
-    max-height: 340px;
+    max-height: 352px;
   }
 
   .hair-tryon__empty {
