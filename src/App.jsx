@@ -565,25 +565,35 @@ export default function App() {
             </aside>
           </section>
 
-          <Suspense fallback={null}>
-            <PortfolioGallery />
-          </Suspense>
+          <div className="lazy-slot lazy-slot--portfolio">
+            <Suspense fallback={null}>
+              <PortfolioGallery />
+            </Suspense>
+          </div>
 
-          <Suspense fallback={null}>
-            <ServicesGrid />
-          </Suspense>
+          <div className="lazy-slot lazy-slot--services">
+            <Suspense fallback={null}>
+              <ServicesGrid />
+            </Suspense>
+          </div>
 
-          <Suspense fallback={null}>
-            <StyleQuiz />
-          </Suspense>
+          <div className="lazy-slot lazy-slot--quiz">
+            <Suspense fallback={null}>
+              <StyleQuiz />
+            </Suspense>
+          </div>
 
-          <Suspense fallback={null}>
-            <HairTryOn />
-          </Suspense>
+          <div className="lazy-slot lazy-slot--tryon">
+            <Suspense fallback={null}>
+              <HairTryOn />
+            </Suspense>
+          </div>
 
-          <Suspense fallback={null}>
-            <ContactForm />
-          </Suspense>
+          <div className="lazy-slot lazy-slot--contact">
+            <Suspense fallback={null}>
+              <ContactForm />
+            </Suspense>
+          </div>
 
           <section
             id="booking"

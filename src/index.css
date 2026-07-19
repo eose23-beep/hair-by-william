@@ -3846,6 +3846,54 @@ a {
   color: var(--champagne-bright);
 }
 
+/* Persistent min-heights above #booking — Suspense fallback=null was collapsing to 0 then expanding (mobile CLS ~0.11). φ/Fib reservation. */
+.lazy-slot {
+  width: 100%;
+  display: block;
+}
+
+.lazy-slot--portfolio {
+  min-height: clamp(610px, 100vw, 987px);
+}
+
+.lazy-slot--services {
+  min-height: clamp(987px, 260vw, 1597px);
+}
+
+.lazy-slot--quiz {
+  min-height: clamp(377px, 78vw, 610px);
+}
+
+.lazy-slot--tryon {
+  min-height: clamp(610px, 135vw, 987px);
+}
+
+.lazy-slot--contact {
+  min-height: clamp(610px, 125vw, 987px);
+}
+
+@media (min-width: 900px) {
+  .lazy-slot--portfolio {
+    min-height: 754px; /* 610 × φ */
+  }
+
+  .lazy-slot--services {
+    min-height: 1210px;
+  }
+
+  .lazy-slot--quiz {
+    min-height: 377px;
+  }
+
+  .lazy-slot--tryon {
+    min-height: 754px;
+  }
+
+  .lazy-slot--contact {
+    min-height: 610px;
+  }
+}
+
 .booking-panel__heading {
   max-width: 16ch;
   color: #fff8e7;
