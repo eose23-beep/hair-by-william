@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Indexable HTML only. Submit this URL in Google Search Console.
+     When a custom domain goes live, rewrite every loc (+ robots Sitemap:) to that host. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://william-site-snowy.vercel.app/</loc>
