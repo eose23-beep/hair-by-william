@@ -8,6 +8,9 @@ const services = [
     description:
       "Custom hair extensions for length and volume: tape-in, weft, I-tip, and beaded bond installations blended to your texture.",
     image: "/portfolio/extensions_after.jpg",
+    imageDesk: "/portfolio/extensions_after-desk-focus.jpg",
+    imageWebp: "/portfolio/extensions_after.webp",
+    imageWebpDesk: "/portfolio/extensions_after-desk-focus.webp",
     imageAlt:
       "Custom hair extensions with natural length and blended volume by Hair by William",
   },
@@ -18,6 +21,9 @@ const services = [
     description:
       "Professional Brazilian Blowout smoothing for lasting shine, softness, and frizz control that still moves like you.",
     image: "/portfolio/blowout_after.jpg",
+    imageDesk: "/portfolio/blowout_after-desk-focus.jpg",
+    imageWebp: "/portfolio/blowout_after.webp",
+    imageWebpDesk: "/portfolio/blowout_after-desk-focus.webp",
     imageAlt: "Brazilian Blowout finish with soft shine and smooth, frizz-controlled movement",
   },
   {
@@ -36,6 +42,9 @@ const services = [
     description:
       "Dimensional color and color correction for uneven tone, brassiness, or past color. Healthy hair, refined results.",
     image: "/portfolio/work-05.png",
+    imageDesk: "/portfolio/work-05-desk-focus.jpg",
+    imageWebp: "/portfolio/work-05.webp",
+    imageWebpDesk: "/portfolio/work-05-desk-focus.webp",
     imageAlt: "Color correction with balanced tone and healthy, refined results",
   },
 ];
@@ -82,8 +91,24 @@ function ServiceCard({ service, index }) {
         {service.image ? (
           <div className="service-card__media">
             <picture>
+              {service.imageWebpDesk ? (
+                <source
+                  media="(min-width: 1024px)"
+                  type="image/webp"
+                  srcSet={`${service.imageWebpDesk} 1600w`}
+                  sizes="(min-width: 1024px) 28vw, 100vw"
+                />
+              ) : null}
+              {service.imageDesk ? (
+                <source
+                  media="(min-width: 1024px)"
+                  type="image/jpeg"
+                  srcSet={`${service.imageDesk} 1600w`}
+                  sizes="(min-width: 1024px) 28vw, 100vw"
+                />
+              ) : null}
               <source
-                srcSet={service.image.replace(/\.(png|jpe?g)$/i, ".webp")}
+                srcSet={service.imageWebp || service.image.replace(/\.(png|jpe?g)$/i, ".webp")}
                 type="image/webp"
               />
               <img

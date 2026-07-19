@@ -469,7 +469,7 @@ export default function App() {
                 <AmbientVideo
                   className="hero-stage__photo"
                   src={HERO_AMBIENT_VIDEO}
-                  poster="/portfolio/extensions_after-hero-desk.jpg"
+                  poster="/portfolio/extensions_after-hero-desk-focus.jpg"
                   ariaLabel="Long strawberry-blonde waves and soft fringe, custom extension finish by Hair by William in El Paso"
                   preload="metadata"
                   active
@@ -479,25 +479,25 @@ export default function App() {
                   <source
                     media="(min-width: 1280px)"
                     type="image/webp"
-                    srcSet="/portfolio/extensions_after-hero-desk.webp 2880w, /portfolio/extensions_after-hero-desk-2x.webp 3600w"
+                    srcSet="/portfolio/extensions_after-hero-desk-focus.webp 2880w, /portfolio/extensions_after-hero-desk-2x-focus.webp 3600w"
                     sizes="100vw"
                   />
                   <source
                     media="(min-width: 1280px)"
                     type="image/jpeg"
-                    srcSet="/portfolio/extensions_after-hero-desk.jpg 2880w, /portfolio/extensions_after-hero-desk-2x.jpg 3600w"
+                    srcSet="/portfolio/extensions_after-hero-desk-focus.jpg 2880w, /portfolio/extensions_after-hero-desk-2x-focus.jpg 3600w"
                     sizes="100vw"
                   />
                   <source
                     media="(min-width: 1024px)"
                     type="image/webp"
-                    srcSet="/portfolio/extensions_after-hero-desk.webp 2880w, /portfolio/extensions_after-hero-desk-2x.webp 3600w"
+                    srcSet="/portfolio/extensions_after-hero-desk-focus.webp 2880w, /portfolio/extensions_after-hero-desk-2x-focus.webp 3600w"
                     sizes="100vw"
                   />
                   <source
                     media="(min-width: 1024px)"
                     type="image/jpeg"
-                    srcSet="/portfolio/extensions_after-hero-desk.jpg 2880w, /portfolio/extensions_after-hero-desk-2x.jpg 3600w"
+                    srcSet="/portfolio/extensions_after-hero-desk-focus.jpg 2880w, /portfolio/extensions_after-hero-desk-2x-focus.jpg 3600w"
                     sizes="100vw"
                   />
                   <source
@@ -518,6 +518,8 @@ export default function App() {
             </div>
             {/* Soft gold sidelight / specular lift — sells hair without neon rim */}
             <div className="hero-stage__hair-sheen" aria-hidden="true" />
+            {/* Edge veil — softens room/background so strands read first */}
+            <div className="hero-stage__hair-focus" aria-hidden="true" />
             <div className="hero-stage__overlay" aria-hidden="true" />
             <div className="hero-stage__content shell">
               <div className="hero-stage__copy">
@@ -573,7 +575,9 @@ export default function App() {
                         <AmbientVideo
                           className="hero-film__media"
                           src={clip.src}
+                          srcDesk={clip.srcDesk}
                           poster={clip.poster}
+                          posterDesk={clip.posterDesk}
                           ariaLabel={clip.alt}
                           preload={index === 0 ? "metadata" : "none"}
                           active
@@ -672,7 +676,9 @@ export default function App() {
                     <AmbientVideo
                       className="booking-panel__clip-media"
                       src={bookingAmbientClip.src}
+                      srcDesk={bookingAmbientClip.srcDesk}
                       poster={bookingAmbientClip.poster}
+                      posterDesk={bookingAmbientClip.posterDesk}
                       ariaLabel={bookingAmbientClip.alt}
                       preload="metadata"
                       active

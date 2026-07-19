@@ -113,7 +113,7 @@ function slideAriaLabel(slide, index, total) {
   return `${kind} slide ${index + 1} of ${total}: ${slide.title}. ${slide.alt}`;
 }
 
-/** Prefer sibling .webp only when a known companion exists in /public/portfolio. */
+/** Prefer slide webp fields, else known companion under /public/portfolio. */
 const WEBP_IDS = new Set([
   "work-01",
   "work-02",
@@ -125,9 +125,19 @@ const WEBP_IDS = new Set([
 
 function webpSibling(slide) {
   if (!slide?.src || typeof slide.src !== "string") return null;
+  if (slide.webp) return slide.webp;
   if (!WEBP_IDS.has(slide.id)) return null;
   if (/\.webp$/i.test(slide.src)) return slide.src;
   return slide.src.replace(/\.(png|jpe?g)$/i, ".webp");
+}
+
+/** Desktop srcset candidates — hair-focus desk crops when present. */
+function deskSources(slide) {
+  if (!slide || slide.type === "video") return null;
+  const jpg = slide.srcDesk || null;
+  const webp = slide.webpDesk || null;
+  if (!jpg && !webp) return null;
+  return { jpg, webp };
 }
 
 /** Resolve #clip-01 / #portfolio-clip-01 / #portfolio?clip=01 style hashes to a slide index. */
@@ -492,41 +502,58 @@ export default function PortfolioGallery() {
                         <span className="coverflow__corners" aria-hidden="true" />
                         {slide.type === "video" ? (
                           <AmbientVideo
-                            className="coverflow__media"
+                            className={`coverflow__media${slide.hairFocus ? " coverflow__media--hair" : ""}`}
                             src={slide.src}
+                            srcDesk={slide.srcDesk}
                             poster={slide.poster}
+                            posterDesk={slide.posterDesk}
                             ariaLabel={slide.alt}
                             preload={Math.abs(index - active) <= 1 ? "metadata" : "none"}
                             active={isCenter && stageInView && !lightboxOpen}
                           />
-                        ) : webp ? (
-                          <picture className="coverflow__picture">
-                            <source srcSet={webp} type="image/webp" />
-                            <img
-                              className="coverflow__media"
-                              src={slide.src}
-                              alt={slide.alt}
-                              loading={Math.abs(index - active) < 2 ? "eager" : "lazy"}
-                              decoding="async"
-                              draggable={false}
-                              onError={(event) => {
-                                const img = event.currentTarget;
-                                if (img.dataset.fallbackApplied === "1") return;
-                                img.dataset.fallbackApplied = "1";
-                                img.removeAttribute("srcset");
-                                img.src = slide.src;
-                              }}
-                            />
-                          </picture>
                         ) : (
-                          <img
-                            className="coverflow__media"
-                            src={slide.src}
-                            alt={slide.alt}
-                            loading={Math.abs(index - active) < 2 ? "eager" : "lazy"}
-                            decoding="async"
-                            draggable={false}
-                          />
+                          (() => {
+                            const desk = deskSources(slide);
+                            const mediaClass = `coverflow__media${
+                              slide.hairFocus ? " coverflow__media--hair" : ""
+                            }`;
+                            return (
+                              <picture className="coverflow__picture">
+                                {desk?.webp ? (
+                                  <source
+                                    media="(min-width: 1024px)"
+                                    type="image/webp"
+                                    srcSet={`${desk.webp} 1600w`}
+                                    sizes="(min-width: 1280px) 42vw, 56vw"
+                                  />
+                                ) : null}
+                                {desk?.jpg ? (
+                                  <source
+                                    media="(min-width: 1024px)"
+                                    type="image/jpeg"
+                                    srcSet={`${desk.jpg} 1600w`}
+                                    sizes="(min-width: 1280px) 42vw, 56vw"
+                                  />
+                                ) : null}
+                                {webp ? <source srcSet={webp} type="image/webp" /> : null}
+                                <img
+                                  className={mediaClass}
+                                  src={slide.src}
+                                  alt={slide.alt}
+                                  loading={Math.abs(index - active) < 2 ? "eager" : "lazy"}
+                                  decoding="async"
+                                  draggable={false}
+                                  onError={(event) => {
+                                    const img = event.currentTarget;
+                                    if (img.dataset.fallbackApplied === "1") return;
+                                    img.dataset.fallbackApplied = "1";
+                                    img.removeAttribute("srcset");
+                                    img.src = slide.src;
+                                  }}
+                                />
+                              </picture>
+                            );
+                          })()
                         )}
                         <span className="coverflow__caption">
                           <span className="coverflow__title">{slide.title}</span>
@@ -655,7 +682,9 @@ export default function PortfolioGallery() {
                 <AmbientVideo
                   className="lightbox__image lightbox__video"
                   src={activeSlide.src}
+                  srcDesk={activeSlide.srcDesk}
                   poster={activeSlide.poster}
+                  posterDesk={activeSlide.posterDesk}
                   ariaLabel={activeSlide.alt}
                   preload="metadata"
                   active={lightboxOpen}
@@ -663,23 +692,33 @@ export default function PortfolioGallery() {
               ) : (
                 (() => {
                   const webp = webpSibling(activeSlide);
-                  return webp ? (
+                  const desk = deskSources(activeSlide);
+                  return (
                     <picture>
-                      <source srcSet={webp} type="image/webp" />
+                      {desk?.webp ? (
+                        <source
+                          media="(min-width: 1024px)"
+                          type="image/webp"
+                          srcSet={`${desk.webp} 1680w`}
+                          sizes="min(72vw, 920px)"
+                        />
+                      ) : null}
+                      {desk?.jpg ? (
+                        <source
+                          media="(min-width: 1024px)"
+                          type="image/jpeg"
+                          srcSet={`${desk.jpg} 1680w`}
+                          sizes="min(72vw, 920px)"
+                        />
+                      ) : null}
+                      {webp ? <source srcSet={webp} type="image/webp" /> : null}
                       <img
                         className="lightbox__image"
-                        src={activeSlide.src}
+                        src={activeSlide.srcDesk || activeSlide.src}
                         alt={activeSlide.alt}
                         loading="eager"
                       />
                     </picture>
-                  ) : (
-                    <img
-                      className="lightbox__image"
-                      src={activeSlide.src}
-                      alt={activeSlide.alt}
-                      loading="eager"
-                    />
                   );
                 })()
               )}

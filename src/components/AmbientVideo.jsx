@@ -3,10 +3,13 @@ import { useEffect, useRef, useState } from "react";
 /**
  * Muted, playsInline loop that only plays when on-screen.
  * Respects prefers-reduced-motion (poster / static frame only).
+ * Desktop can request higher-res `srcDesk` / `posterDesk` (≥1024px).
  */
 export default function AmbientVideo({
   src,
+  srcDesk,
   poster,
+  posterDesk,
   className = "",
   ariaLabel,
   preload = "metadata",
@@ -15,10 +18,19 @@ export default function AmbientVideo({
   const videoRef = useRef(null);
   const [inView, setInView] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [isDesk, setIsDesk] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const sync = () => setReduceMotion(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const sync = () => setIsDesk(media.matches);
     sync();
     media.addEventListener("change", sync);
     return () => media.removeEventListener("change", sync);
@@ -64,11 +76,14 @@ export default function AmbientVideo({
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, []);
 
+  const resolvedSrc = isDesk && srcDesk ? srcDesk : src;
+  const resolvedPoster = isDesk && posterDesk ? posterDesk : poster;
+
   if (reduceMotion) {
     return (
       <img
         className={className}
-        src={poster || src}
+        src={resolvedPoster || resolvedSrc}
         alt={ariaLabel || ""}
         loading="lazy"
         decoding="async"
@@ -81,16 +96,17 @@ export default function AmbientVideo({
     <video
       ref={videoRef}
       className={className}
-      src={src}
-      poster={poster}
+      key={resolvedSrc}
+      src={resolvedSrc}
+      poster={resolvedPoster}
       muted
       playsInline
       loop
       preload={preload}
       aria-label={ariaLabel}
       disablePictureInPicture
-      width={720}
-      height={1280}
+      width={isDesk ? 1080 : 720}
+      height={isDesk ? 1920 : 1280}
     />
   );
 }
