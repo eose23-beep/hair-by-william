@@ -35,9 +35,11 @@ Hair by William is a local salon practice inside LV Hair Salon (Suite 13C) in El
 
 ## Optional
 
+- Optional: homepage `#faq` for location, hours, booking, and services
 - Portfolio: homepage `#portfolio`
 - Virtual try-on: homepage `#try-on`
-- Directions: homepage `#booking`
+- Directions / visit: homepage `#booking`
+- Booking form: homepage `#contact-form` (also `#contact`)
 
 ## Notes
 

@@ -6,7 +6,8 @@ import ServicesGrid from "./components/ServicesGrid";
 import BookingFab from "./components/BookingFab";
 import AmbientVideo from "./components/AmbientVideo";
 import { bookingAmbientClip, heroWorkClips } from "./data/portfolio";
-import { DIRECTIONS_URL } from "./data/location";
+import { DIRECTIONS_URL, MAPS_SEARCH_URL } from "./data/location";
+import SalonFaq from "./components/SalonFaq";
 
 const PortfolioGallery = lazy(() => import("./components/PortfolioGallery"));
 const HairTryOn = lazy(() => import("./components/HairTryOn"));
@@ -697,6 +698,8 @@ export default function App() {
               </figure>
             </div>
           </section>
+
+          <SalonFaq />
         </main>
 
         <footer className="site-footer">
@@ -713,7 +716,15 @@ export default function App() {
               <div className="site-footer__col motion-block">
                 <p className="site-footer__label">Studio</p>
                 <p>
-                  <a href="#booking">5411 N. Mesa, Suite 13C</a>
+                  <a
+                    href={MAPS_SEARCH_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-mcp-action="open-maps"
+                    data-mcp-description="Open Google Maps for Hair by William at 5411 N. Mesa, Suite 13C, El Paso, TX 79912."
+                  >
+                    5411 N. Mesa, Suite 13C
+                  </a>
                 </p>
                 <p className="footer-hours">El Paso, TX 79912 · LV Hair Salon</p>
               </div>
@@ -749,6 +760,9 @@ export default function App() {
                   </li>
                   <li>
                     <a href="#booking">Location</a>
+                  </li>
+                  <li>
+                    <a href="#faq">FAQ</a>
                   </li>
                 </ul>
               </div>

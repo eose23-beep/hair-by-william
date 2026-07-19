@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -50,6 +50,11 @@
       name="twitter:image"
       content="https://william-site-snowy.vercel.app/portfolio/extensions_after-hero.jpg"
     />
+    <meta
+      name="twitter:image:alt"
+      content="Long strawberry-blonde waves and soft fringe - Hair by William, El Paso"
+    />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
     <style>
       html,
       body {
@@ -57,8 +62,6 @@
         color: #2e2b28;
       }
     </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- LCP: mobile-first hero (desktop overrides via media) -->
     <link
       rel="preload"
@@ -80,29 +83,26 @@
       media="(min-width: 1024px)"
       fetchpriority="high"
     />
-    <!-- Async fonts — cut render-blocking ~1.6s on mobile PSI -->
+    <!-- Self-hosted body font — avoids fonts.googleapis.com on critical path -->
     <link
       rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@500;600&family=Sora:wght@400;500;600;700&display=swap"
+      as="font"
+      type="font/woff2"
+      href="/fonts/sora-400.woff2"
+      crossorigin
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@500;600&family=Sora:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/sora-500.woff2"
+      crossorigin
     />
-    <noscript>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@500;600&family=Sora:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-      />
-    </noscript>
     <!-- sameAs: Google Business only for now. Add Instagram URL after the salon creates its own account. -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "HairSalon",
+        "@type": ["HairSalon", "LocalBusiness"],
         "@id": "https://william-site-snowy.vercel.app/#salon",
         "name": "Hair by William",
         "alternateName": "Hair by William at LV Hair Salon",
@@ -110,10 +110,11 @@
         "sameAs": [
           "https://www.google.com/search?kgmid=/g/11nr0zw44j"
         ],
-
         "telephone": "+1-915-920-7823",
         "priceRange": "$$$$",
+        "currenciesAccepted": "USD",
         "image": "https://william-site-snowy.vercel.app/portfolio/extensions_after-hero.jpg",
+        "logo": "https://william-site-snowy.vercel.app/favicon.svg",
         "hasMap": "https://www.google.com/maps/search/?api=1&query=5411%20N.%20Mesa%2C%20Suite%2013C%2C%20El%20Paso%2C%20TX%2079912",
         "address": {
           "@type": "PostalAddress",
@@ -128,18 +129,28 @@
           "latitude": 31.8188,
           "longitude": -106.5168
         },
-        "areaServed": {
-          "@type": "City",
-          "name": "El Paso",
-          "containedInPlace": {
-            "@type": "State",
-            "name": "Texas"
+        "areaServed": [
+          {
+            "@type": "City",
+            "name": "El Paso",
+            "containedInPlace": {
+              "@type": "State",
+              "name": "Texas"
+            }
           }
-        },
+        ],
         "containedInPlace": {
           "@type": "HairSalon",
           "name": "LV Hair Salon"
         },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+1-915-920-7823",
+          "contactType": "reservations",
+          "areaServed": "US-TX",
+          "availableLanguage": "English"
+        },
+        "openingHours": "Fr-Sa 10:00-18:00",
         "openingHoursSpecification": [
           {
             "@type": "OpeningHoursSpecification",
@@ -148,6 +159,44 @@
             "closes": "18:00"
           }
         ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Hair by William services",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Custom Hair Extensions",
+                "description": "I-Tip, Genius Weft, Tape-In, and Micro-link extensions for natural length and volume."
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Brazilian Blowout",
+                "description": "Professional smoothing for shine, softness, and frizz control."
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Dimensional Color & Color Correction",
+                "description": "High-end dimensional color and corrective color tailored for depth and movement."
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Precision Cuts",
+                "description": "Precision cutting for polished silhouette and editorial finish."
+              }
+            }
+          ]
+        },
         "knowsAbout": [
           "Hair Extensions",
           "I-Tip Hair Extensions",
@@ -160,6 +209,19 @@
           "Precision Hair Cutting"
         ],
         "description": "Hair by William - El Paso hair stylist specializing in custom extensions, precision cuts, color correction, and Brazilian Blowouts. Open Friday and Saturday 10 AM-6 PM by appointment. Closed Sunday-Thursday. Located inside LV Hair Salon, Suite 13C."
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "https://william-site-snowy.vercel.app/#website",
+        "name": "Hair by William",
+        "url": "https://william-site-snowy.vercel.app/",
+        "inLanguage": "en-US",
+        "publisher": {
+          "@id": "https://william-site-snowy.vercel.app/#salon"
+        }
       }
     </script>
     <script type="application/ld+json">
@@ -210,12 +272,31 @@
         ]
       }
     </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T4274Q1Q1D"></script>
+    <!-- Defer GA until idle — keeps ~160 KiB + long tasks off first paint -->
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-T4274Q1Q1D');
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      function loadGtag() {
+        if (window.__gtagLoaded) return;
+        window.__gtagLoaded = true;
+        var s = document.createElement("script");
+        s.src = "https://www.googletagmanager.com/gtag/js?id=G-T4274Q1Q1D";
+        s.async = true;
+        s.onload = function () {
+          gtag("js", new Date());
+          gtag("config", "G-T4274Q1Q1D", { send_page_view: true });
+        };
+        document.head.appendChild(s);
+      }
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(loadGtag, { timeout: 4000 });
+      } else {
+        window.addEventListener("load", function () {
+          setTimeout(loadGtag, 1);
+        });
+      }
     </script>
   </head>
   <body>
@@ -246,6 +327,33 @@
             Closed Sunday-Thursday. Ask for Suite 13C at the building.
           </p>
         </section>
+        <section id="faq" aria-labelledby="prehydrate-faq-heading">
+          <h2 id="prehydrate-faq-heading">Frequently asked questions</h2>
+          <dl>
+            <dt>Where is Hair by William located?</dt>
+            <dd>
+              Hair by William is inside LV Hair Salon at 5411 N. Mesa, Suite 13C, El Paso, TX 79912.
+              Look for Suite 13C when you arrive.
+            </dd>
+            <dt>What are Hair by William's hours?</dt>
+            <dd>
+              Open Friday and Saturday 10:00 AM-6:00 PM. Closed Sunday through Thursday. Appointments
+              by call or text.
+            </dd>
+            <dt>How do I book an appointment with Hair by William?</dt>
+            <dd>
+              Call or text 915-920-7823, message on WhatsApp, or use the booking form on this
+              website. No online account is required.
+            </dd>
+            <dt>What services does Hair by William offer?</dt>
+            <dd>
+              Custom hair extensions (I-Tip, Genius Weft, Tape-In, Micro-link), Brazilian Blowouts,
+              dimensional color and color correction, and precision cuts.
+            </dd>
+            <dt>What is Hair by William's phone number?</dt>
+            <dd>915-920-7823 (+1-915-920-7823).</dd>
+          </dl>
+        </section>
         <section id="facts" aria-labelledby="prehydrate-facts-heading">
           <h2 id="prehydrate-facts-heading">Salon facts</h2>
           <ul>
@@ -266,3 +374,4 @@
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
+

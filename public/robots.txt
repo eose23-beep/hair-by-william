@@ -1,5 +1,5 @@
 # Hair by William — crawler access
-# Last updated: 2026-07-17
+# Last updated: 2026-07-19
 
 User-agent: *
 Allow: /
