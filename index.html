@@ -72,7 +72,8 @@
         top: 64px;
         height: clamp(560px, 78dvh, 780px);
         max-height: 820px;
-        z-index: 0;
+        /* Above #root until seated — otherwise opaque React root hides LCP (render delay) */
+        z-index: 5;
         overflow: hidden;
         pointer-events: none;
         background: #0a0908;
@@ -83,6 +84,7 @@
         top: 0;
         height: 100%;
         max-height: none;
+        z-index: 0;
       }
       #lcp-shell picture,
       #lcp-shell img {
@@ -96,6 +98,7 @@
         position: relative;
         z-index: 1;
         min-height: 100dvh;
+        background: transparent;
       }
       @media (min-width: 1024px) {
         #lcp-shell {
