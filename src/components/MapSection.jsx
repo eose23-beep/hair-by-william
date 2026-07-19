@@ -1,9 +1,4 @@
-const SALON_ADDRESS = "5411 N. Mesa, Suite 13C, El Paso, TX 79912";
-
-const MAP_QUERY = encodeURIComponent(SALON_ADDRESS);
-export const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${MAP_QUERY}`;
-const MAPS_SEARCH_URL = `https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}`;
-const MAP_EMBED_URL = `https://maps.google.com/maps?q=${MAP_QUERY}&z=16&hl=en&output=embed`;
+import { MAPS_SEARCH_URL, MAP_EMBED_URL, SALON_ADDRESS } from "../data/location";
 
 /**
  * Studio map embed — nested in the booking card beside the craft clip.

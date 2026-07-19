@@ -2417,19 +2417,36 @@ a {
   animation: lookbook-pulse 2.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
+.coverflow__card.is-playing .coverflow__frame::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(240, 208, 96, 0.5),
+    0 0 36px rgba(232, 197, 71, 0.28);
+  opacity: 0.55;
+  animation: lookbook-pulse-glow 2.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
 @keyframes lookbook-pulse {
   0%,
   100% {
-    box-shadow:
-      inset 0 0 0 1px rgba(240, 208, 96, 0.42),
-      0 36px 72px rgba(0, 0, 0, 0.5),
-      0 0 28px rgba(232, 197, 71, 0.18);
+    transform: translateZ(0) scale(1);
   }
   50% {
-    box-shadow:
-      inset 0 0 0 1px rgba(240, 208, 96, 0.55),
-      0 40px 80px rgba(0, 0, 0, 0.55),
-      0 0 40px rgba(232, 197, 71, 0.32);
+    transform: translateZ(0) scale(1.008);
+  }
+}
+
+@keyframes lookbook-pulse-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.85;
   }
 }
 
@@ -2519,26 +2536,28 @@ a {
     0 0 32px var(--gold-glow),
     0 0 56px rgba(212, 175, 55, 0.14),
     0 -8px 24px rgba(255, 210, 60, 0.1);
+}
+
+.coverflow__card.is-active .coverflow__frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    0 0 36px var(--gold-glow),
+    0 0 56px rgba(212, 175, 55, 0.14);
+  opacity: 0.55;
   animation: gold-frame-breathe 5s var(--ease-luxury) infinite;
 }
 
 @keyframes gold-frame-breathe {
   0%,
   100% {
-    box-shadow:
-      inset 0 0 0 1px rgba(240, 208, 96, 0.38),
-      0 36px 72px rgba(0, 0, 0, 0.48),
-      0 0 26px var(--gold-glow-soft),
-      0 0 48px rgba(212, 175, 55, 0.1),
-      0 -8px 24px rgba(255, 210, 60, 0.08);
+    opacity: 0.4;
   }
   50% {
-    box-shadow:
-      inset 0 0 0 1px rgba(240, 208, 96, 0.48),
-      0 36px 72px rgba(0, 0, 0, 0.48),
-      0 0 36px var(--gold-glow),
-      0 0 60px rgba(212, 175, 55, 0.16),
-      0 -8px 24px rgba(255, 210, 60, 0.12);
+    opacity: 0.85;
   }
 }
 
@@ -3854,6 +3873,7 @@ a {
 }
 
 .booking-hours__closed {
+  display: block;
   font-size: 13px;
   letter-spacing: 0.04em;
   color: rgba(255, 255, 255, 0.62);
@@ -5316,6 +5336,11 @@ a {
     animation: none !important;
   }
 
+  .coverflow__card.is-active .coverflow__frame::before {
+    animation: none !important;
+    opacity: 0.55;
+  }
+
   .ghost-link::after {
     transform: none;
     opacity: 0;
@@ -5362,6 +5387,11 @@ a {
 
   .coverflow__card.is-playing .coverflow__frame {
     animation: none;
+  }
+
+  .coverflow__card.is-playing .coverflow__frame::after {
+    animation: none;
+    opacity: 0.55;
   }
 
   .coverflow__card--still.is-active .coverflow__media {

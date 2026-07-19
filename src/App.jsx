@@ -1,15 +1,17 @@
-import { useEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import GoldWaveField from "./components/GoldWaveField";
 import ServicesGrid from "./components/ServicesGrid";
-import PortfolioGallery from "./components/PortfolioGallery";
-import HairTryOn from "./components/HairTryOn";
-import ContactForm from "./components/ContactForm";
-import MapSection, { DIRECTIONS_URL } from "./components/MapSection";
 import BookingFab from "./components/BookingFab";
 import AmbientVideo from "./components/AmbientVideo";
 import { bookingAmbientClip, heroWorkClips } from "./data/portfolio";
+import { DIRECTIONS_URL } from "./data/location";
+
+const PortfolioGallery = lazy(() => import("./components/PortfolioGallery"));
+const HairTryOn = lazy(() => import("./components/HairTryOn"));
+const ContactForm = lazy(() => import("./components/ContactForm"));
+const MapSection = lazy(() => import("./components/MapSection"));
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -477,39 +479,33 @@ export default function App() {
               ) : (
                 <picture>
                   <source
-                    media="(min-width: 1280px)"
-                    type="image/webp"
-                    srcSet="/portfolio/extensions_after-hero-desk.webp 2880w, /portfolio/extensions_after-hero-desk-2x.webp 3600w"
-                    sizes="100vw"
-                  />
-                  <source
-                    media="(min-width: 1280px)"
-                    type="image/jpeg"
-                    srcSet="/portfolio/extensions_after-hero-desk.jpg 2880w, /portfolio/extensions_after-hero-desk-2x.jpg 3600w"
-                    sizes="100vw"
-                  />
-                  <source
                     media="(min-width: 1024px)"
                     type="image/webp"
-                    srcSet="/portfolio/extensions_after-hero-desk.webp 2880w, /portfolio/extensions_after-hero-desk-2x.webp 3600w"
+                    srcSet="/portfolio/extensions_after-hero-desk.webp 1920w, /portfolio/extensions_after-hero-desk-2x.webp 2400w"
                     sizes="100vw"
                   />
                   <source
                     media="(min-width: 1024px)"
                     type="image/jpeg"
-                    srcSet="/portfolio/extensions_after-hero-desk.jpg 2880w, /portfolio/extensions_after-hero-desk-2x.jpg 3600w"
+                    srcSet="/portfolio/extensions_after-hero-desk.jpg 1920w, /portfolio/extensions_after-hero-desk-2x.jpg 2400w"
                     sizes="100vw"
                   />
                   <source
                     type="image/webp"
-                    srcSet="/portfolio/extensions_after-hero.webp"
+                    srcSet="/portfolio/extensions_after-hero-720.webp 720w, /portfolio/extensions_after-hero-960.webp 960w, /portfolio/extensions_after-hero-1280.webp 1280w"
+                    sizes="100vw"
+                  />
+                  <source
+                    type="image/jpeg"
+                    srcSet="/portfolio/extensions_after-hero-720.jpg 720w, /portfolio/extensions_after-hero-960.jpg 960w, /portfolio/extensions_after-hero.jpg 1600w"
+                    sizes="100vw"
                   />
                   <img
                     className="hero-stage__photo"
                     src="/portfolio/extensions_after-hero.jpg"
                     alt="Long strawberry-blonde waves and soft fringe, custom extension finish by Hair by William in El Paso"
-                    width={2880}
-                    height={1405}
+                    width={1600}
+                    height={1600}
                     fetchPriority="high"
                     decoding="async"
                   />
@@ -558,7 +554,7 @@ export default function App() {
             </div>
             <aside className="hero-film" aria-label="Salon work in the chair">
               <ul className="hero-film__strip">
-                {heroWorkClips.map((clip, index) => {
+                {heroWorkClips.map((clip) => {
                   const portfolioHref = `#${clip.slideId}`;
                   return (
                     <li key={clip.id} className="hero-film__cell">
@@ -575,7 +571,7 @@ export default function App() {
                           src={clip.src}
                           poster={clip.poster}
                           ariaLabel={clip.alt}
-                          preload={index === 0 ? "metadata" : "none"}
+                          preload="none"
                           active
                         />
                       </a>
@@ -586,13 +582,19 @@ export default function App() {
             </aside>
           </section>
 
-          <PortfolioGallery />
+          <Suspense fallback={null}>
+            <PortfolioGallery />
+          </Suspense>
 
           <ServicesGrid />
 
-          <HairTryOn />
+          <Suspense fallback={null}>
+            <HairTryOn />
+          </Suspense>
 
-          <ContactForm />
+          <Suspense fallback={null}>
+            <ContactForm />
+          </Suspense>
 
           <section
             id="booking"
@@ -612,8 +614,10 @@ export default function App() {
                 <dl className="booking-hours" aria-label="Salon hours and studio address">
                   <div className="booking-hours__row">
                     <dt>Hours</dt>
-                    <dd>Friday-Saturday 10 AM-6 PM</dd>
-                    <dd className="booking-hours__closed">Closed Sunday-Thursday</dd>
+                    <dd>
+                      Friday-Saturday 10 AM-6 PM
+                      <span className="booking-hours__closed">Closed Sunday-Thursday</span>
+                    </dd>
                   </div>
                   <div className="booking-hours__row booking-hours__row--studio">
                     <dt>Studio</dt>
@@ -624,13 +628,16 @@ export default function App() {
                       </address>
                     </dd>
                   </div>
-                  <dd className="booking-hours__note">
-                    Call or text{" "}
-                    <a className="booking-hours__phone" href={PHONE_HREF}>
-                      {PHONE_LABEL}
-                    </a>{" "}
-                    to book
-                  </dd>
+                  <div className="booking-hours__row">
+                    <dt>Book</dt>
+                    <dd className="booking-hours__note">
+                      Call or text{" "}
+                      <a className="booking-hours__phone" href={PHONE_HREF}>
+                        {PHONE_LABEL}
+                      </a>{" "}
+                      to book
+                    </dd>
+                  </div>
                 </dl>
 
                 <div className="booking-actions">
@@ -657,7 +664,9 @@ export default function App() {
                 </div>
               </div>
 
-              <MapSection />
+              <Suspense fallback={null}>
+                <MapSection />
+              </Suspense>
 
               <figure className="booking-panel__clip">
                 <a

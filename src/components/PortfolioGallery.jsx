@@ -113,20 +113,11 @@ function slideAriaLabel(slide, index, total) {
   return `${kind} slide ${index + 1} of ${total}: ${slide.title}. ${slide.alt}`;
 }
 
-/** Prefer sibling .webp only when a known companion exists in /public/portfolio. */
-const WEBP_IDS = new Set([
-  "work-01",
-  "work-02",
-  "work-05",
-  "work-07",
-  "extensions-before",
-  "extensions-after",
-]);
-
+/** Prefer sibling .webp when available under /public/portfolio. */
 function webpSibling(slide) {
   if (!slide?.src || typeof slide.src !== "string") return null;
-  if (!WEBP_IDS.has(slide.id)) return null;
   if (/\.webp$/i.test(slide.src)) return slide.src;
+  if (!/\.(png|jpe?g)$/i.test(slide.src)) return null;
   return slide.src.replace(/\.(png|jpe?g)$/i, ".webp");
 }
 
@@ -506,8 +497,10 @@ export default function PortfolioGallery() {
                               className="coverflow__media"
                               src={slide.src}
                               alt={slide.alt}
-                              loading={Math.abs(index - active) < 2 ? "eager" : "lazy"}
+                              loading={isCenter ? "eager" : "lazy"}
                               decoding="async"
+                              width={900}
+                              height={1200}
                               draggable={false}
                               onError={(event) => {
                                 const img = event.currentTarget;
@@ -523,8 +516,10 @@ export default function PortfolioGallery() {
                             className="coverflow__media"
                             src={slide.src}
                             alt={slide.alt}
-                            loading={Math.abs(index - active) < 2 ? "eager" : "lazy"}
+                            loading={isCenter ? "eager" : "lazy"}
                             decoding="async"
+                            width={900}
+                            height={1200}
                             draggable={false}
                           />
                         )}
@@ -671,6 +666,8 @@ export default function PortfolioGallery() {
                         src={activeSlide.src}
                         alt={activeSlide.alt}
                         loading="eager"
+                        width={900}
+                        height={1200}
                       />
                     </picture>
                   ) : (
@@ -679,6 +676,8 @@ export default function PortfolioGallery() {
                       src={activeSlide.src}
                       alt={activeSlide.alt}
                       loading="eager"
+                      width={900}
+                      height={1200}
                     />
                   );
                 })()

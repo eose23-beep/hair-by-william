@@ -2,6 +2,8 @@
 
 > El Paso hair stylist specializing in custom extensions, precision cuts, color correction, and Brazilian Blowouts.
 
+Hair by William is a local salon practice inside LV Hair Salon (Suite 13C) in El Paso, TX. Book by phone or the on-site form — no account required.
+
 ## Salon
 
 - Name: Hair by William
@@ -30,6 +32,12 @@
 2. Or use the booking form on the homepage (WhatsApp or SMS)
 3. Share your name, phone, and preferred service
 4. No website account required
+
+## Optional
+
+- Portfolio: homepage `#portfolio`
+- Virtual try-on: homepage `#try-on`
+- Directions: homepage `#booking`
 
 ## Notes
 

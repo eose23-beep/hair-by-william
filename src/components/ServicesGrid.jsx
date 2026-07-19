@@ -26,7 +26,7 @@ const services = [
     title: "Precision Cuts",
     description:
       "Precision haircuts shaped to your face, texture, and lifestyle. Clean lines with an editorial finish.",
-    image: "/portfolio/work-03.png",
+    image: "/portfolio/work-03.jpg",
     imageAlt: "Precision cut with polished silhouette and editorial finish",
   },
   {
@@ -35,7 +35,7 @@ const services = [
     title: "Color Correction",
     description:
       "Dimensional color and color correction for uneven tone, brassiness, or past color. Healthy hair, refined results.",
-    image: "/portfolio/work-05.png",
+    image: "/portfolio/work-05.jpg",
     imageAlt: "Color correction with balanced tone and healthy, refined results",
   },
 ];

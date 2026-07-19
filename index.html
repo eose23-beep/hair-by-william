@@ -34,8 +34,8 @@
       property="og:image"
       content="https://william-site-snowy.vercel.app/portfolio/extensions_after-hero.jpg"
     />
-    <meta property="og:image:width" content="2160" />
-    <meta property="og:image:height" content="2160" />
+    <meta property="og:image:width" content="1600" />
+    <meta property="og:image:height" content="1600" />
     <meta
       property="og:image:alt"
       content="Long strawberry-blonde waves and soft fringe - Hair by William, El Paso"
@@ -59,10 +59,45 @@
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- LCP: mobile-first hero (desktop overrides via media) -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=Sora:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="image"
+      type="image/webp"
+      href="/portfolio/extensions_after-hero-960.webp"
+      imagesrcset="/portfolio/extensions_after-hero-720.webp 720w, /portfolio/extensions_after-hero-960.webp 960w, /portfolio/extensions_after-hero-1280.webp 1280w"
+      imagesizes="100vw"
+      media="(max-width: 1023px)"
+      fetchpriority="high"
     />
+    <link
+      rel="preload"
+      as="image"
+      type="image/webp"
+      href="/portfolio/extensions_after-hero-desk.webp"
+      imagesrcset="/portfolio/extensions_after-hero-desk.webp 1920w, /portfolio/extensions_after-hero-desk-2x.webp 2400w"
+      imagesizes="100vw"
+      media="(min-width: 1024px)"
+      fetchpriority="high"
+    />
+    <!-- Async fonts — cut render-blocking ~1.6s on mobile PSI -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@500;600&family=Sora:wght@400;500;600;700&display=swap"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@500;600&family=Sora:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@500;600&family=Sora:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <!-- sameAs: Google Business only for now. Add Instagram URL after the salon creates its own account. -->
     <script type="application/ld+json">
       {
