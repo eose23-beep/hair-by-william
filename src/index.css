@@ -5181,9 +5181,9 @@ a {
   align-content: center;
   gap: var(--space-2);
   width: 100%;
-  min-height: 144px;
+  min-height: 112px;
   margin: 0;
-  padding: var(--space-4) var(--space-3);
+  padding: var(--space-3);
   border: 1px dashed rgba(166, 139, 75, 0.55);
   background: rgba(255, 252, 246, 0.45);
   color: var(--ink);
@@ -5723,8 +5723,8 @@ a {
   }
 
   .hair-tryon__drop-target {
-    min-height: 184px;
-    padding: var(--space-6) var(--space-5);
+    min-height: 128px;
+    padding: var(--space-4) var(--space-3);
   }
 
   .hair-tryon__drop-preview {
@@ -5858,8 +5858,8 @@ a {
   }
 
   .hair-tryon__drop-target {
-    min-height: 140px;
-    padding: var(--space-5) var(--space-4);
+    min-height: 120px;
+    padding: var(--space-4) var(--space-3);
   }
 
   .hair-tryon__frames {
