@@ -42,14 +42,30 @@ function resolveScrollTarget(hash) {
   return document.getElementById(id);
 }
 
-function scrollToHash(hash, { smooth = true } = {}) {
+function scrollToHash(hash, { smooth = false } = {}) {
   const target = resolveScrollTarget(hash);
   if (!target) return false;
+  /* Instant by default. Assigning location.hash / scrollTo() under
+     html { scroll-behavior: smooth } can leave an in-flight animation that
+     keeps running after Book clicks and pulls the form back out of view. */
+  const root = document.documentElement;
+  const prevBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  target.scrollIntoView({
-    behavior: smooth && !reduce ? "smooth" : "auto",
-    block: "start",
-  });
+  const margin = Number.parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+  const top = Math.max(
+    0,
+    Math.round(target.getBoundingClientRect().top + window.scrollY - margin),
+  );
+  if (smooth && !reduce) {
+    window.scrollTo({ top, left: 0, behavior: "smooth" });
+  } else {
+    /* scrollTop write cancels in-flight CSS smooth scrolls (scrollIntoView no-op won't) */
+    root.scrollTop = top;
+    if (document.body) document.body.scrollTop = top;
+    window.scrollTo({ top, left: 0, behavior: "auto" });
+  }
+  root.style.scrollBehavior = prevBehavior;
   return true;
 }
 
@@ -87,20 +103,26 @@ export default function App() {
         url.pathname.replace(/\/$/, "") === window.location.pathname.replace(/\/$/, "");
       if (!samePath) return;
 
-      /* Pure hash: always handle so re-clicks still scroll */
+      /* Pure hash: pushState avoids CSS-smooth native hash jump; re-clicks still scroll */
       if (href.startsWith("#")) {
         event.preventDefault();
         ignoreSpyUntil = Date.now() + 1600;
         if (window.location.hash !== url.hash) {
-          window.location.hash = url.hash;
+          window.history.pushState(null, "", url.hash);
         }
         scrollToHash(url.hash);
         return;
       }
 
-      /* Query + hash (service book links): let URL update, then scroll */
+      /* Query + hash (service book links): own navigation so scroll is instant */
+      event.preventDefault();
       ignoreSpyUntil = Date.now() + 1600;
-      window.setTimeout(() => scrollToHash(url.hash), 0);
+      const next = `${url.pathname}${url.search}${url.hash}`;
+      const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      if (next !== current) {
+        window.history.pushState(null, "", next);
+      }
+      scrollToHash(url.hash);
     };
 
     /* Keep hash aligned with the section in view (fixes #contact while reading Try On). */
@@ -139,10 +161,12 @@ export default function App() {
 
     onHash();
     window.addEventListener("hashchange", onHash);
+    window.addEventListener("popstate", onHash);
     document.addEventListener("click", onClick);
     return () => {
       spyObserver.disconnect();
       window.removeEventListener("hashchange", onHash);
+      window.removeEventListener("popstate", onHash);
       document.removeEventListener("click", onClick);
     };
   }, []);
