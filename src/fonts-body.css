@@ -1,4 +1,4 @@
-/* Body UI font only — display faces load after idle to avoid CLS */
+/* Body UI font — optional + preloaded weights avoid booking CLS */
 @font-face {
   font-family: 'Sora';
   font-style: normal;
