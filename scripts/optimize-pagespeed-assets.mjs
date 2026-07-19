@@ -11,8 +11,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIR = path.resolve(__dirname, "..", "public", "portfolio");
 const ORIGINALS = path.join(DIR, "_originals");
 
-const WEBP_Q = 82;
-const JPEG_Q = 82;
+const WEBP_Q = 72;
+const JPEG_Q = 74;
 
 /** Prefer untouched backup when re-running optimizers. */
 function sourcePath(name) {
@@ -76,8 +76,8 @@ async function optimizeWorkStills() {
     const before = fs.statSync(png).size;
     const jpgPath = path.join(DIR, `${base}.jpg`);
     const webpPath = path.join(DIR, `${base}.webp`);
-    const jpgSize = await writeJpeg(png, jpgPath, { width: 1200 });
-    const webpSize = await writeWebp(png, webpPath, { width: 1200 });
+    const jpgSize = await writeJpeg(png, jpgPath, { width: 900 });
+    const webpSize = await writeWebp(png, webpPath, { width: 900 });
     console.log(
       `${base}: png ${kb(before)} → jpg ${kb(jpgSize)} + webp ${kb(webpSize)}`,
     );
@@ -143,21 +143,21 @@ async function optimizePostersAndMisc() {
     const buf = await sharp(src, { failOn: "none", unlimited: true })
       .rotate()
       .toBuffer();
-    const jpgSize = await writeJpeg(buf, outJpg, { width: 720, quality: 78 });
-    const webpSize = await writeWebp(buf, webp, { width: 720, quality: 78 });
+    const jpgSize = await writeJpeg(buf, outJpg, { width: 640, quality: 72 });
+    const webpSize = await writeWebp(buf, webp, { width: 640, quality: 72 });
     console.log(
       `${name}: ${kb(before)} → jpg ${kb(jpgSize)} webp ${kb(webpSize)}`,
     );
   }
 
   const misc = [
-    "extensions_after.jpg",
-    "extensions_before.jpg",
-    "blowout_after.jpg",
-    "blowout_before.jpg",
-    "color_cut.jpg",
+    { name: "extensions_after.jpg", width: 900 },
+    { name: "extensions_before.jpg", width: 800 },
+    { name: "blowout_after.jpg", width: 900 },
+    { name: "blowout_before.jpg", width: 900 },
+    { name: "color_cut.jpg", width: 900 },
   ];
-  for (const name of misc) {
+  for (const { name, width } of misc) {
     const src = sourcePath(name);
     if (!fs.existsSync(src)) continue;
     const before = fs.statSync(src).size;
@@ -166,8 +166,8 @@ async function optimizePostersAndMisc() {
     const buf = await sharp(src, { failOn: "none", unlimited: true })
       .rotate()
       .toBuffer();
-    const jpgSize = await writeJpeg(buf, outJpg, { width: 1400, quality: 82 });
-    const webpSize = await writeWebp(buf, webp, { width: 1400 });
+    const jpgSize = await writeJpeg(buf, outJpg, { width });
+    const webpSize = await writeWebp(buf, webp, { width });
     console.log(
       `${name}: ${kb(before)} → jpg ${kb(jpgSize)} webp ${kb(webpSize)}`,
     );

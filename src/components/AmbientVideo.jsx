@@ -106,6 +106,14 @@ export default function AmbientVideo({
       disablePictureInPicture
       width={720}
       height={1280}
-    />
+    >
+      <track
+        kind="captions"
+        src="/portfolio/ambient-captions.vtt"
+        srcLang="en"
+        label="English"
+        default
+      />
+    </video>
   );
 }

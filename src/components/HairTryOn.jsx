@@ -740,14 +740,13 @@ export default function HairTryOn() {
 
             <fieldset className="hair-tryon__styles">
               <legend className="hair-tryon__step-label">His work</legend>
-              <div className="hair-tryon__chips" role="list">
+              <div className="hair-tryon__chips" role="group" aria-label="Style presets from his work">
                 {STYLE_PRESETS.map((style) => {
                   const active = style.id === presetId;
                   return (
                     <button
                       key={style.id}
                       type="button"
-                      role="listitem"
                       className={`hair-tryon__chip${active ? " is-active" : ""}`}
                       aria-pressed={active}
                       onClick={() => onSelectPreset(style)}
