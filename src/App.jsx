@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useLayoutEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import AmbientVideo from "./components/AmbientVideo";
 import MobileCtaBar from "./components/MobileCtaBar";
 import { bookingAmbientClip, heroWorkClips } from "./data/portfolio";
@@ -29,18 +29,6 @@ const STUDIO_CITY = "El Paso, TX 79912 · LV Hair Salon";
  * AmbientVideo uses poster + still fallback when reduced-motion is on.
  */
 const HERO_AMBIENT_VIDEO = null;
-
-/** Seat the HTML LCP shell into the hero media slot — keep the same DOM node as LCP. */
-function useSeatLcpShell(mediaRef) {
-  useLayoutEffect(() => {
-    const media = mediaRef.current;
-    const shell = document.getElementById("lcp-shell");
-    if (!media || !shell || media.contains(shell)) return undefined;
-    shell.classList.add("is-seated");
-    media.prepend(shell);
-    return undefined;
-  }, [mediaRef]);
-}
 
 /** Map in-page hashes to a real scroll target (clips -> lookbook, visit -> booking, contact -> form). */
 function resolveScrollTarget(hash) {
@@ -95,8 +83,6 @@ function scrollToHash(hash, { smooth = false } = {}) {
 
 export default function App() {
   const rootRef = useRef(null);
-  const heroMediaRef = useRef(null);
-  useSeatLcpShell(heroMediaRef);
 
   useEffect(() => {
     let ignoreSpyUntil = 0;
@@ -488,11 +474,10 @@ export default function App() {
 
         <main id="main-content" className="site-main" tabIndex={-1}>
           <section className="hero-stage" aria-label="Hair by William">
-            <div className="hero-stage__media" ref={heroMediaRef}>
+            <div className="hero-stage__media">
               {/*
-                LCP photo lives in #lcp-shell (index.html) and is seated here so the
-                same <img> DOM node remains the LCP element (avoids React remount delay).
-                Optional living-hero video replaces that path when HERO_AMBIENT_VIDEO is set.
+                LCP photo is a permanent #lcp-shell in index.html (never remounted / moved).
+                Optional living-hero video covers that path when HERO_AMBIENT_VIDEO is set.
               */}
               {HERO_AMBIENT_VIDEO ? (
                 <AmbientVideo

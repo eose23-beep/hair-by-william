@@ -1150,7 +1150,8 @@ a {
   overflow: hidden;
   isolation: isolate;
   margin: 0;
-  background: #0a0908;
+  /* Photo is permanent #lcp-shell behind this section — keep transparent */
+  background: transparent;
 }
 
 .hero-stage__media {

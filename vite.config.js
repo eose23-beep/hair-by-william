@@ -71,7 +71,9 @@ function lcpFirstPaintPlugins() {
           `<script type="module">` +
           `const src=${JSON.stringify(src)};` +
           `const boot=()=>import(src);` +
-          `requestAnimationFrame(()=>requestAnimationFrame(boot));` +
+          `const start=()=>requestAnimationFrame(()=>requestAnimationFrame(boot));` +
+          `if(document.readyState==="complete")start();` +
+          `else window.addEventListener("load",start,{once:true});` +
           `</script>`,
       )
       return next

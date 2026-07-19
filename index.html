@@ -68,23 +68,14 @@
         position: absolute;
         left: 0;
         right: 0;
-        /* Approximate header row until app CSS applies */
-        top: 64px;
+        /* Match header + hero stack; shell stays put (never moved by React) */
+        top: 56px;
         height: clamp(560px, 78dvh, 780px);
         max-height: 820px;
-        /* Above #root until seated — otherwise opaque React root hides LCP (render delay) */
-        z-index: 5;
+        z-index: 0;
         overflow: hidden;
         pointer-events: none;
         background: #0a0908;
-      }
-      #lcp-shell.is-seated {
-        position: absolute;
-        inset: 0;
-        top: 0;
-        height: 100%;
-        max-height: none;
-        z-index: 0;
       }
       #lcp-shell picture,
       #lcp-shell img {
@@ -100,9 +91,14 @@
         min-height: 100dvh;
         background: transparent;
       }
+      /* Transparent hero media so permanent #lcp-shell shows through */
+      .hero-stage__media:empty,
+      .hero-stage__media:not(:has(video, img, picture)) {
+        background: transparent;
+      }
       @media (min-width: 1024px) {
         #lcp-shell {
-          top: 72px;
+          top: 64px;
         }
       }
     </style>
