@@ -3,13 +3,19 @@
   "site": "https://william-site-snowy.vercel.app/",
   "name": "Hair by William",
   "description": "El Paso hair salon — book appointments, call, WhatsApp, view portfolio and services, get directions. Guest-friendly; no account required.",
+  "nap": {
+    "name": "Hair by William",
+    "telephone": "+1-915-920-7823",
+    "address": "5411 N. Mesa, Suite 13C, El Paso, TX 79912",
+    "hours": "Friday–Saturday 10:00–18:00; closed Sunday–Thursday"
+  },
   "actions": [
     {
       "id": "book-appointment",
       "name": "Book Appointment",
-      "description": "Request an appointment for extensions, precision cuts, color correction, or Brazilian Blowout. Opens the guest booking form (#contact).",
+      "description": "Request an appointment for extensions, precision cuts, color correction, or Brazilian Blowout. Opens the guest booking form (#contact-form).",
       "method": "declarative",
-      "endpoint": "/#contact",
+      "endpoint": "/#contact-form",
       "parameters": {
         "required": [],
         "optional": ["service"]
@@ -20,7 +26,7 @@
       "name": "Submit Appointment Request",
       "description": "Fill name, phone, and preferred service, then send via WhatsApp or SMS. No website account.",
       "method": "declarative",
-      "endpoint": "/#contact",
+      "endpoint": "/#contact-form",
       "parameters": {
         "required": ["name", "phone", "service"],
         "optional": ["message"]
@@ -75,7 +81,7 @@
       "name": "Get Directions",
       "description": "Open Google Maps directions to 5411 N. Mesa, Suite 13C, El Paso, TX 79912.",
       "method": "declarative",
-      "endpoint": "/#visit",
+      "endpoint": "https://www.google.com/maps/dir/?api=1&destination=5411%20N.%20Mesa%2C%20Suite%2013C%2C%20El%20Paso%2C%20TX%2079912",
       "parameters": {
         "required": [],
         "optional": []
@@ -84,9 +90,9 @@
     {
       "id": "open-location",
       "name": "Open Location",
-      "description": "View Hair by William at LV Hair Salon — 5411 N. Mesa, Suite 13C, El Paso, TX 79912.",
+      "description": "View Hair by William visit details and map at LV Hair Salon — 5411 N. Mesa, Suite 13C, El Paso, TX 79912.",
       "method": "declarative",
-      "endpoint": "/#visit",
+      "endpoint": "/#booking",
       "parameters": {
         "required": [],
         "optional": []
@@ -109,6 +115,28 @@
       "description": "See signature services: hair extensions, Brazilian Blowout, precision cuts, color correction.",
       "method": "declarative",
       "endpoint": "/#services",
+      "parameters": {
+        "required": [],
+        "optional": []
+      }
+    },
+    {
+      "id": "view-try-on",
+      "name": "Open Virtual Try-On",
+      "description": "Open the optional AI hair try-on tool on the homepage.",
+      "method": "declarative",
+      "endpoint": "/#try-on",
+      "parameters": {
+        "required": [],
+        "optional": []
+      }
+    },
+    {
+      "id": "view-faq",
+      "name": "View FAQ",
+      "description": "Read location, hours, booking, services, and phone answers for Hair by William.",
+      "method": "declarative",
+      "endpoint": "/#faq",
       "parameters": {
         "required": [],
         "optional": []

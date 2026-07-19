@@ -1,20 +1,16 @@
 import { lazy, Suspense, useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import GoldWaveField from "./components/GoldWaveField";
-import ServicesGrid from "./components/ServicesGrid";
-import BookingFab from "./components/BookingFab";
 import AmbientVideo from "./components/AmbientVideo";
+import BookingFab from "./components/BookingFab";
 import { bookingAmbientClip, heroWorkClips } from "./data/portfolio";
 import { DIRECTIONS_URL, MAPS_SEARCH_URL } from "./data/location";
-import SalonFaq from "./components/SalonFaq";
 
 const PortfolioGallery = lazy(() => import("./components/PortfolioGallery"));
 const HairTryOn = lazy(() => import("./components/HairTryOn"));
 const ContactForm = lazy(() => import("./components/ContactForm"));
 const MapSection = lazy(() => import("./components/MapSection"));
-
-gsap.registerPlugin(ScrollTrigger);
+const ServicesGrid = lazy(() => import("./components/ServicesGrid"));
+const SalonFaq = lazy(() => import("./components/SalonFaq"));
+const GoldWaveField = lazy(() => import("./components/GoldWaveField"));
 
 const PHONE_HREF = "tel:915-920-7823";
 const PHONE_LABEL = "915-920-7823";
@@ -180,208 +176,211 @@ export default function App() {
   useEffect(() => {
     if (!rootRef.current) return undefined;
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const motionTargets =
-      ".reveal, .motion-block, .service-card, .site-footer__brand, .site-footer__col, .nav-row > *, .services-section__header > *, .portfolio-gallery__intro > *, .hair-tryon__intro > *, .hair-tryon__stage, .contact-section__intro, .contact-section__form-wrap, .booking-panel__card > *";
+      '.reveal, .motion-block, .service-card, .site-footer__brand, .site-footer__col, .nav-row > *, .services-section__header > *, .portfolio-gallery__intro > *, .hair-tryon__intro > *, .hair-tryon__stage, .contact-section__intro, .contact-section__form-wrap, .booking-panel__card > *';
 
-    if (reduceMotion) {
-      gsap.set(motionTargets, { clearProps: "opacity,transform" });
-      return undefined;
-    }
+    let cancelled = false;
+    let context;
 
-    const context = gsap.context(() => {
-      const easeOut = "power3.out";
-      const revealOnce = { start: "top 86%", once: true };
+    const bootMotion = async () => {
+      if (cancelled) return;
+      const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
+      if (cancelled || !rootRef.current) return;
 
-      gsap.fromTo(
-        ".nav-row > *",
-        { opacity: 0, y: -10 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.72,
-          stagger: 0.055,
-          ease: easeOut,
-          delay: 0.08,
-          clearProps: "opacity,transform",
-        },
-      );
+      gsap.registerPlugin(ScrollTrigger);
 
-      const heroTl = gsap.timeline();
-      heroTl
-        .fromTo(
-          ".hero-title",
-          { opacity: 0, y: 48 },
-          { opacity: 1, y: 0, duration: 1.1, ease: easeOut },
-        )
-        .fromTo(
-          ".hero-copy",
-          { opacity: 0, y: 32 },
-          { opacity: 1, y: 0, duration: 0.9, ease: easeOut },
-          "-=0.64",
-        )
-        .fromTo(
-          ".hero-actions",
-          { opacity: 0, y: 24 },
-          { opacity: 1, y: 0, duration: 0.85, ease: easeOut },
-          "-=0.5",
-        )
-        .fromTo(
-          ".hero-film",
-          { opacity: 0, y: -16 },
-          { opacity: 1, y: 0, duration: 0.9, ease: easeOut },
-          "-=0.45",
+      if (reduceMotion) {
+        gsap.set(motionTargets, { clearProps: 'opacity,transform' });
+        return;
+      }
+
+      context = gsap.context(() => {
+        const easeOut = 'power3.out';
+        const revealOnce = { start: 'top 86%', once: true };
+
+        gsap.fromTo(
+          '.nav-row > *',
+          { opacity: 0, y: -10 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.72,
+            stagger: 0.055,
+            ease: easeOut,
+            delay: 0.08,
+            clearProps: 'opacity,transform',
+          },
         );
 
-      gsap.fromTo(
-        ".portfolio-gallery__intro > *",
-        { opacity: 0, y: 22 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.85,
-          stagger: 0.07,
-          ease: easeOut,
-          clearProps: "opacity,transform",
-          scrollTrigger: {
-            trigger: "#portfolio",
-            ...revealOnce,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        [".hair-tryon__intro > *", ".hair-tryon__stage"],
-        { opacity: 0, y: 24 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.88,
-          stagger: 0.08,
-          ease: easeOut,
-          clearProps: "opacity,transform",
-          scrollTrigger: {
-            trigger: "#try-on",
-            ...revealOnce,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        [".contact-section__intro", ".contact-section__form-wrap"],
-        { opacity: 0, y: 28 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.12,
-          ease: easeOut,
-          clearProps: "opacity,transform",
-          scrollTrigger: {
-            trigger: "#contact",
-            ...revealOnce,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        ".services-section__header > *",
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.08,
-          ease: easeOut,
-          clearProps: "opacity,transform",
-          scrollTrigger: {
-            trigger: "#services",
-            ...revealOnce,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        gsap.utils.toArray(".service-card"),
-        { opacity: 0, y: 28 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.88,
-          stagger: 0.1,
-          ease: easeOut,
-          clearProps: "transform",
-          scrollTrigger: {
-            trigger: "#services",
-            start: "top 78%",
-            once: true,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        ".booking-panel__card > *",
-        { opacity: 0, y: 24 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.1,
-          ease: easeOut,
-          clearProps: "opacity,transform",
-          scrollTrigger: {
-            trigger: "#booking",
-            ...revealOnce,
-          },
-        },
-      );
-
-      gsap.fromTo(
-        [".site-footer__brand", ...gsap.utils.toArray(".site-footer__col")],
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.85,
-          stagger: 0.09,
-          ease: easeOut,
-          clearProps: "opacity,transform",
-          scrollTrigger: {
-            trigger: ".site-footer",
-            start: "top 92%",
-            once: true,
-          },
-        },
-      );
-
-      gsap.utils.toArray(".reveal:not(.services-section):not(.contact-section):not(.booking-panel)").forEach(
-        (element) => {
-          gsap.fromTo(
-            element,
+        const heroTl = gsap.timeline();
+        heroTl
+          .fromTo(
+            '.hero-title',
+            { opacity: 0, y: 48 },
+            { opacity: 1, y: 0, duration: 1.1, ease: easeOut },
+          )
+          .fromTo(
+            '.hero-copy',
             { opacity: 0, y: 32 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.95,
-              ease: easeOut,
-              clearProps: "opacity,transform",
-              scrollTrigger: {
-                trigger: element,
-                start: "top 84%",
-                once: true,
-              },
-            },
+            { opacity: 1, y: 0, duration: 0.9, ease: easeOut },
+            '-=0.64',
+          )
+          .fromTo(
+            '.hero-actions',
+            { opacity: 0, y: 24 },
+            { opacity: 1, y: 0, duration: 0.85, ease: easeOut },
+            '-=0.5',
+          )
+          .fromTo(
+            '.hero-film',
+            { opacity: 0, y: -16 },
+            { opacity: 1, y: 0, duration: 0.9, ease: easeOut },
+            '-=0.45',
           );
-        },
-      );
-    }, rootRef);
 
-    return () => context.revert();
+        gsap.fromTo(
+          '.portfolio-gallery__intro > *',
+          { opacity: 0, y: 22 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            stagger: 0.07,
+            ease: easeOut,
+            clearProps: 'opacity,transform',
+            scrollTrigger: { trigger: '#portfolio', ...revealOnce },
+          },
+        );
+
+        gsap.fromTo(
+          ['.hair-tryon__intro > *', '.hair-tryon__stage'],
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.88,
+            stagger: 0.08,
+            ease: easeOut,
+            clearProps: 'opacity,transform',
+            scrollTrigger: { trigger: '#try-on', ...revealOnce },
+          },
+        );
+
+        gsap.fromTo(
+          ['.contact-section__intro', '.contact-section__form-wrap'],
+          { opacity: 0, y: 28 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            stagger: 0.12,
+            ease: easeOut,
+            clearProps: 'opacity,transform',
+            scrollTrigger: { trigger: '#contact', ...revealOnce },
+          },
+        );
+
+        gsap.fromTo(
+          '.services-section__header > *',
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.08,
+            ease: easeOut,
+            clearProps: 'opacity,transform',
+            scrollTrigger: { trigger: '#services', ...revealOnce },
+          },
+        );
+
+        gsap.fromTo(
+          gsap.utils.toArray('.service-card'),
+          { opacity: 0, y: 28 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.88,
+            stagger: 0.1,
+            ease: easeOut,
+            clearProps: 'transform',
+            scrollTrigger: { trigger: '#services', start: 'top 78%', once: true },
+          },
+        );
+
+        gsap.fromTo(
+          '.booking-panel__card > *',
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            stagger: 0.1,
+            ease: easeOut,
+            clearProps: 'opacity,transform',
+            scrollTrigger: { trigger: '#booking', ...revealOnce },
+          },
+        );
+
+        gsap.fromTo(
+          ['.site-footer__brand', ...gsap.utils.toArray('.site-footer__col')],
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            stagger: 0.09,
+            ease: easeOut,
+            clearProps: 'opacity,transform',
+            scrollTrigger: { trigger: '.site-footer', start: 'top 92%', once: true },
+          },
+        );
+
+        gsap.utils
+          .toArray('.reveal:not(.services-section):not(.contact-section):not(.booking-panel)')
+          .forEach((element) => {
+            gsap.fromTo(
+              element,
+              { opacity: 0, y: 32 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.95,
+                ease: easeOut,
+                clearProps: 'opacity,transform',
+                scrollTrigger: { trigger: element, start: 'top 84%', once: true },
+              },
+            );
+          });
+      }, rootRef);
+    };
+
+    const start = () => {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => bootMotion(), { timeout: 2200 });
+      } else {
+        window.setTimeout(bootMotion, 1);
+      }
+    };
+
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+
+    return () => {
+      cancelled = true;
+      context?.revert();
+    };
   }, []);
 
   return (
     <>
-      <GoldWaveField />
+      <Suspense fallback={null}>
+        <GoldWaveField />
+      </Suspense>
 
       <div ref={rootRef} className="site-shell typography-layer">
         <a className="skip-link" href="#main-content">
@@ -439,6 +438,9 @@ export default function App() {
             <a className="ghost-link" href="#booking">
               Location
             </a>
+            <a className="ghost-link" href="#faq">
+              FAQ
+            </a>
             <a
               className="nav-phone"
               href={PHONE_HREF}
@@ -493,20 +495,20 @@ export default function App() {
                   />
                   <source
                     type="image/webp"
-                    srcSet="/portfolio/extensions_after-hero-720.webp 720w, /portfolio/extensions_after-hero-960.webp 960w, /portfolio/extensions_after-hero-1280.webp 1280w"
+                    srcSet="/portfolio/extensions_after-hero-540.webp 540w, /portfolio/extensions_after-hero-720.webp 720w, /portfolio/extensions_after-hero-960.webp 960w, /portfolio/extensions_after-hero-1280.webp 1280w"
                     sizes="100vw"
                   />
                   <source
                     type="image/jpeg"
-                    srcSet="/portfolio/extensions_after-hero-720.jpg 720w, /portfolio/extensions_after-hero-960.jpg 960w, /portfolio/extensions_after-hero.jpg 1600w"
+                    srcSet="/portfolio/extensions_after-hero-540.jpg 540w, /portfolio/extensions_after-hero-720.jpg 720w, /portfolio/extensions_after-hero-960.jpg 960w, /portfolio/extensions_after-hero.jpg 1600w"
                     sizes="100vw"
                   />
                   <img
                     className="hero-stage__photo"
-                    src="/portfolio/extensions_after-hero.jpg"
+                    src="/portfolio/extensions_after-hero-720.webp"
                     alt="Long strawberry-blonde waves and soft fringe, custom extension finish by Hair by William in El Paso"
-                    width={1600}
-                    height={1600}
+                    width={720}
+                    height={900}
                     fetchPriority="high"
                     decoding="async"
                   />
@@ -587,7 +589,9 @@ export default function App() {
             <PortfolioGallery />
           </Suspense>
 
-          <ServicesGrid />
+          <Suspense fallback={null}>
+            <ServicesGrid />
+          </Suspense>
 
           <Suspense fallback={null}>
             <HairTryOn />
@@ -699,7 +703,9 @@ export default function App() {
             </div>
           </section>
 
-          <SalonFaq />
+          <Suspense fallback={null}>
+            <SalonFaq />
+          </Suspense>
         </main>
 
         <footer className="site-footer">

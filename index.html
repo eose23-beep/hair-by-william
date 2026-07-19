@@ -55,20 +55,47 @@
       content="Long strawberry-blonde waves and soft fringe - Hair by William, El Paso"
     />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <!-- Critical path: enough paint rules for LCP before async app CSS -->
     <style>
       html,
       body {
-        background: #ffffff;
-        color: #2e2b28;
+        margin: 0;
+        background: #0a0908;
+        color: #f5efe6;
+      }
+      #lcp-shell {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+        background: #0a0908;
+      }
+      #lcp-shell picture,
+      #lcp-shell img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 58% 32%;
+      }
+      #root {
+        position: relative;
+        z-index: 1;
+        min-height: 100dvh;
+      }
+      #root[data-hydrated="true"] ~ #lcp-shell,
+      body.is-hydrated #lcp-shell {
+        display: none;
       }
     </style>
-    <!-- LCP: mobile-first hero (desktop overrides via media) -->
+    <!-- LCP: prefer 720w on mobile (Moto G lab width); desk uses landscape crop -->
     <link
       rel="preload"
       as="image"
       type="image/webp"
-      href="/portfolio/extensions_after-hero-960.webp"
-      imagesrcset="/portfolio/extensions_after-hero-720.webp 720w, /portfolio/extensions_after-hero-960.webp 960w, /portfolio/extensions_after-hero-1280.webp 1280w"
+      href="/portfolio/extensions_after-hero-720.webp"
+      imagesrcset="/portfolio/extensions_after-hero-540.webp 540w, /portfolio/extensions_after-hero-720.webp 720w, /portfolio/extensions_after-hero-960.webp 960w, /portfolio/extensions_after-hero-1280.webp 1280w"
       imagesizes="100vw"
       media="(max-width: 1023px)"
       fetchpriority="high"
@@ -83,19 +110,12 @@
       media="(min-width: 1024px)"
       fetchpriority="high"
     />
-    <!-- Self-hosted body font — avoids fonts.googleapis.com on critical path -->
+    <!-- One body font preload only — display fonts stay optional in fonts.css -->
     <link
       rel="preload"
       as="font"
       type="font/woff2"
       href="/fonts/sora-400.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/sora-500.woff2"
       crossorigin
     />
     <!-- sameAs: Google Business only for now. Add Instagram URL after the salon creates its own account. -->
@@ -208,6 +228,23 @@
           "Color Correction",
           "Precision Hair Cutting"
         ],
+        "employee": {
+          "@type": "Person",
+          "@id": "https://william-site-snowy.vercel.app/#stylist",
+          "name": "William",
+          "jobTitle": "Hair Stylist",
+          "worksFor": {
+            "@id": "https://william-site-snowy.vercel.app/#salon"
+          },
+          "knowsAbout": [
+            "Hair Extensions",
+            "Brazilian Blowouts",
+            "Dimensional Color",
+            "Color Correction",
+            "Precision Hair Cutting"
+          ],
+          "description": "El Paso hair stylist with 27 years in the chair, specializing in custom extensions, precision cuts, color correction, and Brazilian Blowouts at Hair by William inside LV Hair Salon."
+        },
         "description": "Hair by William - El Paso hair stylist specializing in custom extensions, precision cuts, color correction, and Brazilian Blowouts. Open Friday and Saturday 10 AM-6 PM by appointment. Closed Sunday-Thursday. Located inside LV Hair Salon, Suite 13C."
       }
     </script>
@@ -221,6 +258,36 @@
         "inLanguage": "en-US",
         "publisher": {
           "@id": "https://william-site-snowy.vercel.app/#salon"
+        }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": "https://william-site-snowy.vercel.app/#webpage",
+        "url": "https://william-site-snowy.vercel.app/",
+        "name": "Hair by William | El Paso Hair Stylist - Extensions, Cuts & Color",
+        "description": "Hair by William in El Paso, TX: custom extensions, precision cuts, color correction, and Brazilian Blowouts. Call 915-920-7823. Suite 13C at LV Hair Salon, 5411 N. Mesa.",
+        "inLanguage": "en-US",
+        "isPartOf": {
+          "@id": "https://william-site-snowy.vercel.app/#website"
+        },
+        "about": {
+          "@id": "https://william-site-snowy.vercel.app/#salon"
+        },
+        "mainEntity": {
+          "@id": "https://william-site-snowy.vercel.app/#salon"
+        },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://william-site-snowy.vercel.app/portfolio/extensions_after-hero.jpg",
+          "width": 1600,
+          "height": 1600
+        },
+        "speakable": {
+          "@type": "SpeakableSpecification",
+          "cssSelector": [".salon-faq", "#faq", ".booking-hours", ".site-footer__grid"]
         }
       }
     </script>
@@ -291,15 +358,39 @@
         document.head.appendChild(s);
       }
       if ("requestIdleCallback" in window) {
-        requestIdleCallback(loadGtag, { timeout: 4000 });
+        requestIdleCallback(loadGtag, { timeout: 8000 });
       } else {
         window.addEventListener("load", function () {
-          setTimeout(loadGtag, 1);
+          setTimeout(loadGtag, 3500);
         });
       }
     </script>
   </head>
   <body>
+    <!-- Pre-React LCP candidate: paints from preload without waiting on JS/CSS -->
+    <div id="lcp-shell" aria-hidden="true">
+      <picture>
+        <source
+          media="(min-width: 1024px)"
+          type="image/webp"
+          srcset="/portfolio/extensions_after-hero-desk.webp 1920w, /portfolio/extensions_after-hero-desk-2x.webp 2400w"
+          sizes="100vw"
+        />
+        <source
+          type="image/webp"
+          srcset="/portfolio/extensions_after-hero-540.webp 540w, /portfolio/extensions_after-hero-720.webp 720w, /portfolio/extensions_after-hero-960.webp 960w, /portfolio/extensions_after-hero-1280.webp 1280w"
+          sizes="100vw"
+        />
+        <img
+          src="/portfolio/extensions_after-hero-720.webp"
+          alt=""
+          width="720"
+          height="900"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </picture>
+    </div>
     <div id="root">
       <header>
         <p>Hair by William</p>

@@ -48,21 +48,42 @@ function editHairDevApi() {
   }
 }
 
+/** Load app CSS async so LCP hero (inline + preload) is not blocked ~1s by index.css. */
+function asyncCssLinks() {
+  return {
+    name: 'async-css-links',
+    enforce: 'post',
+    transformIndexHtml(html) {
+      return html.replace(
+        /<link([^>]*\s)rel="stylesheet"([^>]*?)href="([^"]+\.css)"([^>]*)>/g,
+        (_m, pre, mid, href, post) =>
+          `<link${pre}rel="preload" as="style" href="${href}"${mid}${post} onload="this.onload=null;this.rel='stylesheet'">` +
+          `<noscript><link rel="stylesheet" href="${href}"></noscript>`,
+      )
+    },
+  }
+}
+
 export default defineConfig({
-  plugins: [react(), editHairDevApi()],
+  plugins: [react(), editHairDevApi(), asyncCssLinks()],
   root: resolve(__dirname, '.'),
   build: {
     cssCodeSplit: true,
     modulePreload: {
-      resolveDependencies: (filename, deps) =>
-        deps.filter((dep) => !/swiper|HairTryOn|PortfolioGallery|ContactForm/.test(dep)),
+      resolveDependencies: (_filename, deps) =>
+        deps.filter(
+          (dep) =>
+            !/swiper|HairTryOn|PortfolioGallery|ContactForm|gsap|MapSection|ServicesGrid|SalonFaq|GoldWave/.test(
+              dep,
+            ),
+        ),
     },
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules/swiper')) return 'swiper';
-          if (id.includes('node_modules/gsap')) return 'gsap';
-          if (id.includes('node_modules/three') || id.includes('@react-three')) return 'three';
+          if (id.includes('node_modules/swiper')) return 'swiper'
+          if (id.includes('node_modules/gsap')) return 'gsap'
+          if (id.includes('node_modules/three') || id.includes('@react-three')) return 'three'
         },
       },
     },
@@ -73,19 +94,19 @@ export default defineConfig({
     strictPort: true,
     watch: {
       ignored: [
-        '**/node_modules/**', 
-        '**/.git/**', 
+        '**/node_modules/**',
+        '**/.git/**',
         '**/C:/Users/SysMigrator/.bun/**',
         '**/.bun/**',
         'C:/Users/SysMigrator/*',
-        'C:\\Users\\SysMigrator\\.bun\\**'
+        'C:\\Users\\SysMigrator\\.bun\\**',
       ],
       usePolling: true,
-      interval: 100
+      interval: 100,
     },
     fs: {
       strict: true,
-      allow: ['.']
-    }
-  }
+      allow: ['.'],
+    },
+  },
 })

@@ -46,6 +46,15 @@ Token-budgeted citation sheet. Prefer this file for accurate NAP and booking ans
 - Location, hours, booking, services, and phone: https://william-site-snowy.vercel.app/#faq
 - Same answers appear in FAQPage structured data on the homepage
 
+## Page anchors
+
+- `#portfolio` — salon portfolio
+- `#services` — signature services
+- `#try-on` — optional AI try-on
+- `#contact` / `#contact-form` — booking form
+- `#booking` / `#visit` — location, hours, map
+- `#faq` — visit FAQ
+
 ## Finding the suite
 
 - Building address: 5411 N. Mesa, El Paso, TX 79912
