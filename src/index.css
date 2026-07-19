@@ -743,8 +743,8 @@ a {
 .section {
   position: relative;
   z-index: 1;
-  padding-top: clamp(20px, 3vw, 32px);
-  padding-bottom: clamp(20px, 3vw, 32px);
+  padding-top: clamp(32px, 4.5vw, 56px);
+  padding-bottom: clamp(32px, 4.5vw, 56px);
   background: transparent !important;
 }
 
@@ -813,7 +813,7 @@ a {
 .brand-mark {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin: 0;
   min-width: 0;
   color: #fffaf0;
@@ -824,17 +824,22 @@ a {
 
 .brand-mark:hover,
 .brand-mark:focus-visible {
-  opacity: 0.96;
+  opacity: 0.97;
+}
+
+.brand-mark:focus-visible {
+  outline: 1px solid var(--champagne-soft);
+  outline-offset: 4px;
 }
 
 .brand-mark__glyph {
   flex-shrink: 0;
   display: block;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   overflow: visible;
   color: var(--champagne-bright);
-  filter: drop-shadow(0 0 10px rgba(232, 197, 71, 0.18));
+  filter: drop-shadow(0 0 8px rgba(232, 197, 71, 0.2));
   transition:
     color 0.45s var(--ease-luxury),
     filter 0.55s var(--ease-luxury),
@@ -842,47 +847,62 @@ a {
 }
 
 .brand-mark__seal {
-  fill: rgba(10, 9, 8, 0.55);
+  fill: rgba(10, 9, 8, 0.62);
   stroke: currentColor;
-  stroke-width: 0.9;
+  stroke-width: 0.85;
 }
 
 .brand-mark__ring {
   fill: none;
   stroke: currentColor;
-  stroke-width: 0.55;
-  opacity: 0.58;
+  stroke-width: 0.5;
+  opacity: 0.72;
+}
+
+.brand-mark__ring--inner {
+  stroke-width: 0.35;
+  opacity: 0.4;
+}
+
+.brand-mark__ticks {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 0.7;
+  stroke-linecap: square;
+  opacity: 0.78;
 }
 
 .brand-mark__strand {
   fill: none;
   stroke: currentColor;
-  stroke-width: 0.9;
+  stroke-width: 0.95;
   stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .brand-mark__strand--soft {
-  stroke-width: 0.45;
-  opacity: 0.55;
+  stroke-width: 0.4;
+  opacity: 0.5;
 }
 
 .brand-mark__monogram {
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.55;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke-width: 1.45;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  stroke-miterlimit: 2.4;
 }
 
 .brand-mark__jewel {
   fill: currentColor;
-  opacity: 0.78;
+  opacity: 0.88;
 }
 
 .brand-mark:hover .brand-mark__glyph,
 .brand-mark:focus-visible .brand-mark__glyph {
-  color: var(--champagne-soft);
-  filter: drop-shadow(0 0 14px rgba(232, 197, 71, 0.34));
+  color: #f3d978;
+  filter: drop-shadow(0 0 12px rgba(232, 197, 71, 0.36));
   transform: translateY(-1px);
 }
 
@@ -890,31 +910,34 @@ a {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 3px;
+  justify-content: center;
+  gap: 0;
   min-width: 0;
   line-height: 1;
+  padding-top: 1px;
 }
 
 .brand-mark__kicker {
   font-family: var(--font-brand);
-  font-size: clamp(9px, 0.78vw, 11px);
+  font-size: clamp(8px, 0.7vw, 10px);
   font-weight: 500;
-  letter-spacing: 0.42em;
+  letter-spacing: 0.4em;
   text-transform: uppercase;
   color: var(--champagne-soft);
-  padding-bottom: 4px;
-  border-bottom: var(--rule) solid var(--gold-rule-mid);
+  padding: 0 0.12em 5px 0;
+  margin: 0 0 5px;
+  border-bottom: var(--rule) solid rgba(232, 197, 71, 0.72);
 }
 
 .brand-mark__name {
   font-family: var(--font-display);
-  font-size: clamp(22px, 2.1vw, 28px);
+  font-size: clamp(23px, 2.2vw, 30px);
   font-weight: 500;
   font-style: italic;
-  letter-spacing: 0.01em;
-  line-height: 0.95;
-  color: #fffaf0;
-  text-shadow: 0 0 24px rgba(232, 197, 71, 0.16);
+  letter-spacing: 0.018em;
+  line-height: 0.9;
+  color: #fff8eb;
+  text-shadow: 0 0 20px rgba(232, 197, 71, 0.14);
 }
 
 .ghost-link {
@@ -3043,7 +3066,7 @@ a {
   }
 
   .brand-mark {
-    gap: 10px;
+    gap: 8px;
   }
 
   .brand-mark__glyph {
@@ -3053,12 +3076,13 @@ a {
 
   .brand-mark__kicker {
     font-size: 8px;
-    letter-spacing: 0.28em;
-    padding-bottom: 3px;
+    letter-spacing: 0.3em;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
   }
 
   .brand-mark__name {
-    font-size: 16px;
+    font-size: 17px;
   }
 
   .nav-phone {
@@ -3135,17 +3159,19 @@ a {
   }
 
   .brand-mark__glyph {
-    width: 28px;
-    height: 28px;
+    width: 30px;
+    height: 30px;
   }
 
   .brand-mark__kicker {
     font-size: 7px;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.22em;
+    padding-bottom: 3px;
+    margin-bottom: 3px;
   }
 
   .brand-mark__name {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .nav-phone {
@@ -3238,19 +3264,19 @@ a {
 
 .services-section__header {
   display: grid;
-  gap: var(--space-2);
-  margin-bottom: clamp(16px, 2.5vw, 24px);
+  gap: var(--space-3);
+  margin-bottom: clamp(24px, 3vw, 32px);
 }
 
 .services-section__copy {
-  max-width: 40ch;
+  max-width: 42ch;
 }
 
 .services-section__jump {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 16px;
-  margin: 4px 0 0;
+  gap: 4px 20px;
+  margin: var(--space-1) 0 0;
   padding: 0;
 }
 
@@ -3562,9 +3588,9 @@ a {
 .booking-panel {
   display: grid;
   gap: clamp(16px, 2.5vw, 24px);
-  padding: clamp(16px, 3vw, 32px) 0 clamp(16px, 3vw, 28px);
+  padding: clamp(32px, 4.5vw, 56px) 0;
   border-radius: 0;
-  border-top: 1px solid var(--stroke-mid);
+  border-top: none;
   background: transparent !important;
   margin-left: 0;
   max-width: none;
@@ -3967,14 +3993,14 @@ a {
   }
 }
 
-/* Contact form ? full shell width; ? split on desktop */
+/* Contact form — full shell width; φ split on desktop */
 .contact-section {
   max-width: none;
   margin-left: 0;
   width: 100%;
   min-width: 0;
-  padding-top: 8px;
-  padding-bottom: 16px;
+  padding-top: clamp(32px, 4.5vw, 56px);
+  padding-bottom: clamp(32px, 4.5vw, 56px);
   scroll-margin-top: 88px;
 }
 
@@ -4066,7 +4092,7 @@ a {
 
 @media (min-width: 1024px) {
   .contact-section__layout {
-    grid-template-columns: minmax(240px, 2fr) minmax(320px, 3fr);
+    grid-template-columns: minmax(240px, var(--phi-minor)) minmax(320px, var(--phi-major));
     column-gap: var(--gap-phi);
     align-items: start;
   }
@@ -4678,6 +4704,39 @@ a {
   border: 0;
 }
 
+.site-footer__nav {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer__nav li {
+  margin: 0;
+}
+
+.site-footer__nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font-size: 13px;
+  font-weight: 550;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff8e7;
+  border-bottom: var(--rule) solid transparent;
+  transition:
+    color 0.4s var(--ease-luxury),
+    border-color 0.4s var(--ease-luxury);
+}
+
+.site-footer__nav a:hover,
+.site-footer__nav a:focus-visible {
+  color: var(--champagne-bright);
+  border-bottom-color: rgba(232, 197, 71, 0.72);
+}
+
 .footer-details {
   display: grid;
   gap: 6px;
@@ -4789,8 +4848,8 @@ a {
   }
 
   .contact-section {
-    padding-top: 8px;
-    padding-bottom: 16px;
+    padding-top: clamp(28px, 5vw, 40px);
+    padding-bottom: clamp(28px, 5vw, 40px);
   }
 
   .contact-section__layout {
@@ -4830,11 +4889,13 @@ a {
 
   .brand-mark__kicker {
     font-size: clamp(8px, 2.2vw, 10px);
-    letter-spacing: clamp(0.22em, 0.8vw, 0.34em);
+    letter-spacing: clamp(0.24em, 0.85vw, 0.36em);
+    padding-bottom: 4px;
+    margin-bottom: 4px;
   }
 
   .brand-mark__name {
-    font-size: clamp(18px, 5vw, 22px);
+    font-size: clamp(19px, 5.2vw, 23px);
   }
 
   .cta-small {
@@ -4849,7 +4910,7 @@ a {
     display: none;
   }
 
-  .nav-row .ghost-link:nth-of-type(2) {
+  .nav-row .ghost-link--priority {
     grid-area: menu;
     display: inline-flex;
     align-items: center;
@@ -5159,15 +5220,15 @@ a {
 
 .hair-tryon__layout {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-6);
   width: 100%;
   min-width: 0;
 }
 
 .hair-tryon__intro {
   display: grid;
-  gap: var(--space-2);
-  max-width: 40ch;
+  gap: var(--space-3);
+  max-width: 42ch;
 }
 
 .hair-tryon__copy {

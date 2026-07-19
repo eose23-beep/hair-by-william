@@ -395,35 +395,43 @@ export default function App() {
                 aria-hidden="true"
                 focusable="false"
               >
-                <circle className="brand-mark__seal" cx="20" cy="20" r="18.6" />
-                <circle className="brand-mark__ring" cx="20" cy="20" r="15.8" />
+                <circle className="brand-mark__seal" cx="20" cy="20" r="18.5" />
+                <circle className="brand-mark__ring" cx="20" cy="20" r="16.55" />
+                <circle className="brand-mark__ring brand-mark__ring--inner" cx="20" cy="20" r="14.7" />
+                <path
+                  className="brand-mark__ticks"
+                  d="M20 5.05v1.45M20 33.5v1.45M5.05 20h1.45M33.5 20h1.45"
+                />
                 <path
                   className="brand-mark__strand"
-                  d="M11.2 13.8c3.4-2.8 14.2-2.8 17.6 0"
+                  d="M12.1 13.35c2.55-2.85 6.35-3.55 7.9-1.55 1.55-2 5.35-1.3 7.9 1.55"
                 />
                 <path
                   className="brand-mark__strand brand-mark__strand--soft"
-                  d="M12.6 15.4c2.8-1.9 12-1.9 14.8 0"
+                  d="M13.85 14.65c1.95-1.55 4.05-1.85 6.15-.15 2.1-1.7 4.2-1.4 6.15.15"
                 />
                 <path
                   className="brand-mark__monogram"
-                  d="M11.6 15.2 14.8 29.6 20 20.4 25.2 29.6 28.4 15.2"
+                  d="M10.85 16.15h2.15l2.05 11.55L20 18.35l4.95 9.35 2.05-11.55h2.15"
                 />
-                <circle className="brand-mark__jewel" cx="20" cy="32.2" r="0.85" />
+                <path
+                  className="brand-mark__jewel"
+                  d="M20 31.15l0.85 0.85-0.85 0.85-0.85-0.85z"
+                />
               </svg>
               <span className="brand-mark__lockup">
                 <span className="brand-mark__kicker">Hair by</span>
                 <span className="brand-mark__name">William</span>
               </span>
             </a>
-            <a className="ghost-link" href="#portfolio">
+            <a className="ghost-link ghost-link--priority" href="#portfolio">
               Portfolio
-            </a>
-            <a className="ghost-link" href="#try-on">
-              Try On
             </a>
             <a className="ghost-link" href="#services">
               Services
+            </a>
+            <a className="ghost-link" href="#try-on">
+              Try On
             </a>
             <a className="ghost-link" href="#booking">
               Location
@@ -578,11 +586,11 @@ export default function App() {
 
           <PortfolioGallery />
 
+          <ServicesGrid />
+
           <HairTryOn />
 
           <ContactForm />
-
-          <ServicesGrid />
 
           <section
             id="booking"
@@ -715,21 +723,12 @@ export default function App() {
               </div>
               <div className="site-footer__col motion-block">
                 <p className="site-footer__label">Explore</p>
-                <ul className="site-footer__tags">
-                  <li>
-                    <a href="#extensions">Extensions</a>
-                  </li>
-                  <li>
-                    <a href="#precision-cuts">Cuts</a>
-                  </li>
-                  <li>
-                    <a href="#color-correction">Color</a>
-                  </li>
-                  <li>
-                    <a href="#brazilian-blowout">Blowout</a>
-                  </li>
+                <ul className="site-footer__nav">
                   <li>
                     <a href="#portfolio">Portfolio</a>
+                  </li>
+                  <li>
+                    <a href="#services">Services</a>
                   </li>
                   <li>
                     <a href="#try-on">Try On</a>
@@ -739,16 +738,6 @@ export default function App() {
                   </li>
                   <li>
                     <a href="#booking">Location</a>
-                  </li>
-                  <li>
-                    <a
-                      href={PHONE_HREF}
-                      data-mcp-action="call-salon"
-                      data-mcp-description="Call Hair by William at 915-920-7823."
-                      data-mcp-params='{"phone":"+1-915-920-7823"}'
-                    >
-                      Call
-                    </a>
                   </li>
                 </ul>
               </div>
