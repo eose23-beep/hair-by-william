@@ -1184,12 +1184,79 @@ a {
   transform-origin: 62% 28%;
 }
 
-.hero-stage__overlay {
+/*
+ * Hair luminosity — warm champagne sidelight + soft midtone lift over the
+ * hair mass (object-position aware). soft-light keeps face natural.
+ */
+.hero-stage__hair-sheen {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  /* Slight black veil — left copy readable, photo stays vivid (not milky) */
+  /* Mobile crop: face/hair upper-left-center */
+  background:
+    radial-gradient(
+      ellipse 56% 58% at 48% 22%,
+      rgba(240, 208, 96, 0.2) 0%,
+      rgba(212, 175, 55, 0.09) 34%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 42% 46% at 54% 16%,
+      rgba(255, 248, 231, 0.14) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 70% 55% at 58% 40%,
+      rgba(201, 162, 39, 0.06) 0%,
+      transparent 65%
+    );
+  mix-blend-mode: soft-light;
+  opacity: 0.72;
+}
+
+.hero-stage__hair-sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Selective midtone lift — hair body, not a full-frame wash */
+  background: radial-gradient(
+    ellipse 48% 58% at 50% 24%,
+    rgba(255, 244, 220, 0.22) 0%,
+    rgba(232, 197, 71, 0.08) 38%,
+    transparent 68%
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.45;
+}
+
+.hero-stage__hair-sheen::after {
+  content: "";
+  position: absolute;
+  inset: -8% -20%;
+  /* Slow specular sweep — champagne ribbon masked to hair zone */
+  background: linear-gradient(
+    118deg,
+    transparent 38%,
+    rgba(255, 248, 231, 0.02) 44%,
+    rgba(255, 248, 231, 0.2) 50%,
+    rgba(240, 208, 96, 0.12) 53%,
+    rgba(212, 175, 55, 0.04) 57%,
+    transparent 64%
+  );
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transform: translate3d(-18%, 4%, 0);
+  -webkit-mask-image: radial-gradient(ellipse 52% 64% at 50% 24%, #000 0%, transparent 74%);
+  mask-image: radial-gradient(ellipse 52% 64% at 50% 24%, #000 0%, transparent 74%);
+}
+
+.hero-stage__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  /* Slight black veil — left copy readable; hair zone left less crushed */
   background:
     linear-gradient(
       105deg,
@@ -1197,15 +1264,21 @@ a {
       rgba(5, 4, 3, 0.72) 18%,
       rgba(5, 4, 3, 0.48) 34%,
       rgba(5, 4, 3, 0.18) 52%,
-      rgba(5, 4, 3, 0.04) 72%,
-      rgba(5, 4, 3, 0.12) 100%
+      rgba(5, 4, 3, 0.02) 72%,
+      rgba(5, 4, 3, 0.1) 100%
     ),
-    linear-gradient(180deg, rgba(5, 4, 3, 0.28) 0%, transparent 30%, rgba(5, 4, 3, 0.48) 100%);
+    linear-gradient(180deg, rgba(5, 4, 3, 0.28) 0%, transparent 30%, rgba(5, 4, 3, 0.48) 100%),
+    radial-gradient(
+      ellipse 46% 58% at 62% 36%,
+      transparent 0%,
+      transparent 42%,
+      rgba(5, 4, 3, 0.06) 100%
+    );
 }
 
 .hero-stage__content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1341,11 +1414,48 @@ a {
         rgba(5, 4, 3, 0.9) 0%,
         rgba(5, 4, 3, 0.78) 20%,
         rgba(5, 4, 3, 0.52) 38%,
-        rgba(5, 4, 3, 0.2) 56%,
-        rgba(5, 4, 3, 0.06) 72%,
-        rgba(5, 4, 3, 0.16) 100%
+        rgba(5, 4, 3, 0.18) 56%,
+        rgba(5, 4, 3, 0.02) 74%,
+        rgba(5, 4, 3, 0.12) 100%
       ),
-      linear-gradient(180deg, rgba(5, 4, 3, 0.28) 0%, transparent 36%, rgba(5, 4, 3, 0.48) 100%);
+      linear-gradient(180deg, rgba(5, 4, 3, 0.26) 0%, transparent 36%, rgba(5, 4, 3, 0.46) 100%);
+  }
+
+  /* Desk crop: hair mass sits right-of-center — bias gold sidelight there */
+  .hero-stage__hair-sheen {
+    opacity: 0.88;
+    background:
+      radial-gradient(
+        ellipse 46% 64% at 68% 36%,
+        rgba(240, 208, 96, 0.24) 0%,
+        rgba(212, 175, 55, 0.11) 30%,
+        transparent 68%
+      ),
+      radial-gradient(
+        ellipse 34% 48% at 74% 26%,
+        rgba(255, 248, 231, 0.16) 0%,
+        transparent 56%
+      ),
+      radial-gradient(
+        ellipse 58% 52% at 62% 48%,
+        rgba(201, 162, 39, 0.07) 0%,
+        transparent 62%
+      );
+  }
+
+  .hero-stage__hair-sheen::before {
+    background: radial-gradient(
+      ellipse 44% 60% at 70% 38%,
+      rgba(255, 244, 220, 0.26) 0%,
+      rgba(232, 197, 71, 0.1) 36%,
+      transparent 68%
+    );
+    opacity: 0.52;
+  }
+
+  .hero-stage__hair-sheen::after {
+    -webkit-mask-image: radial-gradient(ellipse 48% 66% at 70% 38%, #000 0%, transparent 74%);
+    mask-image: radial-gradient(ellipse 48% 66% at 70% 38%, #000 0%, transparent 74%);
   }
 
   .hero-stage__copy {
@@ -1392,8 +1502,8 @@ a {
 
   .hero-stage__overlay {
     background:
-      linear-gradient(180deg, rgba(5, 4, 3, 0.38) 0%, rgba(5, 4, 3, 0.2) 34%, rgba(5, 4, 3, 0.88) 100%),
-      linear-gradient(90deg, rgba(5, 4, 3, 0.72) 0%, rgba(5, 4, 3, 0.16) 62%, rgba(5, 4, 3, 0.08) 100%);
+      linear-gradient(180deg, rgba(5, 4, 3, 0.36) 0%, rgba(5, 4, 3, 0.16) 32%, rgba(5, 4, 3, 0.88) 100%),
+      linear-gradient(90deg, rgba(5, 4, 3, 0.72) 0%, rgba(5, 4, 3, 0.14) 58%, rgba(5, 4, 3, 0.06) 100%);
   }
 
   .hero-stage__media img,
@@ -1456,12 +1566,36 @@ a {
     transform: scale(1.02);
     animation: none !important;
   }
+
+  .hero-stage__hair-sheen::after {
+    animation: none !important;
+    opacity: 0.28;
+    transform: translate3d(0, 0, 0);
+    background: linear-gradient(
+      118deg,
+      transparent 42%,
+      rgba(255, 248, 231, 0.1) 50%,
+      rgba(240, 208, 96, 0.06) 54%,
+      transparent 62%
+    );
+  }
 }
 
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
   .hero-stage__media img.hero-stage__photo,
   .hero-stage__media .hero-stage__photo {
     animation: hero-living 34s var(--ease-luxury) infinite alternate;
+  }
+
+  .hero-stage__hair-sheen::after {
+    animation: hero-hair-specular 16s var(--ease-luxury) infinite;
+  }
+}
+
+@media (max-width: 1023px) and (prefers-reduced-motion: no-preference) {
+  .hero-stage__hair-sheen::after {
+    /* Subtler, slower sweep on phone — still luxury, less busy */
+    animation: hero-hair-specular-mob 22s var(--ease-luxury) infinite;
   }
 }
 
@@ -1474,10 +1608,50 @@ a {
   }
 }
 
+@keyframes hero-hair-specular {
+  0%,
+  14% {
+    transform: translate3d(-20%, 5%, 0);
+    opacity: 0;
+  }
+  28% {
+    opacity: 0.55;
+  }
+  52% {
+    transform: translate3d(10%, -2%, 0);
+    opacity: 0.42;
+  }
+  68%,
+  100% {
+    transform: translate3d(24%, -5%, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes hero-hair-specular-mob {
+  0%,
+  18% {
+    transform: translate3d(-16%, 4%, 0);
+    opacity: 0;
+  }
+  34% {
+    opacity: 0.32;
+  }
+  56% {
+    transform: translate3d(8%, -1%, 0);
+    opacity: 0.24;
+  }
+  74%,
+  100% {
+    transform: translate3d(18%, -3%, 0);
+    opacity: 0;
+  }
+}
+
 /* Hero lookbook strip — top-right muted work loops; photo stays full-bleed */
 .hero-film {
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   display: flex;
   flex-direction: column;
   gap: 8px;

@@ -516,6 +516,8 @@ export default function App() {
                 </picture>
               )}
             </div>
+            {/* Soft gold sidelight / specular lift — sells hair without neon rim */}
+            <div className="hero-stage__hair-sheen" aria-hidden="true" />
             <div className="hero-stage__overlay" aria-hidden="true" />
             <div className="hero-stage__content shell">
               <div className="hero-stage__copy">
