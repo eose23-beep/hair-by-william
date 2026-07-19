@@ -1,6 +1,4 @@
-﻿/* Self-hosted Google Fonts (latin woff2) — see public/fonts/ */
-
-/* Display / brand: optional to limit CLS if late */
+/* Display / brand faces — idle-loaded; optional so late arrival never shifts layout */
 @font-face {
   font-family: 'Cormorant Garamond';
   font-style: normal;
@@ -22,10 +20,6 @@
   font-style: normal;
   font-weight: 500;
   font-display: optional;
-  size-adjust: 102%;
-  ascent-override: 90%;
-  descent-override: 22%;
-  line-gap-override: 0%;
   src: url('/fonts/cormorant-garamond-500.woff2') format('woff2');
 }
 
@@ -51,37 +45,4 @@
   font-weight: 600;
   font-display: optional;
   src: url('/fonts/cinzel-600.woff2') format('woff2');
-}
-
-/* UI body: optional once preloaded — avoids late swap CLS */
-@font-face {
-  font-family: 'Sora';
-  font-style: normal;
-  font-weight: 400;
-  font-display: optional;
-  src: url('/fonts/sora-400.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Sora';
-  font-style: normal;
-  font-weight: 500;
-  font-display: optional;
-  src: url('/fonts/sora-500.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Sora';
-  font-style: normal;
-  font-weight: 600;
-  font-display: optional;
-  src: url('/fonts/sora-600.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Sora';
-  font-style: normal;
-  font-weight: 700;
-  font-display: optional;
-  src: url('/fonts/sora-700.woff2') format('woff2');
 }
