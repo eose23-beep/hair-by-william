@@ -7,12 +7,12 @@ const FAQ_ITEMS = [
   {
     question: "What are Hair by William's hours?",
     answer:
-      "Open Friday and Saturday 10:00 AM-6:00 PM. Closed Sunday through Thursday. Appointments by call or text.",
+      "Open Friday and Saturday 10:00 AM-6:00 PM. Closed Sunday through Thursday. We confirm the next available Friday or Saturday when you book — no online waitlist gimmicks.",
   },
   {
     question: "How do I book an appointment with Hair by William?",
     answer:
-      "Call or text 915-920-7823, message on WhatsApp, or use the booking form on this website. No online account is required.",
+      "Call or text 915-920-7823, message on WhatsApp, or use the booking form on this website. WhatsApp and text are the fastest. No online account is required.",
   },
   {
     question: "What services does Hair by William offer?",

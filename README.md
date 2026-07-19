@@ -1,16 +1,23 @@
-# React + Vite
+# Hair by William
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+El Paso salon site — parchment / ink / gold editorial. Production: https://william-site-snowy.vercel.app/
 
-Currently, two official plugins are available:
+## Hero ambient video (optional)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Still hero is the default. To drop in a living loop without breaking LCP:
 
-## React Compiler
+1. Export a muted 4–6s hair/chair loop (WebM preferred).
+2. Save as `public/portfolio/hero-hair-sway.webm`.
+3. In `src/App.jsx`, set:
+   `const HERO_AMBIENT_VIDEO = "/portfolio/hero-hair-sway.webm";`
+4. Leave as `null` until the file exists.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+`AmbientVideo` only loads near viewport and falls back to the poster / still when reduced-motion is on.
 
-## Expanding the Oxlint configuration
+## Scripts
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```bash
+npm run dev
+npm run build
+npm run preview
+```

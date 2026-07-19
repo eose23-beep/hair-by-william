@@ -1,9 +1,11 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { MessageCircle, Phone } from "lucide-react";
+import { DIRECTIONS_URL } from "../data/location";
 
 const PHONE_E164 = "19159207823";
 const PHONE_DISPLAY = "915-920-7823";
 const WHATSAPP_HREF = `https://wa.me/${PHONE_E164}`;
+const HOURS_LINE = "Friday–Saturday · 10 AM–6 PM · El Paso";
 
 const SERVICE_OPTIONS = [
   "Extensions",
@@ -173,8 +175,14 @@ export default function ContactForm() {
         <aside className="contact-section__intro motion-block">
           <h2 className="section-heading">Request Your Visit</h2>
           <p className="lead contact-section__copy">
-            Tell William what you need. Your message opens in WhatsApp or Text, ready to send. No
-            account needed.
+            Tell William what you need. Primary path: WhatsApp or Text — message opens ready to
+            send. No account needed.
+          </p>
+
+          <p className="contact-section__hours-line">{HOURS_LINE}</p>
+          <p className="contact-section__hours-note">
+            Closed Sunday–Thursday. We confirm the next open slot when you reach out — no fake
+            scarcity.
           </p>
 
           <dl className="contact-section__studio" aria-label="Studio details">
@@ -184,9 +192,7 @@ export default function ContactForm() {
             </div>
             <div>
               <dt>Hours</dt>
-              <dd>
-                Friday-Saturday 10 AM-6 PM · closed Sunday-Thursday · call or text to book
-              </dd>
+              <dd>Friday–Saturday 10 AM–6 PM · closed Sunday–Thursday</dd>
             </div>
             <div>
               <dt>Call</dt>
@@ -198,6 +204,21 @@ export default function ContactForm() {
                   data-mcp-params='{"phone":"+1-915-920-7823"}'
                 >
                   {PHONE_DISPLAY}
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt>Directions</dt>
+              <dd>
+                <a
+                  href={DIRECTIONS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-mcp-action="get-directions"
+                  data-mcp-description="Open Google Maps directions to Hair by William at 5411 N. Mesa, Suite 13C, El Paso, TX 79912."
+                  data-mcp-params='{"destination":"5411 N. Mesa, Suite 13C, El Paso, TX 79912"}'
+                >
+                  Open in Google Maps
                 </a>
               </dd>
             </div>
@@ -322,6 +343,10 @@ export default function ContactForm() {
               />
             </label>
 
+            <p className="contact-form__hours" aria-label="Salon hours">
+              {HOURS_LINE}
+            </p>
+
             <div className="contact-form__actions" role="group" aria-label="Send request">
               <button
                 type="submit"
@@ -336,7 +361,7 @@ export default function ContactForm() {
               </button>
               <button
                 type="button"
-                className="secondary-button contact-form__text"
+                className="cta-button contact-form__text"
                 aria-disabled={!isValid}
                 onClick={handleText}
                 data-mcp-action="book-via-sms"
@@ -368,6 +393,16 @@ export default function ContactForm() {
                 data-mcp-params='{"phone":"+1-915-920-7823"}'
               >
                 {PHONE_DISPLAY}
+              </a>
+              {" · "}
+              <a
+                href={DIRECTIONS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-mcp-action="get-directions"
+                data-mcp-description="Open Google Maps directions to Hair by William at 5411 N. Mesa, Suite 13C, El Paso, TX 79912."
+              >
+                Get directions
               </a>
             </p>
           </form>
