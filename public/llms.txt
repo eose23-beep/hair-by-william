@@ -4,6 +4,16 @@
 
 Hair by William is a local salon practice inside LV Hair Salon (Suite 13C) in El Paso, TX. Book by phone or the on-site form — no account required.
 
+## Primary actions (fastest paths)
+
+- Call / text: tel:915-920-7823 (+1-915-920-7823)
+- WhatsApp: https://wa.me/19159207823
+- Book on site: https://william-site-snowy.vercel.app/#contact-form
+- Visit / map: https://william-site-snowy.vercel.app/#booking
+- FAQ: https://william-site-snowy.vercel.app/#faq
+- Portfolio: https://william-site-snowy.vercel.app/#portfolio
+- Virtual try-on: https://william-site-snowy.vercel.app/#try-on
+
 ## Salon
 
 - Name: Hair by William
