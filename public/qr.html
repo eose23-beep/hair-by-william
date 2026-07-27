@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hair by William · Chair QR Station Display</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #f9f6f0;
+      --card: #ffffff;
+      --ink: #1a1816;
+      --gold: #c49e2b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      text-align: center;
+    }
+    .qr-card {
+      background: var(--card);
+      border: 2px solid var(--gold);
+      padding: 40px 32px;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .title {
+      font-size: 28px;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--ink);
+    }
+    .subtitle {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .qr-image {
+      width: 200px;
+      height: 200px;
+      padding: 12px;
+      border: 1px solid #e0d8c8;
+      background: #fff;
+    }
+    .instructions {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.5;
+    }
+    .badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      background: #f4efdf;
+      color: #8a6a10;
+      border-radius: 4px;
+    }
+    .print-btn {
+      margin-top: 20px;
+      padding: 10px 24px;
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    @media print {
+      .print-btn { display: none; }
+      body { background: #fff; }
+      .qr-card { box-shadow: none; border-color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <div class="qr-card">
+    <div class="subtitle">Suite 13C · LV Hair Salon</div>
+    <h1 class="title">Hair by William</h1>
+    
+    <!-- Dynamic Google QR Code for William's site -->
+    <img
+      class="qr-image"
+      src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://william-site-snowy.vercel.app/bio"
+      alt="Scan QR Code to Book or Review"
+    />
+
+    <div class="badge">★ Leave a 5-Star Review or Rebook</div>
+    
+    <p class="instructions">
+      Scan with your phone camera to view the virtual lookbook, test the AI hair generator, or leave a review on Google!
+    </p>
+
+    <button class="print-btn" onclick="window.print()">🖨 Print Station Flyer</button>
+  </div>
+</body>
+</html>
