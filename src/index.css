@@ -1,27 +1,27 @@
 :root {
-  /* Brand Guardian — silk white + charcoal + metallic gold */
-  --bg-main: #ffffff;
-  --bg-panel: rgba(255, 255, 255, 0.88);
+  /* Brand Guardian — warm luxury parchment & taupe + charcoal + metallic gold */
+  --bg-main: #d4c4ae;
+  --bg-panel: rgba(232, 223, 208, 0.94);
   --text-main: #0a0908;
-  --text-soft: #1c1a17;
-  --text-dim: #2e2a25;
-  --text-muted: #524d45;
-  --stroke: rgba(10, 9, 8, 0.12);
-  --stroke-mid: rgba(10, 9, 8, 0.22);
+  --text-soft: rgba(10, 9, 8, 0.92);
+  --text-dim: rgba(10, 9, 8, 0.84);
+  --text-muted: rgba(10, 9, 8, 0.7);
+  --stroke: rgba(10, 9, 8, 0.16);
+  --stroke-mid: rgba(10, 9, 8, 0.28);
   --stroke-strong: rgba(10, 9, 8, 0.58);
   --champagne: #c9a227;
   --champagne-soft: #e8c547;
   --champagne-bright: #f0d060;
   --champagne-glow: rgba(232, 197, 71, 0.35);
-  --cream: #faf8f5;
-  --cream-deep: #f2ede4;
-  --beige-light: #f7f4ee;
-  --beige-mid: #efe9df;
-  --beige-deep: #e5dccf;
+  --cream: #ebe4d4;
+  --cream-deep: #e2d9c5;
+  --beige-light: #f2ebd9;
+  --beige-mid: #e8dfcc;
+  --beige-deep: #ded3be;
   --beige-ink: #b8a48a;
-  --glass-fill: rgba(255, 255, 255, 0.52);
-  --glass-fill-strong: rgba(255, 255, 255, 0.72);
-  --glass-stroke: rgba(10, 9, 8, 0.18);
+  --glass-fill: rgba(232, 223, 208, 0.82);
+  --glass-fill-strong: rgba(232, 223, 208, 0.92);
+  --glass-stroke: rgba(10, 9, 8, 0.24);
   --gold-frame: #d4af37;
   --ink: #0a0908;
   /* Editorial gold rules — one hairline language site-wide */

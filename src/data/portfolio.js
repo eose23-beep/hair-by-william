@@ -46,6 +46,23 @@ export const heroWorkClips = [
 
 export const portfolioSlides = [
   {
+    id: "clip-04",
+    title: "Honey Waves",
+    caption: "Balayage glow · soft bounce in motion",
+    src: "/portfolio/clip-04.mp4",
+    poster: "/portfolio/clip-04-poster.webp",
+    alt: "Honey balayage waves with soft bounce as the client lifts her hair",
+    type: "video",
+  },
+  {
+    id: "work-02",
+    title: "Soft Waves",
+    caption: "Precision cut · blended highlight shape",
+    src: "/portfolio/work-02.jpg",
+    alt: "Long hair styled in soft waves with blended highlight dimension and light movement",
+    type: "image",
+  },
+  {
     id: "extensions-after",
     title: "Hair Extensions",
     caption: "The after · volume and length",
@@ -60,15 +77,6 @@ export const portfolioSlides = [
     src: "/portfolio/extensions_before.jpg",
     alt: "Hair at starting length before custom extension installation",
     type: "image",
-  },
-  {
-    id: "clip-04",
-    title: "Honey Waves",
-    caption: "Balayage glow · soft bounce in motion",
-    src: "/portfolio/clip-04.mp4",
-    poster: "/portfolio/clip-04-poster.webp",
-    alt: "Honey balayage waves with soft bounce as the client lifts her hair",
-    type: "video",
   },
   {
     id: "work-07",
@@ -103,14 +111,6 @@ export const portfolioSlides = [
     poster: "/portfolio/clip-02-poster.webp",
     alt: "Voluminous dark blowout waves moving as the client turns in the salon",
     type: "video",
-  },
-  {
-    id: "work-02",
-    title: "Soft Waves",
-    caption: "Precision cut · blended highlight shape",
-    src: "/portfolio/work-02.jpg",
-    alt: "Long hair styled in soft waves with blended highlight dimension and light movement",
-    type: "image",
   },
   {
     id: "clip-01",
