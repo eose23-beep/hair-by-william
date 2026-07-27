@@ -6838,3 +6838,196 @@ a {
     transform: none;
   }
 }
+
+/* Client Reviews Section */
+.client-reviews__card {
+  padding: clamp(24px, 4vw, 48px);
+  border: var(--rule) solid var(--stroke-mid);
+  background: rgba(235, 228, 212, 0.45);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.client-reviews__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.8);
+  border: var(--rule) solid var(--gold-rule);
+  margin-bottom: 12px;
+}
+
+.client-reviews__stars {
+  color: #d4af37;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.client-reviews__score {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.client-reviews__count,
+.client-reviews__divider {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.client-reviews__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.client-reviews__item {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  border: var(--rule) solid var(--stroke-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.3s var(--ease-luxury);
+  cursor: pointer;
+}
+
+.client-reviews__item:hover,
+.client-reviews__item.is-active {
+  border-color: var(--gold-frame);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.client-reviews__item-stars {
+  color: #d4af37;
+  font-size: 12px;
+}
+
+.client-reviews__quote {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink);
+  font-style: italic;
+}
+
+.client-reviews__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: var(--rule) solid var(--stroke-soft);
+}
+
+.client-reviews__author {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.client-reviews__loc {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.client-reviews__tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--champagne-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+.client-reviews__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: var(--rule) solid var(--stroke-mid);
+}
+
+/* VIP Offer Banner Floating Card */
+.vip-offer-banner {
+  position: fixed;
+  bottom: 84px;
+  right: 20px;
+  z-index: 999;
+  max-width: 360px;
+  width: calc(100vw - 40px);
+  background: rgba(26, 24, 22, 0.95);
+  color: #f7f3e9;
+  border: var(--rule) solid var(--gold-rule);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(16px);
+  padding: 16px;
+  animation: vip-banner-slide-up 0.5s var(--ease-luxury) forwards;
+}
+
+@keyframes vip-banner-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vip-offer-banner__content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.vip-offer-banner__badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--gold-glow-bright);
+}
+
+.vip-offer-banner__text {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #ebe4d4;
+}
+
+.vip-offer-banner__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  gap: 12px;
+}
+
+.vip-offer-banner__btn {
+  padding: 8px 16px;
+  font-size: 11px;
+}
+
+.vip-offer-banner__close {
+  background: transparent;
+  border: none;
+  color: #a8a090;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s ease;
+}
+
+.vip-offer-banner__close:hover {
+  color: #fff;
+}

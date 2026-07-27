@@ -7,6 +7,8 @@ import { bookingAmbientClip, heroWorkClips } from "./data/portfolio";
 import { DIRECTIONS_URL, MAPS_SEARCH_URL } from "./data/location";
 
 import HairTryOn from "./components/HairTryOn";
+import ClientReviews from "./components/ClientReviews";
+import VipOfferBanner from "./components/VipOfferBanner";
 const PortfolioGallery = lazy(() => import("./components/PortfolioGallery"));
 const ContactForm = lazy(() => import("./components/ContactForm"));
 const StyleQuiz = lazy(() => import("./components/StyleQuiz"));
@@ -600,6 +602,8 @@ export default function App() {
             <ServicesGrid />
           </LazyWhenVisible>
 
+          <ClientReviews />
+
           <LazyWhenVisible className="lazy-slot lazy-slot--quiz">
             <StyleQuiz />
           </LazyWhenVisible>
@@ -795,6 +799,7 @@ export default function App() {
 
         <MobileCtaBar />
         <BookingFab />
+        <VipOfferBanner />
       </div>
     </>
   );
