@@ -6,8 +6,8 @@ import BookingFab from "./components/BookingFab";
 import { bookingAmbientClip, heroWorkClips } from "./data/portfolio";
 import { DIRECTIONS_URL, MAPS_SEARCH_URL } from "./data/location";
 
+import HairTryOn from "./components/HairTryOn";
 const PortfolioGallery = lazy(() => import("./components/PortfolioGallery"));
-const HairTryOn = lazy(() => import("./components/HairTryOn"));
 const ContactForm = lazy(() => import("./components/ContactForm"));
 const StyleQuiz = lazy(() => import("./components/StyleQuiz"));
 const MapSection = lazy(() => import("./components/MapSection"));
@@ -604,9 +604,9 @@ export default function App() {
             <StyleQuiz />
           </LazyWhenVisible>
 
-          <LazyWhenVisible className="lazy-slot lazy-slot--tryon">
+          <div className="tryon-container">
             <HairTryOn />
-          </LazyWhenVisible>
+          </div>
 
           <LazyWhenVisible className="lazy-slot lazy-slot--contact">
             <ContactForm />

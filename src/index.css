@@ -6183,6 +6183,62 @@ a {
   white-space: nowrap;
 }
 
+.hair-tryon__sample-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: var(--rule) solid var(--stroke-soft);
+}
+
+.hair-tryon__sample-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.hair-tryon__sample-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.hair-tryon__sample-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: var(--rule) solid var(--stroke-mid);
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s var(--ease-luxury);
+}
+
+.hair-tryon__sample-btn:hover {
+  border-color: var(--gold-frame);
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
+}
+
+.hair-tryon__sample-btn img {
+  width: 36px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.hair-tryon__sample-btn span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
 .hair-tryon__camera {
   display: grid;
   gap: var(--space-3);

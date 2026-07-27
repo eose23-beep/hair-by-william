@@ -614,23 +614,46 @@ export default function HairTryOn() {
                   )}
 
                   {!preview ? (
-                    <div className="hair-tryon__upload-actions">
-                      <button
-                        type="button"
-                        className="secondary-button hair-tryon__touch"
-                        onClick={() => fileRef.current?.click()}
-                      >
-                        Upload photo
-                      </button>
-                      <button
-                        type="button"
-                        className="cta-button hair-tryon__touch hair-tryon__selfie-cta"
-                        onClick={openCamera}
-                        disabled={cameraBusy}
-                      >
-                        {cameraBusy ? "Opening…" : "Take selfie"}
-                      </button>
-                    </div>
+                    <>
+                      <div className="hair-tryon__upload-actions">
+                        <button
+                          type="button"
+                          className="secondary-button hair-tryon__touch"
+                          onClick={() => fileRef.current?.click()}
+                        >
+                          Upload photo
+                        </button>
+                        <button
+                          type="button"
+                          className="cta-button hair-tryon__touch hair-tryon__selfie-cta"
+                          onClick={openCamera}
+                          disabled={cameraBusy}
+                        >
+                          {cameraBusy ? "Opening…" : "Take selfie"}
+                        </button>
+                      </div>
+                      <div className="hair-tryon__sample-bar">
+                        <span className="hair-tryon__sample-title">Or tap a sample model:</span>
+                        <div className="hair-tryon__sample-options">
+                          <button
+                            type="button"
+                            className="hair-tryon__sample-btn"
+                            onClick={() => applyPhoto("/portfolio/extensions_before.jpg")}
+                          >
+                            <img src="/portfolio/extensions_before.jpg" alt="Sample 1" width={44} height={55} />
+                            <span>Extensions Base</span>
+                          </button>
+                          <button
+                            type="button"
+                            className="hair-tryon__sample-btn"
+                            onClick={() => applyPhoto("/portfolio/blowout_before.jpg")}
+                          >
+                            <img src="/portfolio/blowout_before.jpg" alt="Sample 2" width={44} height={55} />
+                            <span>Blowout Base</span>
+                          </button>
+                        </div>
+                      </div>
+                    </>
                   ) : null}
                 </div>
               ) : null}
