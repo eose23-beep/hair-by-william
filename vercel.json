@@ -1,4 +1,9 @@
 {
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/bio", "destination": "/bio.html" },
+    { "source": "/qr", "destination": "/qr.html" }
+  ],
   "headers": [
     {
       "source": "/fonts/(.*)",
