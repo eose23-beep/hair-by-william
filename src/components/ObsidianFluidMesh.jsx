@@ -118,10 +118,10 @@ const fragmentShader = /* glsl */ `
     vec3 silkDeep = vec3(0.982, 0.980, 0.976);
     vec3 silk = vec3(0.994, 0.992, 0.988);
     vec3 silkLite = vec3(1.0, 0.999, 0.997);
-    /* #FFE600 / #FFEE00 — neon electric yellow, not champagne/gold */
-    vec3 voltCore = vec3(1.0, 0.902, 0.0);
-    vec3 voltSheen = vec3(1.0, 0.933, 0.0);
-    vec3 voltHot = vec3(1.0, 0.96, 0.12);
+    /* Metallic brand gold (#d4af37), glowing champagne (#e8c547), and warm bright gold (#f0d060) */
+    vec3 voltCore = vec3(0.831, 0.686, 0.216);
+    vec3 voltSheen = vec3(0.910, 0.773, 0.278);
+    vec3 voltHot = vec3(0.941, 0.816, 0.376);
 
     vec3 N = normalize(vNormal);
     vec3 V = normalize(cameraPosition - vWorldPos);

@@ -33,3 +33,10 @@ scripts/output/_video_tmp/
 gcloud_out.txt
 gcloud_stderr.txt
 gcloud_stdout.txt
+
+# Temp test & build outputs
+output/
+tmp/
+.tmp-*/
+build_out*.txt
+

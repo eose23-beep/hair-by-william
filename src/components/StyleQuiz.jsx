@@ -101,12 +101,11 @@ export default function StyleQuiz() {
         {step === 0 ? (
           <fieldset className="style-quiz__fieldset">
             <legend className="style-quiz__legend">What do you want most?</legend>
-            <div className="style-quiz__chips" role="list">
+            <div className="style-quiz__chips">
               {GOALS.map((item) => (
                 <button
                   key={item.id}
                   type="button"
-                  role="listitem"
                   className={`style-quiz__chip${goalId === item.id ? " is-selected" : ""}`}
                   onClick={() => {
                     setGoalId(item.id);
@@ -124,12 +123,11 @@ export default function StyleQuiz() {
         {step === 1 ? (
           <fieldset className="style-quiz__fieldset">
             <legend className="style-quiz__legend">Current length?</legend>
-            <div className="style-quiz__chips style-quiz__chips--inline" role="list">
+            <div className="style-quiz__chips style-quiz__chips--inline">
               {LENGTHS.map((item) => (
                 <button
                   key={item.id}
                   type="button"
-                  role="listitem"
                   className={`style-quiz__chip style-quiz__chip--compact${
                     lengthId === item.id ? " is-selected" : ""
                   }`}
@@ -151,12 +149,11 @@ export default function StyleQuiz() {
         {step === 2 ? (
           <fieldset className="style-quiz__fieldset">
             <legend className="style-quiz__legend">When do you hope to visit?</legend>
-            <div className="style-quiz__chips style-quiz__chips--inline" role="list">
+            <div className="style-quiz__chips style-quiz__chips--inline">
               {TIMING.map((item) => (
                 <button
                   key={item.id}
                   type="button"
-                  role="listitem"
                   className={`style-quiz__chip style-quiz__chip--compact${
                     timingId === item.id ? " is-selected" : ""
                   }`}

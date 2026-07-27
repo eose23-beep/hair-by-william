@@ -1,27 +1,27 @@
 :root {
-  /* Brand Guardian — warm taupe-beige parchment + charcoal + metallic gold */
-  --bg-main: #d4c4ae;
-  --bg-panel: rgba(232, 223, 208, 0.94);
+  /* Brand Guardian — silk white + charcoal + metallic gold */
+  --bg-main: #ffffff;
+  --bg-panel: rgba(255, 255, 255, 0.88);
   --text-main: #0a0908;
-  --text-soft: rgba(10, 9, 8, 0.92);
-  --text-dim: rgba(10, 9, 8, 0.84);
-  --text-muted: rgba(10, 9, 8, 0.7);
-  --stroke: rgba(10, 9, 8, 0.14);
-  --stroke-mid: rgba(10, 9, 8, 0.26);
-  --stroke-strong: rgba(10, 9, 8, 0.62);
+  --text-soft: #1c1a17;
+  --text-dim: #2e2a25;
+  --text-muted: #524d45;
+  --stroke: rgba(10, 9, 8, 0.12);
+  --stroke-mid: rgba(10, 9, 8, 0.22);
+  --stroke-strong: rgba(10, 9, 8, 0.58);
   --champagne: #c9a227;
   --champagne-soft: #e8c547;
   --champagne-bright: #f0d060;
   --champagne-glow: rgba(232, 197, 71, 0.35);
-  --cream: #d4c4ae;
-  --cream-deep: #cbb89a;
-  --beige-light: #ddd0bc;
-  --beige-mid: #d4c4ae;
-  --beige-deep: #cbb89a;
+  --cream: #faf8f5;
+  --cream-deep: #f2ede4;
+  --beige-light: #f7f4ee;
+  --beige-mid: #efe9df;
+  --beige-deep: #e5dccf;
   --beige-ink: #b8a48a;
-  --glass-fill: rgba(232, 223, 208, 0.82);
-  --glass-fill-strong: rgba(232, 223, 208, 0.92);
-  --glass-stroke: rgba(10, 9, 8, 0.22);
+  --glass-fill: rgba(255, 255, 255, 0.52);
+  --glass-fill-strong: rgba(255, 255, 255, 0.72);
+  --glass-stroke: rgba(10, 9, 8, 0.18);
   --gold-frame: #d4af37;
   --ink: #0a0908;
   /* Editorial gold rules — one hairline language site-wide */
@@ -1167,9 +1167,10 @@ a {
   display: block;
 }
 
+/* Scope grade to in-React hero media only — never filter #lcp-shell (LCP repaint). */
 .hero-stage__media img,
 .hero-stage__media video,
-.hero-stage__photo {
+.hero-stage__media .hero-stage__photo {
   display: block;
   position: absolute;
   inset: 0;
@@ -1183,6 +1184,12 @@ a {
   transform: scale(1.03);
   filter: saturate(1.12) contrast(1.06) brightness(1.03);
   transform-origin: 62% 28%;
+}
+
+#lcp-shell img.hero-stage__photo {
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
 }
 
 /*
@@ -1416,7 +1423,7 @@ a {
 
   .hero-stage__media img,
   .hero-stage__media video,
-  .hero-stage__photo {
+  .hero-stage__media .hero-stage__photo {
     /* Landscape desk crop is pre-framed — avoid extra zoom that softens pixels */
     object-position: 62% 38%;
     transform: scale(1.02);
@@ -1494,7 +1501,7 @@ a {
 @media (min-width: 1280px) {
   .hero-stage__media img,
   .hero-stage__media video,
-  .hero-stage__photo {
+  .hero-stage__media .hero-stage__photo {
     /* ~1440: face + crown in clear right third; long hair still readable */
     object-position: 64% 36%;
   }
@@ -1525,7 +1532,7 @@ a {
 
   .hero-stage__media img,
   .hero-stage__media video,
-  .hero-stage__photo {
+  .hero-stage__media .hero-stage__photo {
     /* Face left-center; right edge reserved for film strip */
     object-position: 42% 12%;
   }
@@ -1545,7 +1552,7 @@ a {
 
   .hero-stage__media img,
   .hero-stage__media video,
-  .hero-stage__photo {
+  .hero-stage__media .hero-stage__photo {
     /* Face left-center clear of right-edge clips; above bottom copy */
     object-position: 38% 8%;
   }
@@ -1579,7 +1586,7 @@ a {
 @media (prefers-reduced-motion: reduce) {
   .hero-stage__media img,
   .hero-stage__media video,
-  .hero-stage__photo {
+  .hero-stage__media .hero-stage__photo {
     transform: scale(1.02);
     animation: none !important;
   }
@@ -1860,7 +1867,7 @@ a {
 
   .hero-stage__media img,
   .hero-stage__media video,
-  .hero-stage__photo {
+  .hero-stage__media .hero-stage__photo {
     object-position: 34% 6%;
   }
 }
@@ -3558,12 +3565,12 @@ a {
     ),
     linear-gradient(
       148deg,
-      rgba(232, 223, 208, 0.94) 0%,
-      rgba(212, 196, 174, 0.88) 46%,
-      rgba(203, 184, 154, 0.9) 100%
+      rgba(255, 255, 255, 0.65) 0%,
+      rgba(250, 246, 240, 0.52) 46%,
+      rgba(245, 238, 230, 0.58) 100%
     );
-  backdrop-filter: blur(22px) saturate(150%);
-  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(120%);
+  -webkit-backdrop-filter: blur(28px) saturate(120%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
     var(--frame-inset-gold-strong),
@@ -3870,6 +3877,14 @@ a {
 
 .lazy-slot--contact {
   min-height: clamp(610px, 125vw, 987px);
+}
+
+.lazy-slot--map {
+  min-height: 280px;
+}
+
+.lazy-slot--faq {
+  min-height: clamp(480px, 90vw, 720px);
 }
 
 @media (min-width: 900px) {

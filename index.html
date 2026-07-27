@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -61,8 +61,8 @@
       html,
       body {
         margin: 0;
-        background: #ebe4d4;
-        color: #2e2b28;
+        background: #ffffff;
+        color: #0a0908;
       }
       #lcp-shell {
         position: absolute;
@@ -72,10 +72,17 @@
         top: 56px;
         height: clamp(560px, 78dvh, 780px);
         max-height: 820px;
-        z-index: 0;
+        /*
+          Sit above prehydrate #root SEO copy until React hydrates — otherwise
+          opaque prehydrate paints FCP text and delays shell LCP ~3s (render delay).
+        */
+        z-index: 2;
         overflow: hidden;
         pointer-events: none;
         background: #0a0908;
+      }
+      body.is-hydrated #lcp-shell {
+        z-index: 0;
       }
       #lcp-shell picture,
       #lcp-shell img {

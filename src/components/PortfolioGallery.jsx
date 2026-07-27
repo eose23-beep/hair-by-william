@@ -634,18 +634,19 @@ export default function PortfolioGallery() {
         aria-labelledby={lightboxTitleId}
         aria-describedby={lightboxCaptionId}
       >
-        <button
-          ref={lightboxCloseRef}
-          className="lightbox__close"
-          onClick={closeLightbox}
-          aria-label="Close portfolio media"
-          type="button"
-        >
-          <IconClose />
-        </button>
-        <div className="lightbox__content" onClick={(event) => event.stopPropagation()}>
-          {activeSlide ? (
-            <figure className="lightbox__figure">
+        {lightboxOpen && activeSlide ? (
+          <>
+            <button
+              ref={lightboxCloseRef}
+              className="lightbox__close"
+              onClick={closeLightbox}
+              aria-label="Close portfolio media"
+              type="button"
+            >
+              <IconClose />
+            </button>
+            <div className="lightbox__content" onClick={(event) => event.stopPropagation()}>
+              <figure className="lightbox__figure">
               {activeSlide.type === "video" ? (
                 <AmbientVideo
                   className="lightbox__image lightbox__video"
@@ -712,8 +713,9 @@ export default function PortfolioGallery() {
                 </button>
               </div>
             </figure>
-          ) : null}
-        </div>
+          </div>
+        </>
+        ) : null}
       </div>
     </>
   );

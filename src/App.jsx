@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect, useRef } from "react";
 import AmbientVideo from "./components/AmbientVideo";
+import LazyWhenVisible from "./components/LazyWhenVisible";
 import MobileCtaBar from "./components/MobileCtaBar";
+import BookingFab from "./components/BookingFab";
 import { bookingAmbientClip, heroWorkClips } from "./data/portfolio";
 import { DIRECTIONS_URL, MAPS_SEARCH_URL } from "./data/location";
 
@@ -12,6 +14,7 @@ const MapSection = lazy(() => import("./components/MapSection"));
 const ServicesGrid = lazy(() => import("./components/ServicesGrid"));
 const SalonFaq = lazy(() => import("./components/SalonFaq"));
 const GoldWaveField = lazy(() => import("./components/GoldWaveField"));
+const LiquidSilkCanvas = lazy(() => import("./components/LiquidSilkCanvas"));
 
 const PHONE_HREF = "tel:915-920-7823";
 const PHONE_LABEL = "915-920-7823";
@@ -83,6 +86,11 @@ function scrollToHash(hash, { smooth = false } = {}) {
 
 export default function App() {
   const rootRef = useRef(null);
+
+  useEffect(() => {
+    document.body.classList.add("is-hydrated");
+    return () => document.body.classList.remove("is-hydrated");
+  }, []);
 
   useEffect(() => {
     let ignoreSpyUntil = 0;
@@ -388,8 +396,8 @@ export default function App() {
 
   return (
     <>
-      <Suspense fallback={null}>
-        <GoldWaveField />
+      <Suspense fallback={<GoldWaveField />}>
+        <LiquidSilkCanvas />
       </Suspense>
 
       <div ref={rootRef} className="site-shell typography-layer">
@@ -565,35 +573,25 @@ export default function App() {
             </aside>
           </section>
 
-          <div className="lazy-slot lazy-slot--portfolio">
-            <Suspense fallback={null}>
-              <PortfolioGallery />
-            </Suspense>
-          </div>
+          <LazyWhenVisible className="lazy-slot lazy-slot--portfolio">
+            <PortfolioGallery />
+          </LazyWhenVisible>
 
-          <div className="lazy-slot lazy-slot--services">
-            <Suspense fallback={null}>
-              <ServicesGrid />
-            </Suspense>
-          </div>
+          <LazyWhenVisible className="lazy-slot lazy-slot--services">
+            <ServicesGrid />
+          </LazyWhenVisible>
 
-          <div className="lazy-slot lazy-slot--quiz">
-            <Suspense fallback={null}>
-              <StyleQuiz />
-            </Suspense>
-          </div>
+          <LazyWhenVisible className="lazy-slot lazy-slot--quiz">
+            <StyleQuiz />
+          </LazyWhenVisible>
 
-          <div className="lazy-slot lazy-slot--tryon">
-            <Suspense fallback={null}>
-              <HairTryOn />
-            </Suspense>
-          </div>
+          <LazyWhenVisible className="lazy-slot lazy-slot--tryon">
+            <HairTryOn />
+          </LazyWhenVisible>
 
-          <div className="lazy-slot lazy-slot--contact">
-            <Suspense fallback={null}>
-              <ContactForm />
-            </Suspense>
-          </div>
+          <LazyWhenVisible className="lazy-slot lazy-slot--contact">
+            <ContactForm />
+          </LazyWhenVisible>
 
           <section
             id="booking"
@@ -666,9 +664,9 @@ export default function App() {
                 </div>
               </div>
 
-              <Suspense fallback={null}>
+              <LazyWhenVisible className="lazy-slot lazy-slot--map" rootMargin="360px 0px">
                 <MapSection />
-              </Suspense>
+              </LazyWhenVisible>
 
               <figure className="booking-panel__clip">
                 <a
@@ -700,9 +698,9 @@ export default function App() {
             </div>
           </section>
 
-          <Suspense fallback={null}>
+          <LazyWhenVisible className="lazy-slot lazy-slot--faq" rootMargin="400px 0px">
             <SalonFaq />
-          </Suspense>
+          </LazyWhenVisible>
         </main>
 
         <footer className="site-footer">
@@ -777,6 +775,7 @@ export default function App() {
         </footer>
 
         <MobileCtaBar />
+        <BookingFab />
       </div>
     </>
   );
