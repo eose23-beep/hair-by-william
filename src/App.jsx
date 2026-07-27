@@ -483,10 +483,29 @@ export default function App() {
         <main id="main-content" className="site-main" tabIndex={-1}>
           <section className="hero-stage" aria-label="Hair by William">
             <div className="hero-stage__media">
-              {/*
-                LCP photo is a permanent #lcp-shell in index.html (never remounted / moved).
-                Optional living-hero video covers that path when HERO_AMBIENT_VIDEO is set.
-              */}
+              <picture>
+                <source
+                  media="(min-width: 1024px)"
+                  type="image/webp"
+                  srcSet="/portfolio/extensions_after-hero-desk.webp 1920w, /portfolio/extensions_after-hero-desk-2x.webp 2400w"
+                  sizes="100vw"
+                />
+                <source
+                  media="(max-width: 1023px)"
+                  type="image/webp"
+                  srcSet="/portfolio/extensions_after-hero-540.webp 540w, /portfolio/extensions_after-hero-720.webp 720w"
+                  sizes="100vw"
+                />
+                <img
+                  className="hero-stage__photo"
+                  src="/portfolio/extensions_after-hero-720.webp"
+                  alt="Long strawberry-blonde waves and soft fringe, custom extension finish by Hair by William in El Paso"
+                  width="720"
+                  height="900"
+                  decoding="sync"
+                  fetchPriority="high"
+                />
+              </picture>
               {HERO_AMBIENT_VIDEO ? (
                 <AmbientVideo
                   className="hero-stage__photo"
